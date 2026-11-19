@@ -1,0 +1,2694 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mega We Care AI Content Studio (/megawecareweb1)</title>
+
+  <!-- Google Fonts: Prompt + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- SheetJS with Full Styling (xlsx-js-style) for Styled Excel & Google Sheets Export/Import -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Prompt', 'Inter', 'sans-serif']
+          },
+          colors: {
+            cobalt: {
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              200: '#BFDBFE',
+              300: '#93C5FD',
+              400: '#60A5FA',
+              500: '#1877F2',
+              600: '#0062E6',
+              700: '#0048B8',
+              800: '#0038A8',
+              900: '#062066',
+              950: '#041547'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Prompt', 'Inter', sans-serif;
+      background: linear-gradient(180deg, #EEF5FF 0%, #E4EEFF 40%, #F8FAFC 100%);
+      color: #041547;
+      overflow-x: hidden;
+    }
+
+    /* Engaging Interactive Hero */
+    .garvin-hero {
+      position: relative;
+      background: radial-gradient(circle at 18% 15%, #1877F2 0%, #0062E6 38%, #0038A8 72%, #041547 100%);
+      overflow: hidden;
+    }
+    .cobalt-disc {
+      position: absolute;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 30% 25%, rgba(96, 165, 250, 0.55) 0%, rgba(0, 98, 230, 0.42) 45%, rgba(4, 21, 71, 0.72) 100%);
+      border: 1.5px solid rgba(191, 219, 254, 0.35);
+      box-shadow: inset 0 18px 40px rgba(147, 197, 253, 0.28), 0 30px 70px rgba(4, 21, 71, 0.45);
+      backdrop-filter: blur(8px);
+      will-change: transform;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+    .cursor-glow {
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 9999px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, rgba(24, 119, 242, 0.08) 45%, transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Frosted Glass Panels */
+    .header-glass {
+      background: rgba(240, 247, 255, 0.94);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(191, 219, 254, 0.95);
+      box-shadow: 0 4px 20px -6px rgba(4, 21, 71, 0.08);
+    }
+    .studio-glass {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(191, 219, 254, 0.9);
+      box-shadow: 0 16px 40px -14px rgba(4, 21, 71, 0.12);
+    }
+
+    /* 3D Glossy Icons & Interactive Hover */
+    .icon-3d {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1rem;
+      box-shadow:
+        inset 0 2px 4px rgba(255, 255, 255, 0.65),
+        inset 0 -4px 8px rgba(4, 21, 71, 0.25),
+        0 10px 20px -6px rgba(0, 56, 168, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .icon-3d::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 12%;
+      width: 76%;
+      height: 36%;
+      border-radius: 9999px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .magnetic-btn {
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .magnetic-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -8px rgba(0, 98, 230, 0.38);
+    }
+
+    .tilt-card {
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.2s ease;
+    }
+    .tilt-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px -12px rgba(0, 56, 168, 0.2);
+    }
+
+    /* Mascot Floating & Blink */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .mascot-float { animation: floatSlow 4s ease-in-out infinite; }
+
+    @keyframes blinkEye {
+      0%, 92%, 100% { transform: scaleY(1); }
+      96% { transform: scaleY(0.1); }
+    }
+    .eye-blink { transform-origin: center; animation: blinkEye 4.2s infinite; }
+
+    /* Typing dots for Real-time AI Chat */
+    @keyframes bounceDot {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .dot-1 { animation: bounceDot 1.2s infinite 0s; }
+    .dot-2 { animation: bounceDot 1.2s infinite 0.2s; }
+    .dot-3 { animation: bounceDot 1.2s infinite 0.4s; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #EFF6FF; }
+    ::-webkit-scrollbar-thumb { background: #93C5FD; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #0062E6; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Hidden File Input for Re-Importing Exported Excel (.xlsx) to Edit Retroactively -->
+  <input type="file" id="reimport-xlsx-input" accept=".xlsx,.xls" class="hidden" onchange="handleReimportExcel(event)" />
+
+  <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+  <header class="header-glass sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="goToStep(1)">
+        <div class="icon-3d w-11 h-11 bg-gradient-to-br from-cobalt-500 via-cobalt-600 to-cobalt-900 text-white shrink-0">
+          <i data-lucide="layers" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg tracking-tight text-cobalt-950">Mega We Care Studio</span>
+            <span class="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-cobalt-100 text-cobalt-800 border border-cobalt-200">/megawecareweb1</span>
+          </div>
+          <p class="text-xs font-medium text-cobalt-800/80">Content Repurposing &amp; 3-Angle Video Storyboard Pipeline</p>
+        </div>
+      </div>
+
+      <!-- Production Links & Re-Import & Auth -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="document.getElementById('reimport-xlsx-input').click()" title="นำเข้าไฟล์ Excel (.xlsx) ที่เคย Export ออกไปกลับมาแก้ไขต่อ"
+                class="magnetic-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-900 border border-emerald-300 hover:bg-emerald-100 shadow-sm">
+          <i data-lucide="folder-open" class="w-3.5 h-3.5 text-emerald-700"></i>
+          <span>เปิดไฟล์เก่าแก้ย้อนหลัง (.xlsx)</span>
+        </button>
+
+        <a href="https://flow.google.com/" target="_blank" rel="noopener noreferrer"
+           class="magnetic-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-cobalt-600 to-sky-500 text-white shadow-sm">
+          <i data-lucide="clapperboard" class="w-3.5 h-3.5"></i>
+          <span>Google Flow</span>
+          <i data-lucide="external-link" class="w-3 h-3 opacity-80"></i>
+        </a>
+
+        <a href="https://aistudio.google.com/generate-speech" target="_blank" rel="noopener noreferrer"
+           class="magnetic-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-cobalt-900 border border-cobalt-200 hover:bg-cobalt-50 shadow-sm">
+          <i data-lucide="mic" class="w-3.5 h-3.5 text-cobalt-600"></i>
+          <span>AI Studio Voice</span>
+          <i data-lucide="external-link" class="w-3 h-3 text-cobalt-500"></i>
+        </a>
+
+        <button onclick="openSettingsModal()" title="ตั้งค่า API Key"
+                class="p-2 rounded-xl bg-white text-cobalt-800 border border-cobalt-200 hover:bg-cobalt-50 transition">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+        </button>
+
+        <button onclick="openLoginModal()" id="header-login-btn"
+                class="magnetic-btn inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-cobalt-950 text-white hover:bg-cobalt-800 shadow-sm">
+          <i data-lucide="user-circle" class="w-4 h-4"></i>
+          <span id="header-login-label">เข้าสู่ระบบ</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section id="hero-section" class="garvin-hero text-white py-10 sm:py-12 px-4 sm:px-6 relative">
+    <div class="cobalt-disc w-64 h-64 -top-16 -left-16" data-parallax="18"></div>
+    <div class="cobalt-disc w-80 h-80 -top-24 left-1/4 opacity-80" data-parallax="28"></div>
+    <div class="cobalt-disc w-96 h-96 -bottom-32 right-8 opacity-90" data-parallax="36"></div>
+    <div class="cobalt-disc w-44 h-44 bottom-6 left-1/2 opacity-60" data-parallax="22"></div>
+    <div id="hero-cursor-glow" class="cursor-glow"></div>
+
+    <div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <!-- Left Copy -->
+      <div class="lg:col-span-7 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 border border-white/25 backdrop-blur-md text-xs font-semibold tracking-wide">
+          <span class="w-2 h-2 rounded-full bg-sky-300 animate-pulse"></span>
+          <span>Clinical Lab-Core Mega Wecare</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+          เปลี่ยน 1 Ad &rarr; 3 Video Contents
+        </h1>
+
+        <p class="text-sm sm:text-base text-blue-100/95 max-w-2xl leading-relaxed">
+          ระบบ Content Repurposing อัจฉริยะสำหรับ Mega We Care วิเคราะห์ภาพ Ad ผสานข้อมูลผลิตภัณฑ์จริง แตกเป็น 3 สตอรี่บอร์ด 3 เนื้อหา พร้อมแก้ย้อนหลังได้ทุกเมื่อ
+        </p>
+
+        <div class="flex flex-wrap items-center gap-2.5 pt-1">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 border border-white/25 text-xs font-medium">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-sky-300"></i>
+            ขยายจาก 1 เป็นอีก 3 content
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 border border-white/25 text-xs font-medium">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-300"></i>
+            ตรวจคำเสี่ยง อย. &amp; โซเชียล 3 หมวด
+          </span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <button onclick="scrollToWorkspace()"
+                  class="magnetic-btn inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white text-cobalt-900 font-bold text-sm shadow-lg">
+            <i data-lucide="rocket" class="w-4 h-4 text-cobalt-600"></i>
+            <span>เริ่มทำ Content Repurposing</span>
+          </button>
+          <button onclick="runInstantDemoMode()"
+                  class="magnetic-btn inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-sky-400/20 hover:bg-sky-400/30 border border-sky-200/40 text-white font-semibold text-sm backdrop-blur-md">
+            <i data-lucide="play-circle" class="w-4 h-4 text-sky-200"></i>
+            <span>ทดลองโหมด Demo ทันที</span>
+          </button>
+          <button id="hero-restore-draft-btn" onclick="restoreLastDraft()"
+                  class="hidden magnetic-btn inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-emerald-400/25 hover:bg-emerald-400/35 border border-emerald-200/50 text-white font-semibold text-sm backdrop-blur-md">
+            <i data-lucide="history" class="w-4 h-4 text-emerald-200"></i>
+            <span>เปิดงานล่าสุดที่ค้างไว้</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right 3D Stylized Assistant Character -->
+      <div class="lg:col-span-5 flex flex-col items-center lg:items-end">
+        <div class="relative flex flex-col items-center">
+          <div class="mb-3 px-4 py-2 rounded-2xl bg-white text-cobalt-950 text-xs sm:text-sm font-semibold shadow-xl border border-blue-100 relative">
+            พร้อมทำ Content Repurposing แล้ว ✨
+            <div class="w-3 h-3 bg-white rotate-45 absolute -bottom-1.5 left-1/2 -translate-x-1/2"></div>
+          </div>
+
+          <div onclick="openAssistantModal()" class="mascot-float cursor-pointer group relative">
+            <svg width="160" height="160" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl transition-transform group-hover:scale-105">
+              <defs>
+                <radialGradient id="skin3d" cx="35%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="#FFE6D5"/>
+                  <stop offset="70%" stop-color="#F6BFA0"/>
+                  <stop offset="100%" stop-color="#DD9A77"/>
+                </radialGradient>
+                <linearGradient id="coat3d" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FFFFFF"/>
+                  <stop offset="65%" stop-color="#DBEAFE"/>
+                  <stop offset="100%" stop-color="#93C5FD"/>
+                </linearGradient>
+                <radialGradient id="hair3d" cx="30%" cy="20%" r="80%">
+                  <stop offset="0%" stop-color="#3B4D7A"/>
+                  <stop offset="60%" stop-color="#1E293B"/>
+                  <stop offset="100%" stop-color="#0F172A"/>
+                </radialGradient>
+                <linearGradient id="badge3d" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#38BDF8"/>
+                  <stop offset="100%" stop-color="#0038A8"/>
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="102" r="82" fill="url(#badge3d)" fill-opacity="0.22"/>
+              <path d="M44 178C44 142 66 126 100 126C134 126 156 142 156 178V186H44V178Z" fill="url(#coat3d)"/>
+              <path d="M84 126L100 154L116 126H84Z" fill="#0062E6"/>
+              <circle cx="126" cy="154" r="8" fill="url(#badge3d)"/>
+              <path d="M122 154H130M126 150V158" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+              <rect x="89" y="108" width="22" height="22" rx="10" fill="#E8AE8E"/>
+              <ellipse cx="100" cy="80" rx="42" ry="44" fill="url(#skin3d)"/>
+              <path d="M56 76C54 44 74 26 102 26C128 26 146 44 144 76C138 58 124 48 100 50C78 52 64 60 56 76Z" fill="url(#hair3d)"/>
+              <rect x="66" y="70" width="28" height="22" rx="10" fill="white" fill-opacity="0.28" stroke="#041547" stroke-width="3"/>
+              <rect x="106" y="70" width="28" height="22" rx="10" fill="white" fill-opacity="0.28" stroke="#041547" stroke-width="3"/>
+              <line x1="94" y1="80" x2="106" y2="80" stroke="#041547" stroke-width="3"/>
+              <g class="eye-blink">
+                <circle cx="80" cy="81" r="5.5" fill="#041547"/>
+                <circle cx="78" cy="79" r="2" fill="white"/>
+                <circle cx="120" cy="81" r="5.5" fill="#041547"/>
+                <circle cx="118" cy="79" r="2" fill="white"/>
+              </g>
+              <ellipse cx="70" cy="94" rx="6" ry="3.5" fill="#FB7185" fill-opacity="0.35"/>
+              <ellipse cx="130" cy="94" rx="6" ry="3.5" fill="#FB7185" fill-opacity="0.35"/>
+              <path d="M88 99C93 106 107 106 112 99" stroke="#9A3412" stroke-width="3.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <button onclick="openAssistantModal()"
+                  class="magnetic-btn mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 hover:bg-white/25 border border-white/30 text-white text-xs font-semibold backdrop-blur-md">
+            <i data-lucide="message-circle-heart" class="w-4 h-4 text-sky-300"></i>
+            <span>คลิกปรึกษาผู้ช่วย Content Mega Wecare</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== WIZARD PROGRESS STEPPER (5 STEPS) ==================== -->
+  <div id="workspace-anchor" class="max-w-7xl w-full mx-auto px-4 sm:px-6 -mt-6 relative z-20">
+    <div class="studio-glass rounded-3xl p-3 sm:p-4">
+      <div class="grid grid-cols-5 gap-2">
+        <button onclick="goToStep(1)" id="stepper-btn-1" class="stepper-item flex flex-col sm:flex-row items-center justify-center gap-2 p-2.5 rounded-2xl transition text-left">
+          <div class="icon-3d w-9 h-9 bg-gradient-to-br from-cobalt-500 to-cobalt-800 text-white shrink-0 text-sm font-bold">1</div>
+          <div class="hidden sm:block">
+            <div class="text-xs font-bold leading-tight">ภาพ &amp; สินค้า</div>
+            <div class="text-[10px] opacity-70">Ad + ผลิตภัณฑ์</div>
+          </div>
+        </button>
+
+        <button onclick="goToStep(2)" id="stepper-btn-2" class="stepper-item flex flex-col sm:flex-row items-center justify-center gap-2 p-2.5 rounded-2xl transition text-left">
+          <div class="icon-3d w-9 h-9 bg-gradient-to-br from-violet-500 to-indigo-700 text-white shrink-0 text-sm font-bold">2</div>
+          <div class="hidden sm:block">
+            <div class="text-xs font-bold leading-tight">ตัวละคร 3D</div>
+            <div class="text-[10px] opacity-70">แพลตฟอร์ม &amp; สไตล์</div>
+          </div>
+        </button>
+
+        <button onclick="goToStep(3)" id="stepper-btn-3" class="stepper-item flex flex-col sm:flex-row items-center justify-center gap-2 p-2.5 rounded-2xl transition text-left">
+          <div class="icon-3d w-9 h-9 bg-gradient-to-br from-sky-500 to-cobalt-700 text-white shrink-0 text-sm font-bold">3</div>
+          <div class="hidden sm:block">
+            <div class="text-xs font-bold leading-tight">เช็กข้อมูล</div>
+            <div class="text-[10px] opacity-70">Content Repurposing</div>
+          </div>
+        </button>
+
+        <button onclick="goToStep(4)" id="stepper-btn-4" class="stepper-item flex flex-col sm:flex-row items-center justify-center gap-2 p-2.5 rounded-2xl transition text-left">
+          <div class="icon-3d w-9 h-9 bg-gradient-to-br from-amber-400 to-orange-600 text-white shrink-0 text-sm font-bold">4</div>
+          <div class="hidden sm:block">
+            <div class="text-xs font-bold leading-tight">3 สตอรี่บอร์ด</div>
+            <div class="text-[10px] opacity-70">แก้ไข + ตรวจ อย.</div>
+          </div>
+        </button>
+
+        <button onclick="goToStep(5)" id="stepper-btn-5" class="stepper-item flex flex-col sm:flex-row items-center justify-center gap-2 p-2.5 rounded-2xl transition text-left">
+          <div class="icon-3d w-9 h-9 bg-gradient-to-br from-emerald-500 to-teal-700 text-white shrink-0 text-sm font-bold">5</div>
+          <div class="hidden sm:block">
+            <div class="text-xs font-bold leading-tight">ดาวน์โหลด</div>
+            <div class="text-[10px] opacity-70">Sheet &amp; Excel</div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN WIZARD CONTENT ==================== -->
+  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1">
+
+    <!-- ==================== STEP 1: IMAGE UPLOAD + PRODUCT + NAMING MODE ==================== -->
+    <section id="step-panel-1" class="step-panel space-y-6">
+      <div class="studio-glass rounded-3xl p-5 sm:p-7 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-cobalt-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="icon-3d w-12 h-12 bg-gradient-to-br from-cobalt-500 to-cobalt-800 text-white">
+              <i data-lucide="image-plus" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h2 class="text-lg sm:text-xl font-extrabold text-cobalt-950">ขั้นตอนที่ 1: อัปโหลดภาพ Ad &amp; เลือกผลิตภัณฑ์ Mega We Care</h2>
+              <p class="text-xs sm:text-sm text-slate-600">อัปโหลดภาพโฆษณาตัวอย่างเพื่อทำ Content Repurposing และกำหนดโหมดการระบุชื่อสินค้า</p>
+            </div>
+          </div>
+
+          <button type="button" id="real-package-toggle" onclick="toggleRealPackage()"
+                  class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl border-2 text-xs sm:text-sm font-bold transition shadow-sm bg-slate-50 border-slate-200 text-slate-700">
+            <span>📦 ใส่ package จริง</span>
+            <span id="real-package-pill" class="px-2 py-0.5 rounded-full text-[11px] bg-slate-200 text-slate-700">ปิดอยู่ (ปลอดภัย อย.)</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left: Image Dropzone -->
+          <div class="lg:col-span-5 space-y-3">
+            <label class="block text-sm font-bold text-cobalt-950">ภาพ Ad ตัวอย่าง (Content Repurposing Input)</label>
+            <div id="dropzone"
+                 class="relative border-2 border-dashed border-cobalt-300 hover:border-cobalt-600 rounded-3xl p-6 text-center bg-cobalt-50/50 transition cursor-pointer min-h-[260px] flex flex-col items-center justify-center"
+                 onclick="document.getElementById('ad-image-input').click()">
+              <input type="file" id="ad-image-input" accept="image/*" class="hidden" onchange="handleImageUpload(event)" />
+
+              <div id="dropzone-placeholder" class="space-y-3">
+                <div class="icon-3d w-14 h-14 mx-auto bg-gradient-to-br from-sky-400 to-cobalt-700 text-white">
+                  <i data-lucide="upload-cloud" class="w-7 h-7"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-cobalt-950">คลิกเลือกภาพ หรือลากภาพ Ad มาวางที่นี่</p>
+                  <p class="text-xs text-slate-500 mt-1">รองรับ PNG, JPG, WEBP (AI อ่านข้อความไทยในภาพได้)</p>
+                </div>
+              </div>
+
+              <img id="ad-image-preview" src="" alt="Ad Preview" class="hidden max-h-60 rounded-2xl shadow-md object-contain" />
+            </div>
+
+            <div class="flex items-center justify-between gap-2">
+              <button type="button" onclick="clearUploadedImage()" class="text-xs font-semibold text-slate-500 hover:text-rose-600 transition">
+                ล้างรูปภาพ
+              </button>
+              <button type="button" onclick="runInstantDemoMode()" class="text-xs font-bold text-cobalt-700 hover:text-cobalt-900 underline">
+                ไม่มีรูปตอนนี้? กดทดลองโหมด Demo
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Product Selector & Naming Mode -->
+          <div class="lg:col-span-7 space-y-5">
+            <div class="space-y-2">
+              <label for="product-select" class="block text-sm font-bold text-cobalt-950">
+                เลือกผลิตภัณฑ์ Mega We Care <span class="text-xs font-normal text-cobalt-600">(มีโหมด Auto และเรียง Hero Products ขึ้นก่อน)</span>
+              </label>
+              <select id="product-select" onchange="onProductChange()"
+                      class="w-full px-4 py-3 rounded-2xl border-2 border-cobalt-200 focus:border-cobalt-600 focus:outline-none bg-white text-sm font-semibold text-cobalt-950 shadow-sm">
+              </select>
+
+              <div id="product-info-card" class="rounded-2xl bg-gradient-to-br from-cobalt-50 to-sky-50/70 border border-cobalt-200/80 p-4 text-xs space-y-1.5">
+              </div>
+            </div>
+
+            <!-- Product Naming Mode (4 Options) -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <label class="text-sm font-bold text-cobalt-950">โหมดการระบุชื่อผลิตภัณฑ์ในคอนเทนต์</label>
+                <span class="text-[11px] font-medium text-cobalt-700">คุมความเสี่ยงโฆษณา อย.</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="naming-mode-group">
+                <button type="button" data-mode="extract_benefit" onclick="selectNamingMode('extract_benefit')"
+                        class="naming-mode-btn p-2.5 rounded-2xl border-2 text-xs font-bold transition text-center">
+                  ใส่เฉพาะสารสกัด<br/>+ benefit
+                </button>
+                <button type="button" data-mode="product_extract" onclick="selectNamingMode('product_extract')"
+                        class="naming-mode-btn p-2.5 rounded-2xl border-2 text-xs font-bold transition text-center">
+                  ใส่ชื่อผลิตภัณฑ์<br/>+ สารสกัด
+                </button>
+                <button type="button" data-mode="product_only" onclick="selectNamingMode('product_only')"
+                        class="naming-mode-btn p-2.5 rounded-2xl border-2 text-xs font-bold transition text-center">
+                  ใส่ชื่อผลิตภัณฑ์
+                </button>
+                <button type="button" data-mode="auto" onclick="selectNamingMode('auto')"
+                        class="naming-mode-btn p-2.5 rounded-2xl border-2 text-xs font-bold transition text-center">
+                  Auto<br/><span class="text-[10px] font-normal">(AI ประเมินให้)</span>
+                </button>
+              </div>
+
+              <div id="naming-brief-box" class="hidden rounded-2xl bg-amber-50 border border-amber-200 p-3 space-y-2">
+                <p class="text-xs font-semibold text-amber-900">
+                  ⚠️ โหมดนี้มีการระบุชื่อผลิตภัณฑ์ในคอนเทนต์ กรุณาระบุบรีฟเพิ่มเติมหรือเงื่อนไขที่ต้องการด้านล่าง:
+                </p>
+                <input type="text" id="naming-brief-input" placeholder="เช่น อนุญาตให้พูดชื่อสินค้าเฉพาะช่วงท้ายคลิป 5 วินาทีสุดท้าย..."
+                       class="w-full px-3 py-2 rounded-xl border border-amber-300 text-xs bg-white focus:outline-none focus:border-cobalt-600" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-cobalt-100">
+          <div class="text-xs text-slate-500">
+            สถานะแพคเกจ: <strong id="step1-pkg-status" class="text-cobalt-800">ไม่ใส่ขวด/กระปุกสินค้าจริง (ใช้ภาพเชิงสัญลักษณ์ 3D)</strong>
+          </div>
+          <button type="button" onclick="goToStep(2)"
+                  class="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-cobalt-600 to-cobalt-800 text-white font-bold text-sm shadow-md">
+            <span>ถัดไป: เลือกแพลตฟอร์ม &amp; ตัวละคร 3D</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== STEP 2: PLATFORM, DURATION, STYLE & 3D AVATARS ==================== -->
+    <section id="step-panel-2" class="step-panel hidden space-y-6">
+      <div class="studio-glass rounded-3xl p-5 sm:p-7 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-cobalt-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="icon-3d w-12 h-12 bg-gradient-to-br from-violet-500 to-indigo-700 text-white">
+              <i data-lucide="palette" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h2 class="text-lg sm:text-xl font-extrabold text-cobalt-950">ขั้นตอนที่ 2: กำหนดแพลตฟอร์ม ความยาว สไตล์ภาพ &amp; ตัวละคร 3D</h2>
+              <p class="text-xs sm:text-sm text-slate-600">เลือกสัดส่วนคลิป ความยาวมาตรฐาน 30 วิ–1 นาที หรือเปิด Avatar Auto ให้ AI คิดตัวละครใหม่</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Target Platform -->
+          <div class="space-y-2">
+            <label for="platform-select" class="block text-sm font-bold text-cobalt-950">แพลตฟอร์มเป้าหมาย</label>
+            <select id="platform-select" onchange="onPlatformChange()"
+                    class="w-full px-4 py-3 rounded-2xl border-2 border-cobalt-200 focus:border-cobalt-600 focus:outline-none bg-white text-sm font-semibold text-cobalt-950">
+              <option value="TikTok (9:16)">TikTok (9:16)</option>
+              <option value="Instagram (9:16)">Instagram (9:16)</option>
+              <option value="YouTube (16:9)">YouTube (16:9)</option>
+              <option value="Facebook (9:16)">Facebook (9:16)</option>
+              <option value="YouTube Shorts (9:16)">YouTube Shorts (9:16)</option>
+              <option value="Facebook (16:9)">Facebook (16:9)</option>
+            </select>
+            <p id="platform-ratio-hint" class="text-[11px] text-cobalt-700 font-medium">สัดส่วนภาพใน Prompt: แนวตั้ง 9:16</p>
+          </div>
+
+          <!-- Visual Style -->
+          <div class="space-y-2">
+            <label for="style-select" class="block text-sm font-bold text-cobalt-950">สไตล์ภาพหลัก (Visual Style)</label>
+            <select id="style-select" onchange="state.visualStyle = this.value"
+                    class="w-full px-4 py-3 rounded-2xl border-2 border-cobalt-200 focus:border-cobalt-600 focus:outline-none bg-white text-sm font-semibold text-cobalt-950">
+              <option value="สไตล์ 3D Pixar (3D Pixar Style)">สไตล์ 3D Pixar</option>
+              <option value="สไตล์ 3D สมัยใหม่ (3D Stylized Animation)">3D Stylized (มาตรฐาน 3D)</option>
+              <option value="3D Microscopic Sci-Fi (โลกจุลภาคในร่างกาย)">3D Microscopic Sci-Fi</option>
+              <option value="Clinical Lab-Core Clean (คลีน วิทยาศาสตร์การแพทย์)">Clinical Lab-Core Clean</option>
+              <option value="Modern Lifestyle 3D (ไลฟ์สไตล์ 3D สดใส)">Modern Lifestyle 3D</option>
+            </select>
+          </div>
+
+          <!-- Duration Control -->
+          <div class="space-y-2">
+            <label class="block text-sm font-bold text-cobalt-950">ความยาวคลิป (มาตรฐาน 30 วิ – 1 นาที)</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="selectDuration(30)" data-dur="30" class="dur-btn py-2.5 rounded-xl border-2 text-xs font-bold transition">30 วินาที</button>
+              <button type="button" onclick="selectDuration(45)" data-dur="45" class="dur-btn py-2.5 rounded-xl border-2 text-xs font-bold transition">45 วินาที</button>
+              <button type="button" onclick="selectDuration(60)" data-dur="60" class="dur-btn py-2.5 rounded-xl border-2 text-xs font-bold transition">1 นาที</button>
+            </div>
+
+            <button type="button" id="custom-dur-toggle" onclick="toggleCustomDuration()"
+                    class="w-full mt-1.5 py-2 px-3 rounded-xl border border-dashed border-cobalt-400 text-cobalt-800 bg-cobalt-50/70 hover:bg-cobalt-100 text-xs font-bold transition flex items-center justify-center gap-1.5">
+              <span>⏱️ มากกว่า 1 นาที (กำหนดเอง)</span>
+            </button>
+
+            <div id="custom-dur-panel" class="hidden mt-2 p-3 rounded-2xl bg-indigo-50 border border-indigo-200 space-y-2">
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="setCustomDurationSeconds(90)" class="px-2.5 py-1 rounded-lg bg-white border border-indigo-200 text-[11px] font-bold text-indigo-900 hover:bg-indigo-600 hover:text-white transition">1 นาที 30 วิ</button>
+                <button type="button" onclick="setCustomDurationSeconds(120)" class="px-2.5 py-1 rounded-lg bg-white border border-indigo-200 text-[11px] font-bold text-indigo-900 hover:bg-indigo-600 hover:text-white transition">2 นาที</button>
+                <button type="button" onclick="setCustomDurationSeconds(180)" class="px-2.5 py-1 rounded-lg bg-white border border-indigo-200 text-[11px] font-bold text-indigo-900 hover:bg-indigo-600 hover:text-white transition">3 นาที</button>
+                <button type="button" onclick="setCustomDurationSeconds(300)" class="px-2.5 py-1 rounded-lg bg-white border border-indigo-200 text-[11px] font-bold text-indigo-900 hover:bg-indigo-600 hover:text-white transition">5 นาที</button>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" id="custom-dur-input" min="61" max="600" value="90" oninput="setCustomDurationSeconds(this.value)"
+                       class="w-24 px-3 py-1.5 rounded-xl border border-indigo-300 text-xs font-bold bg-white" />
+                <span class="text-xs text-indigo-900 font-medium">วินาที (แบ่งเวลา 5 ซีนอัตโนมัติ)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Character Bank + Avatar Auto -->
+        <div class="space-y-4 pt-2 border-t border-cobalt-100">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold text-cobalt-950">คลังตัวละครสไตล์ 3D (เลือกได้หลายตัว หรือเปิด Avatar Auto)</h3>
+              <p class="text-xs text-slate-500">ล็อกลักษณะตัวละครให้คงที่ทุกซีน หรือให้ Avatar Auto คิดตัวละคร 3D ใหม่ให้ตรงกับคอนเทนต์โดยเฉพาะ</p>
+            </div>
+            <button type="button" id="avatar-auto-btn" onclick="toggleAvatarAuto()"
+                    class="magnetic-btn inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border-2 text-xs sm:text-sm font-bold transition">
+              <span>🤖 Avatar Auto</span>
+              <span id="avatar-auto-badge" class="px-2 py-0.5 rounded-full text-[10px]">เปิดอยู่</span>
+            </button>
+          </div>
+
+          <div id="avatar-auto-preview" class="rounded-3xl bg-gradient-to-br from-cobalt-900 via-cobalt-800 to-indigo-900 text-white p-5 space-y-4 shadow-lg">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5">
+                <span class="px-2.5 py-1 rounded-full bg-sky-400/25 border border-sky-300/40 text-xs font-bold text-sky-200">🤖 Avatar Auto Active</span>
+                <span class="text-xs sm:text-sm font-semibold">AI คิดตัวละคร 3D ชุดใหม่ให้สอดคล้องกับเนื้อหาโดยไม่อิงคลังเดิม</span>
+              </div>
+              <button type="button" onclick="regenerateAutoAvatars()"
+                      class="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-xs font-bold transition">
+                🎲 สุ่มคิดตัวละครใหม่
+              </button>
+            </div>
+            <div id="avatar-auto-cards" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            </div>
+          </div>
+
+          <div id="character-bank-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-cobalt-100">
+          <button type="button" onclick="goToStep(1)"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl border-2 border-cobalt-200 text-cobalt-900 font-bold text-sm hover:bg-cobalt-50 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>ย้อนกลับ</span>
+          </button>
+          <button type="button" onclick="proceedToFactCheck()"
+                  class="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-cobalt-600 to-cobalt-800 text-white font-bold text-sm shadow-md">
+            <i data-lucide="scan-search" class="w-4 h-4"></i>
+            <span>วิเคราะห์ Content Repurposing &rarr; ขั้นตอนที่ 3</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== STEP 3: CONTENT REPURPOSING FACT CHECK ==================== -->
+    <section id="step-panel-3" class="step-panel hidden space-y-6">
+      <div class="studio-glass rounded-3xl p-5 sm:p-7 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-cobalt-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="icon-3d w-12 h-12 bg-gradient-to-br from-sky-500 to-cobalt-700 text-white">
+              <i data-lucide="file-check-2" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h2 class="text-lg sm:text-xl font-extrabold text-cobalt-950">ขั้นตอนที่ 3: ตรวจสอบข้อมูล Content Repurposing (Fact Check)</h2>
+              <p class="text-xs sm:text-sm text-slate-600">ตรวจสอบและปรับแก้ประเด็นหลัก สารสำคัญ และ Pain Point ก่อนสร้าง 3 สตอรี่บอร์ด (ระบบจะตัดหน่วย mg/มก. ออกอัตโนมัติในสตอรี่และ Prompt)</p>
+            </div>
+          </div>
+
+          <button type="button" onclick="runVisionAnalysis()" id="btn-run-vision"
+                  class="magnetic-btn inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-sky-100 hover:bg-sky-200 text-cobalt-900 border border-sky-300 text-xs font-bold">
+            <i data-lucide="sparkles" class="w-4 h-4 text-cobalt-600"></i>
+            <span>วิเคราะห์ภาพด้วย Gemini Vision อีกครั้ง</span>
+          </button>
+        </div>
+
+        <div id="vision-loading-bar" class="hidden rounded-2xl bg-cobalt-50 border border-cobalt-200 p-4 flex items-center gap-3 text-sm font-semibold text-cobalt-900">
+          <div class="w-5 h-5 border-2 border-cobalt-600 border-t-transparent rounded-full animate-spin"></div>
+          <span>กำลังวิเคราะห์ภาพ Ad และเทียบข้อมูลผลิตภัณฑ์ Mega We Care ด้วย Gemini Vision...</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-cobalt-900">หัวข้อหลัก / ปัญหาสุขภาพ (Core Topic)</label>
+            <input type="text" id="fact-topic" class="w-full px-4 py-3 rounded-2xl border-2 border-cobalt-200 focus:border-cobalt-600 focus:outline-none text-sm font-medium bg-white" />
+          </div>
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-cobalt-900">สารอาหาร / สารสกัดสำคัญ (Active Ingredients — ตัดหน่วย mg อัตโนมัติตอนสร้างคอนเทนต์)</label>
+            <input type="text" id="fact-ingredients" class="w-full px-4 py-3 rounded-2xl border-2 border-cobalt-200 focus:border-cobalt-600 focus:outline-none text-sm font-medium bg-white" />
+          </div>
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-cobalt-900">ปัญหาและอินไซต์กลุ่มเป้าหมาย (Pain Points)</label>
+            <textarea id="fact-pains" rows="3" class="w-full px-4 py-3 rounded-2xl border-2 border-cobalt-200 focus:border-cobalt-600 focus:outline-none text-sm font-medium bg-white"></textarea>
+          </div>
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-cobalt-900">ประเด็นความรู้และทางออก (Key Takeaway / Benefit)</label>
+            <textarea id="fact-takeaway" rows="3" class="w-full px-4 py-3 rounded-2xl border-2 border-cobalt-200 focus:border-cobalt-600 focus:outline-none text-sm font-medium bg-white"></textarea>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-cobalt-100">
+          <button type="button" onclick="goToStep(2)"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl border-2 border-cobalt-200 text-cobalt-900 font-bold text-sm hover:bg-cobalt-50 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>ย้อนกลับ</span>
+          </button>
+          <button type="button" onclick="generate3AngleStoryboards()"
+                  class="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-cobalt-600 via-blue-600 to-indigo-700 text-white font-bold text-sm shadow-lg">
+            <i data-lucide="wand-2" class="w-4 h-4"></i>
+            <span>สร้าง 3 สตอรี่บอร์ด 3 เนื้อหาทันที</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== STEP 4: 3-ANGLE STORYBOARDS + INLINE EDIT + RISK GUARDRAIL ==================== -->
+    <section id="step-panel-4" class="step-panel hidden space-y-6">
+      <div id="risk-scanner-panel" class="studio-glass rounded-3xl p-5 space-y-4"></div>
+
+      <div class="studio-glass rounded-3xl p-5 sm:p-7 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-cobalt-100 pb-4">
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="selectAngleTab(0)" id="angle-tab-0" class="angle-tab px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition">
+              คลิปที่ 1: เปิดหัว Hook น่าสนใจ
+            </button>
+            <button type="button" onclick="selectAngleTab(1)" id="angle-tab-1" class="angle-tab px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition">
+              คลิปที่ 2: เชิงวิชาการย่อยง่าย
+            </button>
+            <button type="button" onclick="selectAngleTab(2)" id="angle-tab-2" class="angle-tab px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition">
+              คลิปที่ 3: เข้าใจง่าย หักล้างความเชื่อ
+            </button>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" id="toggle-edit-mode-btn" onclick="toggleInlineEditMode()"
+                    class="magnetic-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 text-xs font-bold transition">
+              <i data-lucide="pencil-line" class="w-3.5 h-3.5"></i>
+              <span id="toggle-edit-mode-label">✏️ แก้ไขข้อความในสตอรี่บอร์ด</span>
+            </button>
+
+            <button type="button" onclick="copyAllVOInActiveAngle()"
+                    class="magnetic-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-50 text-indigo-900 border border-indigo-200 text-xs font-bold hover:bg-indigo-100">
+              <i data-lucide="mic" class="w-3.5 h-3.5"></i>
+              <span>Copy เสียงพากย์ล้วน &rarr; AI Studio</span>
+            </button>
+
+            <div class="inline-flex rounded-xl bg-cobalt-50 p-1 border border-cobalt-200">
+              <button type="button" onclick="setViewMode('cards')" id="view-btn-cards" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">การ์ดซีน</button>
+              <button type="button" onclick="setViewMode('table')" id="view-btn-table" class="px-3 py-1.5 rounded-lg text-xs font-bold transition">ตาราง 11 คอลัมน์</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="active-angle-header" class="rounded-2xl bg-cobalt-50/80 border border-cobalt-200 p-4 flex flex-wrap items-center justify-between gap-3"></div>
+
+        <div id="storyboard-container" class="space-y-4"></div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-cobalt-100">
+          <button type="button" onclick="goToStep(3)"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl border-2 border-cobalt-200 text-cobalt-900 font-bold text-sm hover:bg-cobalt-50 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>กลับไปแก้ข้อมูล</span>
+          </button>
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="autosave-status-badge" class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl">
+              💾 บันทึกอัตโนมัติในเบราว์เซอร์แล้ว
+            </span>
+            <button type="button" onclick="goToStep(5)"
+                    class="magnetic-btn inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-700 text-white font-bold text-sm shadow-lg">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+              <span>ถัดไป: ดาวน์โหลด Google Sheet &amp; Excel</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== STEP 5: EXPORT (ONLY 2 CATEGORIES: SHEET & EXCEL + RE-IMPORT GUIDE) ==================== -->
+    <section id="step-panel-5" class="step-panel hidden space-y-6">
+      <div class="studio-glass rounded-3xl p-5 sm:p-7 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-cobalt-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="icon-3d w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-700 text-white">
+              <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h2 class="text-lg sm:text-xl font-extrabold text-cobalt-950">ขั้นตอนที่ 5: ดาวน์โหลดไฟล์ตามแพทเทิร์น Storyboard+Promt=tem</h2>
+              <p class="text-xs sm:text-sm text-slate-600">ครบ 3 คอนเทนต์ในไฟล์เดียว • 11 คอลัมน์ • Prompt 9 บูลเลท • เว้นว่าง 4 บรรทัดเป๊ะ • แถวโปร่งอ่านง่าย</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-cobalt-50/80 border border-cobalt-200 p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div class="flex items-center gap-2 font-semibold text-cobalt-950"><span class="text-emerald-600">✅</span> Banner + Meta 4 ช่อง</div>
+          <div class="flex items-center gap-2 font-semibold text-cobalt-950"><span class="text-emerald-600">✅</span> ตาราง 11 คอลัมน์เป๊ะ</div>
+          <div class="flex items-center gap-2 font-semibold text-cobalt-950"><span class="text-emerald-600">✅</span> เว้นว่าง 4 บรรทัดทุกคลิป</div>
+          <div class="flex items-center gap-2 font-semibold text-cobalt-950"><span class="text-emerald-600">✅</span> ไม่ระบุปริมาณ mg ในคอนเทนต์</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Category 1: Download ไฟล์ Sheet -->
+          <div class="tilt-card rounded-3xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50/80 to-white p-6 space-y-4 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <div class="icon-3d w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-700 text-white">
+                  <i data-lucide="table-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-extrabold text-emerald-950">1. Download ไฟล์ Sheet</h3>
+                  <p class="text-xs text-emerald-800/80">สำหรับนำเข้าเปิดใน Google Sheets หรือคัดลอกวางลง sheets.new ทันที</p>
+                </div>
+              </div>
+              <ul class="text-xs text-slate-600 space-y-1.5 pl-1">
+                <li>• แถบหัว Banner สีน้ำเงินเข้ม + แถบ Metadata 4 ช่องตรงต้นแบบ</li>
+                <li>• จัดสีหัวตาราง เส้นขอบ และผสานเซลล์แคปชั่น/แฮชแท็กอัตโนมัติ</li>
+                <li>• เว้นบรรทัดว่าง 4 แถวระหว่างคลิป 1, 2 และ 3 เป๊ะ 100%</li>
+              </ul>
+            </div>
+
+            <div class="space-y-2.5 pt-2">
+              <button type="button" onclick="downloadStyledWorkbook('sheet')"
+                      class="magnetic-btn w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-green-700 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Download ไฟล์ Google Sheet (.xlsx)</span>
+              </button>
+              <button type="button" onclick="copyQuotedTSVAndOpenSheets()"
+                      class="w-full py-2.5 px-4 rounded-2xl bg-white border-2 border-emerald-300 text-emerald-900 hover:bg-emerald-50 font-bold text-xs flex items-center justify-center gap-2 transition">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>คัดลอกตาราง &amp; เปิด sheets.new (วางที่ช่อง A1)</span>
+              </button>
+              <div id="fallback-sheet-link" class="hidden text-center text-xs pt-1"></div>
+            </div>
+          </div>
+
+          <!-- Category 2: ดาวน์โหลดไฟล์ Excel -->
+          <div class="tilt-card rounded-3xl border-2 border-cobalt-200 bg-gradient-to-br from-cobalt-50/80 to-white p-6 space-y-4 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <div class="icon-3d w-12 h-12 bg-gradient-to-br from-cobalt-600 to-cobalt-900 text-white">
+                  <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-extrabold text-cobalt-950">2. ดาวน์โหลดไฟล์ Excel</h3>
+                  <p class="text-xs text-cobalt-800/80">ไฟล์ Microsoft Excel (.xlsx) แท้ จัดความสูงแถวโปร่งสบายตา</p>
+                </div>
+              </div>
+              <ul class="text-xs text-slate-600 space-y-1.5 pl-1">
+                <li>• เปิดได้ทันทีใน Excel ภาษาไทยไม่เพี้ยน 100%</li>
+                <li>• คำนวณความสูงแถวอัตโนมัติ (190–300pt) ไม่ให้ตัวหนังสือเบียดกัน</li>
+                <li>• แยก 9 บูลเลทชัดเจน (กรณีไม่มีบทพูดระบุแค่ <strong>ไม่มี</strong> / <strong>None</strong>)</li>
+              </ul>
+            </div>
+
+            <div class="space-y-2.5 pt-2">
+              <button type="button" onclick="downloadStyledWorkbook('excel')"
+                      class="magnetic-btn w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-cobalt-600 to-cobalt-900 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>ดาวน์โหลดไฟล์ Excel (.xlsx)</span>
+              </button>
+              <div id="fallback-excel-link" class="hidden text-center text-xs pt-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Retroactive Editing Tip Strip -->
+        <div class="rounded-2xl bg-indigo-50/80 border border-indigo-200 p-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="text-xs text-indigo-950 space-y-0.5">
+            <div class="font-extrabold">🔄 ต้องการแก้ไขงานย้อนหลังหลังจาก Export ออกไปแล้ว?</div>
+            <p class="text-indigo-900/80">คุณสามารถนำไฟล์ <strong>.xlsx</strong> ที่เพิ่งดาวน์โหลดออกไป กดปุ่ม <strong>"เปิดไฟล์เก่าแก้ย้อนหลัง (.xlsx)"</strong> เพื่อโหลดกลับมาแก้ข้อความ ตรวจคำเสี่ยง อย. และส่งออกใหม่ได้ทุกเมื่อครับ</p>
+          </div>
+          <button type="button" onclick="document.getElementById('reimport-xlsx-input').click()"
+                  class="px-4 py-2 rounded-xl bg-white border border-indigo-300 text-indigo-900 hover:bg-indigo-100 text-xs font-bold shrink-0 transition">
+            📂 นำเข้าไฟล์ .xlsx มาแก้ไข
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-cobalt-100">
+          <button type="button" onclick="goToStep(4)"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl border-2 border-cobalt-200 text-cobalt-900 font-bold text-sm hover:bg-cobalt-50 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>กลับไปแก้ไข 3 สตอรี่บอร์ด</span>
+          </button>
+          <button type="button" onclick="goToStep(1)"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-cobalt-100 text-cobalt-900 hover:bg-cobalt-200 font-bold text-sm transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>เริ่มโปรเจกต์ใหม่</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== REAL-TIME AI ASSISTANT MODAL ==================== -->
+  <div id="assistant-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-cobalt-950/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-cobalt-200 flex flex-col max-h-[85vh]">
+      <div class="bg-gradient-to-r from-cobalt-900 via-cobalt-700 to-cobalt-600 text-white px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center text-lg">🩺</div>
+          <div>
+            <h3 class="font-bold text-sm sm:text-base">ผู้ช่วย Content Mega Wecare (Real-time AI)</h3>
+            <p class="text-[11px] text-sky-200 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              ออนไลน์ • เชื่อมข้อมูลสินค้าจริง &amp; สถานะหน้าเว็บปัจจุบัน
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button onclick="resetAssistantChat()" title="เริ่มคุยใหม่" class="p-2 rounded-xl hover:bg-white/15 text-white/90 text-xs">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          </button>
+          <button onclick="closeAssistantModal()" class="p-2 rounded-xl hover:bg-white/15 text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="px-4 py-2.5 bg-cobalt-50 border-b border-cobalt-100 flex flex-wrap gap-1.5">
+        <button onclick="askQuickQuestion('ช่วยคิด Hook 3 วินาทีแรกให้สินค้าที่ฉันเลือกอยู่หน่อย')" class="px-2.5 py-1 rounded-full bg-white border border-cobalt-200 text-[11px] font-semibold text-cobalt-900 hover:bg-cobalt-100">💡 คิด Hook ให้สินค้านี้</button>
+        <button onclick="askQuickQuestion('จุดเด่นและส่วนประกอบของสินค้าที่เลือกอยู่มีอะไรบ้าง')" class="px-2.5 py-1 rounded-full bg-white border border-cobalt-200 text-[11px] font-semibold text-cobalt-900 hover:bg-cobalt-100">💊 เช็กจุดเด่นสินค้านี้</button>
+        <button onclick="askQuickQuestion('โหมดใส่ชื่อผลิตภัณฑ์ 4 แบบต่างกันยังไง ควรเลือกอันไหน')" class="px-2.5 py-1 rounded-full bg-white border border-cobalt-200 text-[11px] font-semibold text-cobalt-900 hover:bg-cobalt-100">🛡️ กฎ อย. &amp; โหมดชื่อสินค้า</button>
+      </div>
+
+      <div id="assistant-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/70"></div>
+
+      <form onsubmit="handleAssistantSubmit(event)" class="p-3 bg-white border-t border-cobalt-100 flex items-center gap-2">
+        <input type="text" id="assistant-input" placeholder="พิมพ์คำถามเกี่ยวกับสินค้า กฎ อย. หรือวิธีใช้เว็บ..."
+               class="flex-1 px-4 py-2.5 rounded-2xl border border-cobalt-200 focus:border-cobalt-600 focus:outline-none text-sm" />
+        <button type="submit" class="px-4 py-2.5 rounded-2xl bg-cobalt-600 hover:bg-cobalt-700 text-white font-bold text-sm flex items-center gap-1.5">
+          <span>ส่ง</span>
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== LOGIN MODAL ==================== -->
+  <div id="login-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-cobalt-950/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-cobalt-200">
+      <div class="bg-gradient-to-r from-cobalt-900 to-cobalt-600 text-white p-5 flex items-center justify-between">
+        <div>
+          <h3 class="font-extrabold text-lg">เข้าสู่ระบบ Mega We Care Studio</h3>
+          <p class="text-xs text-sky-200">บันทึกประวัติคอนเทนต์และการตั้งค่าทีม</p>
+        </div>
+        <button onclick="closeLoginModal()" class="p-1.5 rounded-xl hover:bg-white/15"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleLoginSubmit(event)" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-cobalt-900 mb-1">อีเมลทีมงาน / ชื่อผู้ใช้</label>
+          <input type="text" id="login-email" required placeholder="creator@megawecare.com"
+                 class="w-full px-4 py-2.5 rounded-2xl border border-cobalt-200 focus:border-cobalt-600 focus:outline-none text-sm" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-cobalt-900 mb-1">รหัสผ่าน</label>
+          <input type="password" id="login-password" required placeholder="••••••••"
+                 class="w-full px-4 py-2.5 rounded-2xl border border-cobalt-200 focus:border-cobalt-600 focus:outline-none text-sm" />
+        </div>
+        <button type="submit" class="w-full py-3 rounded-2xl bg-cobalt-600 hover:bg-cobalt-700 text-white font-bold text-sm shadow-md">
+          เข้าสู่ระบบ
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== SETTINGS MODAL (API KEY) ==================== -->
+  <div id="settings-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-cobalt-950/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-cobalt-200">
+      <div class="bg-cobalt-950 text-white p-5 flex items-center justify-between">
+        <h3 class="font-extrabold text-base">ตั้งค่าการเชื่อมต่อ Gemini AI</h3>
+        <button onclick="closeSettingsModal()" class="p-1.5 rounded-xl hover:bg-white/15"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-cobalt-900 mb-1">Gemini API Key (ไม่บังคับ — หากเว้นว่างระบบใช้โหมดอัตโนมัติ)</label>
+          <input type="password" id="settings-api-key" placeholder="AIzaSy..."
+                 class="w-full px-4 py-2.5 rounded-2xl border border-cobalt-200 focus:border-cobalt-600 focus:outline-none text-sm" />
+          <p class="text-[11px] text-slate-500 mt-1">เก็บไว้ในเบราว์เซอร์ของคุณเท่านั้น ใช้สำหรับอ่านภาพ Ad และผู้ช่วยแชตเรียลไทม์</p>
+        </div>
+        <button onclick="saveSettings()" class="w-full py-3 rounded-2xl bg-cobalt-600 hover:bg-cobalt-700 text-white font-bold text-sm">
+          บันทึกการตั้งค่า
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ==================== APPLICATION SCRIPT ==================== -->
+  <script>
+    // ==================== 1. PRODUCT KNOWLEDGE BASE (AUTO + HERO PRODUCTS FIRST) ====================
+    const MEGA_PRODUCTS = [
+      { id: 'auto-ad', group: '🤖 อัตโนมัติ (AI Auto Detect)', name: 'Auto (ประเมินจากรูปไฟล์ AD)', short: 'Auto (ประเมินจากรูปไฟล์ AD)', ingredients: 'ประเมินสารสกัดและสูตรผลิตภัณฑ์อัตโนมัติจากภาพไฟล์ Ad ที่อัปโหลด', cleanExtract: 'สารอาหารและสารสกัดสำคัญจากภาพ Ad', benefit: 'วิเคราะห์จุดเด่น Benefit และประเด็นสุขภาพโดยตรงจากภาพโฆษณาที่อัปโหลด', target: 'กลุ่มเป้าหมายที่สอดคล้องกับภาพไฟล์ Ad', pain: 'ปัญหาสุขภาพและพฤติกรรมที่ปรากฏในภาพไฟล์ Ad' },
+
+      { id: 'nat-c', group: '🌟 HERO PRODUCTS', name: 'NAT C', short: 'NAT C (เสริมภูมิคุ้มกัน)', ingredients: 'Vitamin C 1,000 mg (Ascorbic acid + Sodium/Calcium Ascorbate) + Citrus Bioflavonoids 50 mg + Rutin + Hesperidin + Rose Hips + Acerola', cleanExtract: 'วิตามินซีสูตรเกลือลดกรดและไบโอฟลาโวนอยด์จากธรรมชาติ', benefit: 'เสริมสร้างภูมิคุ้มกัน ดูแลหลอดเลือดและผิวพรรณ สูตรเกลือลดกรดอ่อนโยนต่อกระเพาะอาหาร', target: 'ผู้ที่ป่วยง่าย ภูมิแพ้ ทำงานหนัก พักผ่อนน้อย และผู้ที่ต้องการดูแลผิวพรรณ', pain: 'เป็นหวัดง่าย อากาศเปลี่ยนก็จาม พักผ่อนน้อย กลัวกินวิตามินซีแล้วแสบท้อง' },
+      { id: 'nat-b', group: '🌟 HERO PRODUCTS', name: 'NAT B', short: 'NAT B (วิตามินบี 10 ชนิด สมดุล 1:1)', ingredients: 'วิตามินบีปริมาณสูงครบ 10 ชนิด (B1, B2, B3, B4 Choline, B5, B6, B7 Biotin, B8 Inositol, B9 Folic, B12) อัตราส่วนสมดุล 1:1', cleanExtract: 'วิตามินบีรวม โคลีน และอินโนซิทอล', benefit: 'ช่วยดูแลระบบประสาท ลดความเหนื่อยล้า อ่อนเพลีย และช่วยให้สมองปลอดโปร่ง', target: 'วัยทำงาน ผู้บริหาร นักเรียนนักศึกษาที่เครียดสะสม และผู้ที่อ่อนเพลีย', pain: 'ตื่นมาไม่สดชื่น สมองตื้อ บ่ายๆ หมดแรง เครียดสะสมจากการทำงานหนัก' },
+      { id: 'fish-oil', group: '🌟 HERO PRODUCTS', name: 'Fish Oil', short: 'Fish Oil (โอเมก้า-3 EPA/DHA เกรดยุโรป)', ingredients: 'น้ำมันปลาทะเลน้ำลึกเขตหนาว เกรด EP/EU Standard (Fish Oil 1,000 mg / Maxx Omega3 / Triple Omega) ให้ EPA และ DHA', cleanExtract: 'น้ำมันปลาทะเลน้ำลึกที่อุดมด้วยโอเมก้า-3 (EPA และ DHA)', benefit: 'ดูแลสุขภาพหัวใจและหลอดเลือด สมดุลระดับไตรกลีเซอไรด์ สมอง สายตา และดูแลข้อ', target: 'สายบุฟเฟต์ ผู้ที่ดูแลระดับไขมันในเลือด หัวใจ สมอง และผู้สูงอายุ', pain: 'ชอบกินของทอดบุฟเฟต์ กังวลเรื่องไขมันในเลือดและสุขภาพหลอดเลือดระยะยาว' },
+      { id: 'regenez', group: '🌟 HERO PRODUCTS', name: 'Regenez', short: 'Regenez (ไบโอตินสูง 900–1,000 มคก. บำรุงผมและเล็บ)', ingredients: 'Biotin 900–1,000 mcg, Silica (Horsetail), Zinc 15 mg, Vitamin B3/B5/B6, Vitamin C, Iron, Copper', cleanExtract: 'ไบโอติน ซิลิกาจากสารสกัดหางม้า ซิงค์ และวิตามินบี', benefit: 'เติมสารอาหารบำรุงรากผม เส้นผม และเล็บให้แข็งแรง ไม่เปราะหักง่าย', target: 'ผู้ที่มีปัญหาผมร่วง ผมบาง ทำสีผม/ความร้อนบ่อย หรือเล็บเปราะบาง', pain: 'หวีผมทีไรผมร่วงเต็มพื้น ทำสี-ดัด-ทำเล็บเจลบ่อยจนผมแห้งและเล็บฉีกง่าย' },
+      { id: 'lecithin', group: '🌟 HERO PRODUCTS', name: 'Lecithin', short: 'Lecithin (เลซิติน 1,200 มก. บำรุงตับและสมอง)', ingredients: 'Lecithin บริสุทธิ์ 1,200 mg (แหล่งฟอสฟาติดิลโคลีน ปราศจากสารฟอกขาว มาตรฐานยาสากล)', cleanExtract: 'เลซิตินบริสุทธิ์และฟอสฟาติดิลโคลีน', benefit: 'ดูแลสมดุลการเผาผลาญไขมันที่ตับ บำรุงสมอง ความจำ และช่วยดูแลท่อน้ำนมคุณแม่', target: 'สายปาร์ตี้ ชอบของมัน คนทำงานใช้สมองหนัก และคุณแม่ให้นมบุตร', pain: 'กินของมัน-บุฟเฟต์บ่อย พักผ่อนน้อย สมองล้าหลงลืมง่าย กังวลไขมันสะสมที่ตับ' },
+      { id: 'iicare', group: '🌟 HERO PRODUCTS', name: 'ii Care / ii Care Daily', short: 'ii Care / ii Care Daily (ลูทีน+ซีแซนทีน+แอสตาแซนทีน)', ingredients: 'ii Care: Lutein 3 mg + Bilberry 25 mg + Betacarotene | ii Care Daily: Lutein 10 mg (Lutemax) + Zeaxanthin 2 mg + Astaxanthin 6 mg (AstaReal)', cleanExtract: 'ลูทีน ซีแซนทีน บิลเบอร์รี และแอสตาแซนทีน', benefit: 'ช่วยกรองแสงสีฟ้าจากหน้าจอ ดูแลดวงตาจากอาการตาล้า ตาแห้ง และดูแลจอประสาทตา', target: 'วัยทำงานจ้องจอคอมพิวเตอร์ สายไถมือถือ และผู้ที่ใช้สายตาต่อเนื่องทั้งวัน', pain: 'จ้องจอวันละ 8–12 ชั่วโมง ตาแห้ง แสบตา ปวดกระบอกตา พร่ามัวตอนค่ำ' },
+      { id: 'eugica-spray', group: '🌟 HERO PRODUCTS', name: 'Eugica Mouth Spray', short: 'Eugica Mouth Spray (สเปรย์พ่นคอสมุนไพร)', ingredients: 'Herbal Mouth Spray (สมุนไพร 7 ชนิด: คาโมมายล์, โพรพอลิส, ว่านหางจระเข้, เปปเปอร์มินต์, ยูคาลิปตัส, ชะเอมเทศ, น้ำผึ้ง) / Cold Mouth Spray (ราก Pelargonium)', cleanExtract: 'สารสกัดสมุนไพรธรรมชาติ คาโมมายล์ โพรพอลิส และเปปเปอร์มินต์', benefit: 'ช่วยให้ชุ่มคอ เย็นสบาย ดูแลช่องคอเมื่อระคายคอหรือใช้เสียงหนัก ปราศจากน้ำตาล', target: 'ผู้ที่ใช้เสียงเยอะ พูดต่อเนื่อง หรือมีอาการระคายคอ คันคอ', pain: 'ประชุมทั้งวัน ใช้เสียงหนัก คอแห้งระคายคอ เจอฝุ่นและแอร์เย็น' },
+      { id: 'nutrivita', group: '🌟 HERO PRODUCTS', name: 'Nutrivita Daily', short: 'Nutrivita Daily (วิตามินและเกลือแร่รวม 23–24 ชนิด)', ingredients: 'วิตามินและเกลือแร่รวม 3 กลุ่ม: สารต้านอนุมูลอิสระ 6 ชนิด (C, E, D3, Zinc, Selenium, A/Beta-carotene) + แร่ธาตุ 7–8 ชนิด + วิตามินบี 10 ชนิด', cleanExtract: 'วิตามิน แร่ธาตุรวม และสารต้านอนุมูลอิสระ', benefit: 'ช่วยดูแลภูมิคุ้มกันและเติมสารอาหารพื้นฐานให้วัยทำงาน ลดความอ่อนล้าในชีวิตประจำวัน', target: 'วัยทำงานไลฟ์สไตล์เร่งรีบ ทานข้าวกล่อง ไม่ค่อยทานผักผลไม้ นอนดึก', pain: 'รีบจนไม่ได้กินมื้อเช้า กินอาหารซ้ำๆ ไม่ครบ 5 หมู่ อ่อนเพลียง่าย ป่วยบ่อย' },
+
+      { id: 'astax', group: '✨ ผิวพรรณ & แอนไทเอจจิ้ง', name: 'Astax', short: 'Astax (แอสตาแซนทีน AstaReal 4 / 6 มก.)', ingredients: 'Astaxanthin จากสาหร่ายสีแดง Haematococcus pluvialis สูตรลิขสิทธิ์ AstaReal® 4 mg / 6 mg', cleanExtract: 'แอสตาแซนทีนจากสาหร่ายสีแดงธรรมชาติ', benefit: 'สารต้านอนุมูลอิสระประสิทธิภาพสูง ช่วยดูแลผิวให้เรียบเนียนและทนต่อแสงแดด', target: 'ผู้ที่ต้องการดูแลริ้วรอย ชะลอความเสื่อมของผิวและเซลล์', pain: 'ออกแดดบ่อย ผิวโทรมไว เริ่มมีริ้วรอยก่อนวัย' },
+      { id: 'glow-collagen', group: '✨ ผิวพรรณ & แอนไทเอจจิ้ง', name: 'Glow Collagen', short: 'Glow Collagen (คอลลาเจน Verisol 2,500 มก.)', ingredients: 'Verisol® Hydrolysate Collagen 2,500 mg กลิ่นผลไม้ดื่มง่าย', cleanExtract: 'ไฮโดรไลเซตคอลลาเจน', benefit: 'ช่วยเสริมสร้างคอลลาเจน ให้ผิวเรียบเนียน ยืดหยุ่น กระชับ', target: 'ผู้ที่ต้องการดูแลความยืดหยุ่นและความกระชับของผิว', pain: 'ผิวขาดความเด้งกระชับ เริ่มหย่อนคล้อยตามวัย' },
+      { id: 'ab-prepro', group: '🌿 ลำไส้ & ระบบขับถ่าย', name: 'AB Pre & Pro', short: 'AB Pre & Pro (ซินไบโอติกส์ LA-5 + BB-12 + Inulin)', ingredients: 'Lactobacillus acidophilus LA-5 (1B CFU) + Bifidobacterium lactis BB-12 (1B CFU) + Inulin 2.24 g', cleanExtract: 'ซินไบโอติกส์ โพรไบโอติกส์สายพันธุ์ LA-5 และ BB-12 ผสานอินูลิน', benefit: 'สูตรซินไบโอติกส์ครบทั้งพรีและโพรไบโอติกส์ ช่วยปรับสมดุลลำไส้และการขับถ่าย', target: 'ผู้ที่ท้องผูกบ่อย ขับถ่ายไม่เป็นเวลา ท้องอืด หรือไม่ชอบทานผัก', pain: 'นั่งห้องน้ำนานหลายวันไม่ถ่าย ท้องอืดแน่นท้องเป็นประจำ' },
+      { id: 'mega-fiber', group: '🌿 ลำไส้ & ระบบขับถ่าย', name: 'Mega Fiber', short: 'Mega Fiber (ไฟเบอร์ 2 ชนิด ไม่ทำให้ท้องอืด)', ingredients: 'Fibersol-2 2.5 g + Inulin 2.5 g ผงไร้รสชาติผสมเครื่องดื่มได้ทุกชนิด', cleanExtract: 'ไฟเบอร์พรีไบโอติกส์จากธรรมชาติและอินูลิน', benefit: 'เพิ่มกากใยอาหารและเป็นพรีไบโอติกส์ ช่วยให้ขับถ่ายคล่องอย่างเป็นธรรมชาติ', target: 'คนไม่ชอบทานผัก ผลไม้ และผู้ที่ต้องการปรับสมดุลการขับถ่าย', pain: 'กินผักน้อย ขับถ่ายยาก กังวลกินไฟเบอร์แล้วท้องอืดมีลม' },
+      { id: 'flexigen', group: '🦴 กระดูก ข้อ & กล้ามเนื้อ', name: 'Flexigen', short: 'Flexigen (คอลลาเจนบำรุงข้อ Fortigel 10 ก.)', ingredients: 'Hydrolysate Collagen สูตรลิขสิทธิ์ Fortigel® 10 g', cleanExtract: 'ไฮโดรไลเซตคอลลาเจนสำหรับดูแลข้อ', benefit: 'ช่วยดูแลและเสริมสร้างคอลลาเจนให้กระดูกอ่อนข้อและน้ำเลี้ยงข้อ', target: 'นักกีฬา คนออกกำลังกาย คนใส่ส้นสูง ผู้มีน้ำหนักเกิน และผู้สูงอายุ', pain: 'ลุกนั่งมีเสียงกรอบแกรบในข้อเข่า ตื่นเช้าข้อยึดตึง' },
+      { id: 'calcium-d', group: '🦴 กระดูก ข้อ & กล้ามเนื้อ', name: 'Calcium-D', short: 'Calcium-D (แคลเซียมเหลว 600 มก. + วิตามิน D3)', ingredients: 'Calcium Carbonate 1,500 mg (แคลเซียมอิสระ 600 mg รูปแบบเหลว) + Vitamin D3 200 IU', cleanExtract: 'แคลเซียมรูปแบบเหลวและวิตามินดี 3', benefit: 'แคลเซียมเหลวดูดซึมง่าย ช่วยบำรุงกระดูกและฟันให้แข็งแรง', target: 'ผู้ที่ดื่มชา กาแฟเป็นประจำ ไม่ดื่มนม หญิงตั้งครรภ์ และผู้สูงอายุ', pain: 'ดื่มกาแฟทุกวัน ไม่ค่อยดื่มนม กังวลมวลกระดูกลดลงตามวัย' },
+      { id: 'nat-d', group: '🛡️ ภูมิคุ้มกัน & สุขภาพทั่วไป', name: 'Nat D', short: 'Nat D (วิตามินดี 3 สูง 600 / 1,000 / 5,000 IU)', ingredients: 'Vitamin D3 (600 IU / 1,000 IU / 5,000 IU)', cleanExtract: 'วิตามินดี 3', benefit: 'ช่วยเสริมภูมิคุ้มกัน ดูแลความแข็งแรงของกล้ามเนื้อและมวลกระดูก', target: 'ชาวออฟฟิศที่อยู่ในร่มไม่ค่อยโดนแดด และผู้สูงอายุ', pain: 'ทำงานในห้องแอร์ทั้งวันแทบไม่โดนแดด ภูมิคุ้มกันตกง่าย' },
+      { id: 'nat-mag', group: '🧠 สมอง การนอน & ระบบประสาท', name: 'Nat Mag', short: 'Nat Mag (แมกนีเซียม 350 มก. + B1, B6)', ingredients: 'Magnesium 350 mg + Vitamin B1 1.5 mg + Vitamin B6 2.0 mg', cleanExtract: 'แมกนีเซียม วิตามินบี 1 และวิตามินบี 6', benefit: 'ช่วยดูแลการทำงานของระบบประสาทและกล้ามเนื้อ ลดโอกาสการเป็นตะคริว', target: 'ผู้ที่ออกกำลังกาย นักวิ่ง ผู้สูงอายุ และผู้ที่พักผ่อนน้อย', pain: 'เป็นตะคริวที่น่องตอนกลางคืนบ่อย หรือปวดตึงศีรษะจากความเครียด' },
+      { id: 'valian-x', group: '🧠 สมอง การนอน & ระบบประสาท', name: 'Valian-X', short: 'Valian-X (สารสกัดรากวาเลอเรียน 445 มก.)', ingredients: 'Valerian root powdered extract 445 mg จากธรรมชาติ', cleanExtract: 'สารสกัดรากวาเลอเรียนจากธรรมชาติ', benefit: 'ช่วยให้ผ่อนคลายและนอนหลับได้ง่ายขึ้น ตื่นมาสดชื่นไม่มึนงง', target: 'ผู้ที่หลับยาก ตื่นกลางดึกบ่อย และผู้สูงอายุ', pain: 'หัวถึงหมอนแต่สมองยังคิดงาน นอนพลิกไปมาหลับยาก ตื่นกลางดึก' },
+      { id: 'alerten', group: '❤️ หัวใจ หลอดเลือด & ตับ', name: 'Alerten Bioemulcap', short: 'Alerten (CoQ10 100 มก. เทคโนโลยี VESISORB)', ingredients: 'Natural Co-enzyme Q10 (VESISORB® Nano-colloidal) 100 mg', cleanExtract: 'โคเอนไซม์คิวเทนจากธรรมชาติ', benefit: 'ช่วยสร้างพลังงานระดับเซลล์และต้านอนุมูลอิสระ ดูดซึมได้ดีขึ้น', target: 'ผู้ที่อ่อนเพลียเรื้อรัง ดูแลกล้ามเนื้อหัวใจ และผู้ทานยาลดไขมัน', pain: 'รู้สึกเหนื่อยล้าหมดแรงง่าย แม้พักผ่อนแล้วก็ยังไม่สดชื่น' }
+    ];
+
+    // ==================== 2. 10 3D STYLIZED CHARACTERS ====================
+    const DEFAULT_CHARACTERS = [
+      { id: 'c1', emoji: '🏃‍♀️', name: 'น้องเมย์ (17 ปี)', tag: 'วัยรุ่นออกกำลังกาย', descTH: 'หญิงไทยวัยรุ่นอายุ 17 ปี สไตล์ 3D มัดผมหางม้าสูง ใส่ชุดสปอร์ตพาสเทลสดใส หน้าตาสดชื่นมีพลัง', descEN: '17-year-old Thai teen girl in 3D stylized style, high ponytail, pastel activewear, energetic cheerful expression' },
+      { id: 'c2', emoji: '👩‍💻', name: 'คุณแพรว (25 ปี)', tag: 'สาวออฟฟิศจ้องจอ', descTH: 'หญิงไทยวัยทำงานอายุ 25 ปี สไตล์ 3D ผมประบ่าสีน้ำตาลเข้ม สวมเบลเซอร์ลำลองสีฟ้าอ่อน สีหน้าจริงจังแต่น่ารัก', descEN: '25-year-old Thai office woman in 3D stylized style, shoulder-length dark brown hair, light blue smart-casual blazer, expressive eyes' },
+      { id: 'c3', emoji: '👨‍💼', name: 'คุณนนท์ (28 ปี)', tag: 'หนุ่มออฟฟิศ/นักวิ่ง', descTH: 'ชายไทยวัยทำงานอายุ 28 ปี สไตล์ 3D ผมรองทรงเรียบร้อย สวมเสื้อเชิ้ตพับแขนหรือชุดแจ็กเก็ตสปอร์ต บุคลิกกระฉับกระเฉง', descEN: '28-year-old Thai male professional in 3D stylized style, neat short hair, rolled-sleeve shirt or sporty jacket, friendly energetic vibe' },
+      { id: 'c4', emoji: '🥗', name: 'คุณมิน (26 ปี)', tag: 'สายเฮลตี้รักสุขภาพ', descTH: 'หญิงไทยอายุ 26 ปี สไตล์ 3D ผมบ๊อบสั้นประบ่า สวมเสื้อคาร์ดิแกนถักโทนอบอุ่น ยิ้มสดใสในครัวสว่าง', descEN: '26-year-old Thai healthy-lifestyle woman in 3D stylized style, warm bob haircut, cozy knit cardigan, radiant warm smile' },
+      { id: 'c5', emoji: '🏋️‍♂️', name: 'คุณก้อง (30 ปี)', tag: 'สายฟิตเนส/เวทเทรนนิ่ง', descTH: 'ชายไทยอายุ 30 ปี สไตล์ 3D รูปร่างสมส่วนแข็งแรง สวมเสื้อกล้ามสปอร์ตสีกรมท่า บุคลิกมั่นใจ', descEN: '30-year-old athletic Thai man in 3D stylized style, fit build, navy gym wear, confident motivating expression' },
+      { id: 'c6', emoji: '👩‍👧', name: 'คุณแม่นิภา (38 ปี)', tag: 'คุณแม่ยุคใหม่ดูแลครอบครัว', descTH: 'หญิงไทยอายุ 38 ปี สไตล์ 3D รวบผมครึ่งศีรษะอย่างสุภาพ สวมชุดเดรสลำลองโทนครีม ดูอบอุ่นใจดี', descEN: '38-year-old modern Thai mother in 3D stylized style, half-up hair, cream casual dress, warm caring smile' },
+      { id: 'c7', emoji: '👴', name: 'คุณลุงสมชาย (60 ปี)', tag: 'ผู้สูงอายุแอคทีฟ', descTH: 'ชายไทยวัยเกษียณอายุ 60 ปี สไตล์ 3D ผมแซมสีดอกเลา ใส่เสื้อโปโลสีฟ้าสะอาดตา ยิ้มอบอุ่นแข็งแรง', descEN: '60-year-old active Thai senior man in 3D stylized style, salt-and-pepper hair, crisp blue polo shirt, warm healthy smile' },
+      { id: 'c8', emoji: '👵', name: 'คุณป้ามาลี (58 ปี)', tag: 'คุณแม่สายใส่ใจกระดูก/ข้อ', descTH: 'หญิงไทยอายุ 58 ปี สไตล์ 3D ผมสั้นดัดลอนอ่อนโยน สวมเสื้อผ้าลินินสีพาสเทล ใบหน้ายิ้มแย้มใจดี', descEN: '58-year-old Thai senior woman in 3D stylized style, soft wavy short hair, pastel linen blouse, gentle cheerful expression' },
+      { id: 'c9', emoji: '👨‍⚕️', name: 'ดร.ลีโอ (35 ปี)', tag: 'ผู้เชี่ยวชาญ Lab-Core', descTH: 'ผู้เชี่ยวชาญชายอายุ 35 ปี สไตล์ 3D สวมเสื้อกาวน์ห้องแล็บสีขาวสะอาด แว่นตากรอบบาง บุคลิกน่าเชื่อถือและเป็นมิตร', descEN: '35-year-old male health scientist in 3D stylized style, crisp white lab coat, thin-framed glasses, trustworthy friendly expression' },
+      { id: 'c10', emoji: '🎓', name: 'น้องบีม (21 ปี)', tag: 'นักศึกษาสายนอนดึก', descTH: 'นักศึกษาไทยอายุ 21 ปี สไตล์ 3D สวมเสื้อฮู้ดดี้โอเวอร์ไซส์สีน้ำเงินอ่อน แบกเป้ สีหน้าขี้เล่นเข้าถึงง่าย', descEN: '21-year-old Thai university student in 3D stylized style, light blue oversized hoodie, relatable playful expression' }
+    ];
+
+    // ==================== 3. 3-CATEGORY RISK WORD DICTIONARY ====================
+    const RISK_RULES = [
+      { word: 'รักษาหายขาด', category: 'FDA', label: 'กฎ อย. (Overclaim)', suggest: 'มีส่วนช่วยดูแลสุขภาพอย่างต่อเนื่อง' },
+      { word: 'หายขาด', category: 'FDA', label: 'กฎ อย. (Overclaim)', suggest: 'ดูแลและบรรเทาอาการอย่างเหมาะสม' },
+      { word: 'เห็นผลทันที', category: 'FDA', label: 'กฎ อย. (Overclaim)', suggest: 'ดูแลอย่างต่อเนื่องเป็นประจำ' },
+      { word: '100%', category: 'FDA', label: 'กฎ อย. (Overclaim)', suggest: 'อย่างมีประสิทธิภาพตามกลไกธรรมชาติ' },
+      { word: 'การันตี', category: 'FDA', label: 'กฎ อย. (Overclaim)', suggest: 'มั่นใจในมาตรฐานการผลิตระดับสากล' },
+      { word: 'ดีที่สุด', category: 'FDA', label: 'กฎ อย. (Overclaim)', suggest: 'เป็นทางเลือกคุณภาพระดับสากล' },
+      { word: 'ป้องกันโรค', category: 'FDA', label: 'กฎ อย. (Overclaim)', suggest: 'ดูแลสุขภาพเชิงป้องกันในชีวิตประจำวัน' },
+      { word: 'รักษาโรค', category: 'FDA', label: 'กฎ อย. (Overclaim)', suggest: 'ดูแลสมดุลร่างกายควบคู่การปรับพฤติกรรม' },
+      { word: 'ล้างพิษ', category: 'FDA', label: 'กฎ อย. (Overclaim)', suggest: 'ดูแลสมดุลการทำงานของระบบร่างกาย' },
+
+      { word: 'ตาพัง', category: 'SOCIAL', label: 'เสี่ยงโดนลดการมองเห็น', suggest: 'ดวงตาล้าและเสื่อมไวกว่าปกติ' },
+      { word: 'ลดน้ำหนัก', category: 'SOCIAL', label: 'เสี่ยงโดนลดการมองเห็น', suggest: 'ดูแลรูปร่างและสมดุลการเผาผลาญ' },
+      { word: 'ผอมไว', category: 'SOCIAL', label: 'เสี่ยงโดนลดการมองเห็น', suggest: 'ดูแลหุ่นให้เฟิร์มกระชับอย่างยั่งยืน' },
+      { word: 'โรคร้าย', category: 'SOCIAL', label: 'เสี่ยงโดนลดการมองเห็น', suggest: 'ปัญหาสุขภาพระยะยาวที่ควรใส่ใจ' },
+      { word: 'กดลิงก์หน้าโปรไฟล์', category: 'SOCIAL', label: 'เสี่ยงโดนลดการมองเห็น', suggest: 'ศึกษาข้อมูลเพิ่มเติมได้ในคอมเมนต์' },
+      { word: 'แอดไลน์', category: 'SOCIAL', label: 'เสี่ยงโดนลดการมองเห็น', suggest: 'สอบถามข้อมูลสุขภาพเพิ่มเติมได้เลย' },
+
+      { word: 'ซื้อเลย', category: 'HARDSELL', label: 'ขายตรงเกินไป (Hard Sell)', suggest: 'ลองศึกษาข้อมูลเพิ่มเติมเพื่อเลือกให้เหมาะกับตัวเอง' },
+      { word: 'สั่งซื้อด่วน', category: 'HARDSELL', label: 'ขายตรงเกินไป (Hard Sell)', suggest: 'เริ่มต้นดูแลตัวเองตั้งแต่วันนี้' },
+      { word: 'โปรโมชั่นพิเศษ', category: 'HARDSELL', label: 'ขายตรงเกินไป (Hard Sell)', suggest: 'ทางเลือกการดูแลสุขภาพที่คุ้มค่า' },
+      { word: 'ลดราคา', category: 'HARDSELL', label: 'ขายตรงเกินไป (Hard Sell)', suggest: 'ตัวช่วยดูแลสุขภาพประจำวัน' },
+      { word: 'ทักแชท', category: 'HARDSELL', label: 'ขายตรงเกินไป (Hard Sell)', suggest: 'คอมเมนต์แลกเปลี่ยนประสบการณ์กันได้นะ' },
+      { word: 'ของมันต้องมี', category: 'HARDSELL', label: 'ขายตรงเกินไป (Hard Sell)', suggest: 'ไอเทมดูแลสุขภาพที่หลายคนเลือกติดบ้านไว้' }
+    ];
+
+    // ==================== 4. GLOBAL APPLICATION STATE ====================
+    const DRAFT_STORAGE_KEY = 'mwc_studio_autosave_v1';
+    const state = {
+      currentStep: 1,
+      imageBase64: null,
+      imageMime: null,
+      selectedProductId: 'iicare',
+      autoDetectedProductName: '',
+      namingMode: 'extract_benefit',
+      namingBrief: '',
+      includeRealPackage: false,
+      platform: 'TikTok (9:16)',
+      visualStyle: 'สไตล์ 3D Pixar (3D Pixar Style)',
+      durationSec: 45,
+      customDurationEnabled: false,
+      avatarAuto: true,
+      autoAvatars: [],
+      selectedCharIds: ['c2', 'c9'],
+      facts: {
+        topic: '',
+        ingredients: '',
+        pains: '',
+        takeaway: ''
+      },
+      storyboards: [],
+      activeAngleIdx: 0,
+      viewMode: 'cards',
+      inlineEditMode: false,
+      user: null,
+      apiKey: localStorage.getItem('mwc_gemini_key') || '',
+      chatHistory: []
+    };
+
+    // ==================== 5. INITIALIZATION ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      populateProductSelector();
+      selectNamingMode('extract_benefit');
+      selectDuration(45);
+      generateAutoAvatarsForContext();
+      renderCharacterBank();
+      updateAvatarAutoUI();
+      updateRealPackageUI();
+      checkSavedDraftAvailable();
+      goToStep(1);
+      initHeroParallax();
+      resetAssistantChat();
+      lucide.createIcons();
+    });
+
+    function initHeroParallax() {
+      const hero = document.getElementById('hero-section');
+      const glow = document.getElementById('hero-cursor-glow');
+      const discs = document.querySelectorAll('.cobalt-disc');
+      if (!hero) return;
+
+      hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        if (glow) {
+          glow.style.opacity = '1';
+          glow.style.left = x + 'px';
+          glow.style.top = y + 'px';
+        }
+        const nx = (x / rect.width - 0.5) * 2;
+        const ny = (y / rect.height - 0.5) * 2;
+        discs.forEach(d => {
+          const depth = parseFloat(d.dataset.parallax || '20');
+          d.style.transform = `translate3d(${nx * depth}px, ${ny * depth}px, 0)`;
+        });
+      });
+
+      hero.addEventListener('mouseleave', () => {
+        if (glow) glow.style.opacity = '0';
+        discs.forEach(d => d.style.transform = 'translate3d(0,0,0)');
+      });
+    }
+
+    function scrollToWorkspace() {
+      document.getElementById('workspace-anchor').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      const colors = {
+        info: 'bg-cobalt-900 text-white border-cobalt-700',
+        success: 'bg-emerald-600 text-white border-emerald-500',
+        warn: 'bg-amber-500 text-white border-amber-400'
+      };
+      el.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl border text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all duration-300 ${colors[type] || colors.info}`;
+      el.textContent = msg;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(8px)';
+        setTimeout(() => el.remove(), 300);
+      }, 3200);
+    }
+
+    // ==================== 5B. AUTO-SAVE & RE-IMPORT EXCEL (.XLSX) FOR RETROACTIVE EDITING ====================
+    function saveDraftToBrowser() {
+      try {
+        const draft = {
+          savedAt: new Date().toISOString(),
+          selectedProductId: state.selectedProductId,
+          autoDetectedProductName: state.autoDetectedProductName,
+          namingMode: state.namingMode,
+          includeRealPackage: state.includeRealPackage,
+          platform: state.platform,
+          visualStyle: state.visualStyle,
+          durationSec: state.durationSec,
+          facts: state.facts,
+          storyboards: state.storyboards
+        };
+        localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+        const badge = document.getElementById('autosave-status-badge');
+        if (badge) {
+          const t = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          badge.textContent = `💾 บันทึกอัตโนมัติแล้ว (${t})`;
+        }
+        checkSavedDraftAvailable();
+      } catch (e) {}
+    }
+
+    function checkSavedDraftAvailable() {
+      const btn = document.getElementById('hero-restore-draft-btn');
+      if (!btn) return;
+      try {
+        const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+        if (raw) {
+          const d = JSON.parse(raw);
+          if (d?.storyboards?.length > 0) {
+            btn.classList.remove('hidden');
+            return;
+          }
+        }
+      } catch (e) {}
+      btn.classList.add('hidden');
+    }
+
+    function restoreLastDraft() {
+      try {
+        const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+        if (!raw) return;
+        const d = JSON.parse(raw);
+        if (!d?.storyboards?.length) return;
+        state.selectedProductId = d.selectedProductId || 'iicare';
+        state.autoDetectedProductName = d.autoDetectedProductName || '';
+        state.namingMode = d.namingMode || 'extract_benefit';
+        state.includeRealPackage = !!d.includeRealPackage;
+        state.platform = d.platform || 'TikTok (9:16)';
+        state.visualStyle = d.visualStyle || 'สไตล์ 3D Pixar (3D Pixar Style)';
+        state.durationSec = d.durationSec || 45;
+        state.facts = d.facts || state.facts;
+        state.storyboards = d.storyboards;
+
+        document.getElementById('product-select').value = state.selectedProductId;
+        onProductChange();
+        selectNamingMode(state.namingMode);
+        updateRealPackageUI();
+        state.activeAngleIdx = 0;
+        goToStep(4);
+        renderAllStep4();
+        scrollToWorkspace();
+        showToast('กู้คืนงานล่าสุดกลับมาพร้อมแก้ไขต่อเรียบร้อย!', 'success');
+      } catch (e) {
+        showToast('ไม่สามารถเปิดงานล่าสุดได้', 'warn');
+      }
+    }
+
+    function handleReimportExcel(event) {
+      const file = event.target.files?.[0];
+      event.target.value = '';
+      if (!file) return;
+      if (typeof XLSX === 'undefined') {
+        showToast('กำลังโหลดไลบรารีอ่านไฟล์ Excel กรุณาลองใหม่อีกครั้ง', 'warn');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const wb = XLSX.read(data, { type: 'array' });
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+
+          const parsedStoryboards = [];
+          let currentSB = null;
+
+          for (let r = 0; r < rows.length; r++) {
+            const row = rows[r].map(c => String(c ?? '').trim());
+            const col0 = row[0] || '';
+
+            if (col0.includes('Storyboard & AI Prompt Template') || col0.includes('คอนเทนต์ที่')) {
+              if (currentSB && currentSB.scenes.length > 0) parsedStoryboards.push(currentSB);
+              const titleMatch = col0.split('|')[1]?.trim() || `คอนเทนต์ที่ ${parsedStoryboards.length + 1}`;
+              currentSB = {
+                angleKey: `imported_${parsedStoryboards.length + 1}`,
+                angleTitle: titleMatch.replace(/^คอนเทนต์ที่\s*\d+\s*[:：]?\s*/, '') || titleMatch,
+                campaign: titleMatch,
+                format: state.platform,
+                duration: formatDurationLabel(state.durationSec),
+                caption: '',
+                hashtags: '',
+                scenes: []
+              };
+            } else if (col0.startsWith('📌') || col0.includes('แคมเปญ')) {
+              if (!currentSB) {
+                currentSB = { angleKey: `imported_${parsedStoryboards.length + 1}`, angleTitle: `คอนเทนต์ที่ ${parsedStoryboards.length + 1}`, campaign: '', format: state.platform, duration: formatDurationLabel(state.durationSec), caption: '', hashtags: '', scenes: [] };
+              }
+              currentSB.campaign = col0.replace(/^📌\s*แคมเปญ\s*[:：]?\s*/, '').trim() || currentSB.campaign;
+              const fmtCell = row.find(x => x.includes('รูปแบบ')) || '';
+              const durCell = row.find(x => x.includes('ความยาว')) || '';
+              if (fmtCell) currentSB.format = fmtCell.replace(/^📱\s*รูปแบบ\s*[:：]?\s*/, '').trim();
+              if (durCell) currentSB.duration = durCell.replace(/^⏱️?\s*ความยาว\s*[:：]?\s*/, '').trim();
+            } else if (/^scene/i.test(col0) && col0.toLowerCase() !== 'scene') {
+              if (!currentSB) {
+                currentSB = { angleKey: `imported_${parsedStoryboards.length + 1}`, angleTitle: `คอนเทนต์ที่ ${parsedStoryboards.length + 1}`, campaign: file.name, format: state.platform, duration: formatDurationLabel(state.durationSec), caption: '', hashtags: '', scenes: [] };
+              }
+              if (row[9] && !currentSB.caption) currentSB.caption = row[9];
+              if (row[10] && !currentSB.hashtags) currentSB.hashtags = row[10];
+              currentSB.scenes.push({
+                scene: row[0],
+                time: row[1],
+                visual: row[2],
+                imgPromptTH: row[3],
+                imgPromptEN: row[4],
+                vidPromptTH: row[5],
+                vidPromptEN: row[6],
+                vo: row[7],
+                textOnClip: row[8]
+              });
+            }
+          }
+          if (currentSB && currentSB.scenes.length > 0) parsedStoryboards.push(currentSB);
+
+          if (parsedStoryboards.length === 0) {
+            showToast('ไม่พบตารางแพทเทิร์น Storyboard ในไฟล์นี้ กรุณาเลือกไฟล์ที่ Export จากระบบครับ', 'warn');
+            return;
+          }
+
+          state.storyboards = parsedStoryboards;
+          state.activeAngleIdx = 0;
+          state.inlineEditMode = true;
+          saveDraftToBrowser();
+          goToStep(4);
+          renderAllStep4();
+          scrollToWorkspace();
+          showToast(`นำเข้าไฟล์ "${file.name}" (${parsedStoryboards.length} คอนเทนต์) พร้อมโหมดแก้ไขเรียบร้อย!`, 'success');
+        } catch (err) {
+          showToast('อ่านไฟล์ Excel ไม่สำเร็จ กรุณาตรวจสอบว่าเป็นไฟล์ .xlsx ที่ถูกต้อง', 'warn');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    // ==================== 6. WIZARD NAVIGATION ====================
+    function goToStep(step) {
+      if ((step === 4 || step === 5) && state.storyboards.length === 0) {
+        showToast('กรุณากดสร้าง 3 สตอรี่บอร์ดก่อน หรือกดปุ่ม "ทดลองโหมด Demo ทันที"', 'warn');
+        return;
+      }
+      state.currentStep = step;
+      for (let i = 1; i <= 5; i++) {
+        const panel = document.getElementById(`step-panel-${i}`);
+        const btn = document.getElementById(`stepper-btn-${i}`);
+        if (panel) panel.classList.toggle('hidden', i !== step);
+        if (btn) {
+          if (i === step) {
+            btn.className = 'stepper-item flex flex-col sm:flex-row items-center justify-center gap-2 p-2.5 rounded-2xl transition text-left bg-cobalt-600 text-white shadow-md';
+          } else if (i < step) {
+            btn.className = 'stepper-item flex flex-col sm:flex-row items-center justify-center gap-2 p-2.5 rounded-2xl transition text-left bg-emerald-50 text-emerald-900 border border-emerald-200';
+          } else {
+            btn.className = 'stepper-item flex flex-col sm:flex-row items-center justify-center gap-2 p-2.5 rounded-2xl transition text-left bg-slate-50 text-slate-600 hover:bg-cobalt-50';
+          }
+        }
+      }
+      lucide.createIcons();
+    }
+
+    // ==================== 7. STEP 1: PRODUCT, IMAGE, NAMING & REAL PACKAGE ====================
+    function getSelectedProduct() {
+      return MEGA_PRODUCTS.find(p => p.id === state.selectedProductId) || MEGA_PRODUCTS[0];
+    }
+
+    function populateProductSelector() {
+      const sel = document.getElementById('product-select');
+      const groups = {};
+      MEGA_PRODUCTS.forEach(p => {
+        if (!groups[p.group]) groups[p.group] = [];
+        groups[p.group].push(p);
+      });
+      sel.innerHTML = Object.entries(groups).map(([grp, items]) => `
+        <optgroup label="${grp}">
+          ${items.map(p => `<option value="${p.id}">${p.short}</option>`).join('')}
+        </optgroup>
+      `).join('');
+      sel.value = state.selectedProductId;
+      onProductChange();
+    }
+
+    function onProductChange() {
+      state.selectedProductId = document.getElementById('product-select').value;
+      const p = getSelectedProduct();
+      if (p.id === 'auto-ad') {
+        document.getElementById('product-info-card').innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-extrabold text-cobalt-950 text-sm">🤖 ${p.name}</span>
+            <span class="px-2 py-0.5 rounded-full bg-cobalt-600 text-white text-[10px] font-bold">AI Auto Detect</span>
+          </div>
+          <p class="text-slate-700"><strong class="text-cobalt-900">การทำงาน:</strong> ระบบจะวิเคราะห์ภาพไฟล์ Ad ที่คุณอัปโหลดในขั้นตอนที่ 1 ด้วย Gemini Vision เพื่อระบุชื่อผลิตภัณฑ์ สารสกัดสำคัญ และปัญหาสุขภาพให้โดยอัตโนมัติ</p>
+          <p class="text-slate-600"><strong class="text-cobalt-900">สถานะภาพ Ad:</strong> ${state.imageBase64 ? '<span class="text-emerald-700 font-bold">อัปโหลดภาพแล้ว พร้อมประเมินอัตโนมัติ</span>' : '<span class="text-amber-700 font-bold">กรุณาอัปโหลดภาพ Ad ทางด้านซ้ายเพื่อให้ AI ประเมิน</span>'}</p>
+        `;
+      } else {
+        document.getElementById('product-info-card').innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-extrabold text-cobalt-950 text-sm">${p.name}</span>
+            <span class="px-2 py-0.5 rounded-full bg-white text-cobalt-700 border border-cobalt-200 text-[10px] font-bold">${p.group}</span>
+          </div>
+          <p class="text-slate-700"><strong class="text-cobalt-900">สารสำคัญ:</strong> ${p.ingredients}</p>
+          <p class="text-slate-700"><strong class="text-cobalt-900">จุดเด่น Benefit:</strong> ${p.benefit}</p>
+          <p class="text-slate-700"><strong class="text-cobalt-900">กลุ่มเป้าหมาย:</strong> ${p.target}</p>
+        `;
+      }
+      if (state.avatarAuto) {
+        generateAutoAvatarsForContext();
+      }
+    }
+
+    function selectNamingMode(mode) {
+      state.namingMode = mode;
+      document.querySelectorAll('.naming-mode-btn').forEach(btn => {
+        const active = btn.dataset.mode === mode;
+        btn.className = active
+          ? 'naming-mode-btn p-2.5 rounded-2xl border-2 text-xs font-bold transition text-center bg-cobalt-600 text-white border-cobalt-700 shadow-md'
+          : 'naming-mode-btn p-2.5 rounded-2xl border-2 text-xs font-bold transition text-center bg-white text-cobalt-900 border-cobalt-200 hover:bg-cobalt-50';
+      });
+      const briefBox = document.getElementById('naming-brief-box');
+      if (mode === 'product_only' || mode === 'product_extract') {
+        briefBox.classList.remove('hidden');
+      } else {
+        briefBox.classList.add('hidden');
+      }
+    }
+
+    function toggleRealPackage() {
+      state.includeRealPackage = !state.includeRealPackage;
+      updateRealPackageUI();
+      showToast(state.includeRealPackage ? 'เปิดโหมด "ใส่ package จริง" ในสตอรี่และ Prompt แล้ว' : 'ปิดโหมดแพคเกจจริง (ใช้ภาพเชิงสัญลักษณ์ 3D ปลอดภัย อย.)', 'info');
+    }
+
+    function updateRealPackageUI() {
+      const btn = document.getElementById('real-package-toggle');
+      const pill = document.getElementById('real-package-pill');
+      const status = document.getElementById('step1-pkg-status');
+      if (state.includeRealPackage) {
+        btn.className = 'inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl border-2 text-xs sm:text-sm font-bold transition shadow-sm bg-cobalt-50 border-cobalt-600 text-cobalt-950';
+        pill.className = 'px-2 py-0.5 rounded-full text-[11px] bg-cobalt-600 text-white';
+        pill.textContent = 'เปิดใช้งานอยู่';
+        status.textContent = 'อนุญาตให้ใส่แพคเกจสินค้าจริงในสตอรี่และ Prompt';
+      } else {
+        btn.className = 'inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl border-2 text-xs sm:text-sm font-bold transition shadow-sm bg-slate-50 border-slate-200 text-slate-700';
+        pill.className = 'px-2 py-0.5 rounded-full text-[11px] bg-slate-200 text-slate-700';
+        pill.textContent = 'ปิดอยู่ (ปลอดภัย อย.)';
+        status.textContent = 'ไม่ใส่ขวด/กระปุกสินค้าจริง (ใช้ภาพเชิงสัญลักษณ์ 3D)';
+      }
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        state.imageMime = file.type || 'image/jpeg';
+        state.imageBase64 = dataUrl.split(',')[1];
+        const preview = document.getElementById('ad-image-preview');
+        preview.src = dataUrl;
+        preview.classList.remove('hidden');
+        document.getElementById('dropzone-placeholder').classList.add('hidden');
+        if (state.selectedProductId === 'auto-ad') onProductChange();
+        showToast('อัปโหลดภาพ Ad สำเร็จ พร้อมทำ Content Repurposing!', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearUploadedImage() {
+      state.imageBase64 = null;
+      state.imageMime = null;
+      state.autoDetectedProductName = '';
+      document.getElementById('ad-image-input').value = '';
+      document.getElementById('ad-image-preview').classList.add('hidden');
+      document.getElementById('dropzone-placeholder').classList.remove('hidden');
+      if (state.selectedProductId === 'auto-ad') onProductChange();
+    }
+
+    // ==================== 8. STEP 2: PLATFORM, DURATION & AVATAR AUTO ====================
+    function onPlatformChange() {
+      state.platform = document.getElementById('platform-select').value;
+      const is169 = state.platform.includes('16:9');
+      document.getElementById('platform-ratio-hint').textContent = is169
+        ? 'สัดส่วนภาพใน Prompt: แนวนอน 16:9 (Widescreen)'
+        : 'สัดส่วนภาพใน Prompt: แนวตั้ง 9:16 (Vertical Short-Form)';
+    }
+
+    function selectDuration(sec) {
+      state.durationSec = sec;
+      state.customDurationEnabled = false;
+      document.getElementById('custom-dur-panel').classList.add('hidden');
+      document.querySelectorAll('.dur-btn').forEach(btn => {
+        const active = parseInt(btn.dataset.dur, 10) === sec;
+        btn.className = active
+          ? 'dur-btn py-2.5 rounded-xl border-2 text-xs font-bold transition bg-cobalt-600 text-white border-cobalt-700 shadow-sm'
+          : 'dur-btn py-2.5 rounded-xl border-2 text-xs font-bold transition bg-white text-cobalt-900 border-cobalt-200 hover:bg-cobalt-50';
+      });
+    }
+
+    function toggleCustomDuration() {
+      state.customDurationEnabled = !state.customDurationEnabled;
+      const panel = document.getElementById('custom-dur-panel');
+      if (state.customDurationEnabled) {
+        panel.classList.remove('hidden');
+        document.querySelectorAll('.dur-btn').forEach(btn => {
+          btn.className = 'dur-btn py-2.5 rounded-xl border-2 text-xs font-bold transition bg-white text-slate-400 border-slate-200';
+        });
+        setCustomDurationSeconds(document.getElementById('custom-dur-input').value || 90);
+      } else {
+        selectDuration(45);
+      }
+    }
+
+    function setCustomDurationSeconds(val) {
+      const sec = Math.max(61, Math.min(600, parseInt(val, 10) || 90));
+      state.durationSec = sec;
+      document.getElementById('custom-dur-input').value = sec;
+    }
+
+    function formatDurationLabel(sec) {
+      if (sec < 60) return `${sec} วินาที`;
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return s === 0 ? `${m} นาที` : `${m} นาที ${s} วินาที`;
+    }
+
+    function buildSceneTimestamps(totalSec) {
+      const weights = [0.12, 0.22, 0.24, 0.24, 0.18];
+      let cur = 0;
+      const fmt = (t) => `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(t % 60).padStart(2, '0')}`;
+      return weights.map((w, idx) => {
+        const start = cur;
+        const end = idx === 4 ? totalSec : Math.min(totalSec, cur + Math.max(4, Math.round(totalSec * w)));
+        cur = end;
+        return `${fmt(start)}–${fmt(end)}`;
+      });
+    }
+
+    function generateAutoAvatarsForContext(variantSeed = 0) {
+      const p = getSelectedProduct();
+      const palettes = [
+        { role: 'ตัวละครหลัก (Lead)', emoji: '🧑‍🎨', hair: 'ผมสั้นซอยทันสมัยสีน้ำตาลเข้ม', outfit: 'เสื้อเชิ้ตลำลองสีฟ้าโคบอลต์' },
+        { role: 'ตัวละครร่วมซีนเปรียบเทียบ', emoji: '🧑‍💻', hair: 'ผมประบ่าสีดำเงา', outfit: 'สเวตเตอร์สีครีมมินิมอล' },
+        { role: 'ผู้เชี่ยวชาญเฉพาะทาง 3D', emoji: '👩‍🔬', hair: 'รวบผมเรียบร้อยสวมแว่นทรงกลม', outfit: 'เสื้อกาวน์ Lab-Core สีขาวคลีน' }
+      ];
+      const altOutfits = ['แจ็กเก็ตสปอร์ตสีน้ำเงินกรมท่า', 'เสื้อยืดพาสเทลมินิมอลกับคาร์ดิแกน', 'เบลเซอร์สีขาวคลีนสไตล์คลินิก'];
+
+      let archetypes = [];
+      if (p.id === 'iicare') {
+        archetypes = [
+          { name: 'ดีไซเนอร์สายจ้องจอ 3D', age: '27 ปี', th: `ครีเอทีฟกราฟิกวัย 27 ปี สไตล์ 3D ${palettes[0].hair} สวม${variantSeed % 2 ? altOutfits[0] : palettes[0].outfit} นั่งทำงานหน้าจอคู่`, en: '27-year-old digital creative designer in 3D stylized style, modern dark brown hair, cobalt smart-casual outfit, relatable expressive face' },
+          { name: 'สายไถมือถือก่อนนอน 3D', age: '24 ปี', th: `คนรุ่นใหม่วัย 24 ปี สไตล์ 3D ${palettes[1].hair} สวม${variantSeed % 2 ? altOutfits[1] : palettes[1].outfit} สีหน้าตาล้าและขยี้ตาเบาๆ`, en: '24-year-old young adult in 3D stylized style, soft casual loungewear, subtly tired eyes from late-night screen scrolling' },
+          { name: 'นักทัศนมาตร 3D Lab-Core', age: '34 ปี', th: `ผู้เชี่ยวชาญด้านสายตาวัย 34 ปี สไตล์ 3D ${palettes[2].hair} สวม${palettes[2].outfit} บุคลิกอบอุ่นน่าเชื่อถือ`, en: '34-year-old vision specialist in 3D stylized style, clean white lab coat, thin glasses, warm trustworthy smile' }
+        ];
+      } else if (p.id === 'regenez' || p.id === 'astax' || p.id === 'glow-collagen') {
+        archetypes = [
+          { name: 'บิวตี้ครีเอเตอร์ 3D', age: '26 ปี', th: `บิวตี้ครีเอเตอร์หญิงวัย 26 ปี สไตล์ 3D สวมชุดเดรสโทนฟ้าพาสเทล ใบหน้าสดใสกำลังส่องกระจกดูแลตัวเอง`, en: '26-year-old beauty creator in 3D stylized style, pastel blue chic outfit, radiant expressive face' },
+          { name: 'สายทำสีผม/ออกแดด 3D', age: '29 ปี', th: `หญิงวัยทำงานอายุ 29 ปี สไตล์ 3D สวมเสื้อเบลาส์สีครีม สีหน้ากังวลเล็กน้อยกับปัญหาผิวและเส้นผม`, en: '29-year-old working woman in 3D stylized style, cream blouse, relatable slightly concerned look' },
+          { name: 'นักวิจัยโภชนเภสัช 3D', age: '36 ปี', th: `นักวิจัยความงามจากภายในวัย 36 ปี สไตล์ 3D สวมเสื้อกาวน์ Lab-Core สีขาวสะอาด ยิ้มมั่นใจ`, en: '36-year-old nutricosmetic researcher in 3D stylized style, crisp white lab coat, friendly expert vibe' }
+        ];
+      } else {
+        archetypes = [
+          { name: `ตัวแทนกลุ่มเป้าหมาย ${p.name} (3D)`, age: '28 ปี', th: `ตัวละครวัยทำงานอายุ 28 ปี สไตล์ 3D ที่สร้างใหม่เฉพาะคอนเทนต์ ${p.name} สวม${variantSeed % 2 ? altOutfits[0] : palettes[0].outfit} สีหน้าเข้าถึงง่าย`, en: `28-year-old modern Thai adult in 3D stylized style custom-designed for ${p.name} story, smart-casual blue outfit, relatable expression` },
+          { name: 'ตัวละครสายไลฟ์สไตล์เมือง (3D)', age: '31 ปี', th: `ตัวละครคนเมืองอายุ 31 ปี สไตล์ 3D สวม${variantSeed % 2 ? altOutfits[1] : palettes[1].outfit} สะท้อนพฤติกรรมชีวิตประจำวันจริง`, en: '31-year-old urban lifestyle character in 3D stylized style, minimalist casual wear, dynamic expressive body language' },
+          { name: 'นักวิทยาศาสตร์สุขภาพ 3D', age: '35 ปี', th: `ผู้เชี่ยวชาญด้านโภชนเภสัชวัย 35 ปี สไตล์ 3D สวม${variantSeed % 2 ? altOutfits[2] : palettes[2].outfit} บุคลิกโปร่งใสและน่าเชื่อถือ`, en: '35-year-old preventive health scientist in 3D stylized style, clean white lab coat, warm authoritative smile' }
+        ];
+      }
+
+      state.autoAvatars = archetypes.map((a, idx) => ({
+        role: palettes[idx].role,
+        emoji: palettes[idx].emoji,
+        ...a
+      }));
+      renderAutoAvatarCards();
+    }
+
+    function regenerateAutoAvatars() {
+      generateAutoAvatarsForContext(Math.floor(Math.random() * 10) + 1);
+      showToast('สุ่มคิดตัวละคร 3D ชุดใหม่ให้ตรงกับคอนเทนต์แล้ว!', 'success');
+    }
+
+    function renderAutoAvatarCards() {
+      const container = document.getElementById('avatar-auto-cards');
+      if (!container) return;
+      container.innerHTML = state.autoAvatars.map(a => `
+        <div class="rounded-2xl bg-white/10 border border-white/20 p-3.5 space-y-1.5 backdrop-blur-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-lg">${a.emoji}</span>
+            <span class="px-2 py-0.5 rounded-full bg-sky-400/25 text-[10px] font-bold text-sky-200">${a.role}</span>
+          </div>
+          <div class="font-bold text-sm text-white">${a.name} (${a.age})</div>
+          <p class="text-[11px] text-blue-100/90 leading-relaxed">${a.th}</p>
+        </div>
+      `).join('');
+    }
+
+    function toggleAvatarAuto() {
+      state.avatarAuto = !state.avatarAuto;
+      if (state.avatarAuto) generateAutoAvatarsForContext();
+      updateAvatarAutoUI();
+      renderCharacterBank();
+    }
+
+    function updateAvatarAutoUI() {
+      const btn = document.getElementById('avatar-auto-btn');
+      const badge = document.getElementById('avatar-auto-badge');
+      const preview = document.getElementById('avatar-auto-preview');
+      if (state.avatarAuto) {
+        btn.className = 'magnetic-btn inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border-2 text-xs sm:text-sm font-bold transition bg-cobalt-600 text-white border-cobalt-700 shadow-md';
+        badge.className = 'px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white';
+        badge.textContent = 'เปิดอยู่';
+        preview.classList.remove('hidden');
+      } else {
+        btn.className = 'magnetic-btn inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border-2 text-xs sm:text-sm font-bold transition bg-white text-cobalt-900 border-cobalt-200 hover:bg-cobalt-50';
+        badge.className = 'px-2 py-0.5 rounded-full text-[10px] bg-slate-200 text-slate-700';
+        badge.textContent = 'ปิดอยู่';
+        preview.classList.add('hidden');
+      }
+    }
+
+    function renderCharacterBank() {
+      const grid = document.getElementById('character-bank-grid');
+      if (!grid) return;
+      grid.innerHTML = DEFAULT_CHARACTERS.map(c => {
+        const selected = !state.avatarAuto && state.selectedCharIds.includes(c.id);
+        return `
+          <button type="button" onclick="togglePresetCharacter('${c.id}')"
+                  class="tilt-card text-left p-3 rounded-2xl border-2 transition ${selected ? 'bg-cobalt-50 border-cobalt-600 shadow-sm' : 'bg-white border-cobalt-100 hover:border-cobalt-300 opacity-90'}">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-2xl">${c.emoji}</span>
+              ${selected ? '<span class="px-1.5 py-0.5 rounded-full bg-cobalt-600 text-white text-[9px] font-bold">เลือกแล้ว</span>' : ''}
+            </div>
+            <div class="font-bold text-xs text-cobalt-950">${c.name}</div>
+            <div class="text-[10px] font-semibold text-cobalt-600 mb-1">${c.tag}</div>
+            <p class="text-[10px] text-slate-500 line-clamp-2">${c.descTH}</p>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function togglePresetCharacter(id) {
+      if (state.avatarAuto) {
+        state.avatarAuto = false;
+        updateAvatarAutoUI();
+      }
+      if (state.selectedCharIds.includes(id)) {
+        if (state.selectedCharIds.length > 1) {
+          state.selectedCharIds = state.selectedCharIds.filter(x => x !== id);
+        }
+      } else {
+        state.selectedCharIds.push(id);
+      }
+      renderCharacterBank();
+    }
+
+    // ==================== 9. STEP 3: CONTENT REPURPOSING VISION ANALYSIS ====================
+    async function proceedToFactCheck() {
+      goToStep(3);
+      if (state.imageBase64) {
+        await runVisionAnalysis();
+      } else {
+        fillDefaultFactsFromProduct();
+      }
+    }
+
+    function fillDefaultFactsFromProduct() {
+      const p = getSelectedProduct();
+      document.getElementById('fact-topic').value = `ดูแลสุขภาพตรงจุดด้วยสารอาหารสำคัญ (${p.name})`;
+      document.getElementById('fact-ingredients').value = p.cleanExtract || stripDosageFromText(p.ingredients);
+      document.getElementById('fact-pains').value = p.pain;
+      document.getElementById('fact-takeaway').value = p.benefit;
+    }
+
+    async function callGeminiWithBackoff(payload) {
+      const apiKey = state.apiKey || '';
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      const delays = [1000, 2000, 4000];
+      for (let i = 0; i <= delays.length; i++) {
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) return await res.json();
+          if (res.status !== 429 && res.status < 500) break;
+        } catch (err) {
+          if (i === delays.length) throw err;
+        }
+        if (i < delays.length) await new Promise(r => setTimeout(r, delays[i]));
+      }
+      throw new Error('Gemini API unavailable');
+    }
+
+    async function runVisionAnalysis() {
+      const p = getSelectedProduct();
+      if (!state.imageBase64) {
+        fillDefaultFactsFromProduct();
+        showToast(p.id === 'auto-ad' ? 'กรุณาอัปโหลดภาพ Ad ในขั้นตอนที่ 1 เพื่อให้ AI ประเมินผลิตภัณฑ์อัตโนมัติ' : 'ดึงข้อมูลจากฐานข้อมูลผลิตภัณฑ์ Mega We Care ให้แล้วครับ', p.id === 'auto-ad' ? 'warn' : 'info');
+        return;
+      }
+
+      const bar = document.getElementById('vision-loading-bar');
+      bar.classList.remove('hidden');
+      try {
+        const productHint = p.id === 'auto-ad'
+          ? 'โหมด Auto: ให้วิเคราะห์และระบุชื่อผลิตภัณฑ์ Mega We Care ที่ปรากฏหรือตรงกับภาพ Ad นี้มากที่สุดลงใน detectedProduct'
+          : `สินค้าอ้างอิง: ${p.name}`;
+        const payload = {
+          contents: [{
+            role: 'user',
+            parts: [
+              { text: `วิเคราะห์ภาพโฆษณานี้สำหรับแบรนด์ Mega We Care (${productHint}) แล้วสรุปเป็น JSON โดยมี key: detectedProduct, topic, ingredients (ไม่ต้องระบุปริมาณมิลลิกรัม mg/มก.), pains, takeaway เป็นภาษาไทยกระชับและถูกต้องตามกฎ อย.` },
+              { inlineData: { mimeType: state.imageMime || 'image/jpeg', data: state.imageBase64 } }
+            ]
+          }],
+          generationConfig: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: 'OBJECT',
+              properties: {
+                detectedProduct: { type: 'STRING' },
+                topic: { type: 'STRING' },
+                ingredients: { type: 'STRING' },
+                pains: { type: 'STRING' },
+                takeaway: { type: 'STRING' }
+              }
+            }
+          }
+        };
+        const result = await callGeminiWithBackoff(payload);
+        const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          const parsed = JSON.parse(text);
+          if (p.id === 'auto-ad' && parsed.detectedProduct) {
+            state.autoDetectedProductName = parsed.detectedProduct.trim();
+          }
+          document.getElementById('fact-topic').value = parsed.topic || state.autoDetectedProductName || p.name;
+          document.getElementById('fact-ingredients').value = stripDosageFromText(parsed.ingredients || p.cleanExtract);
+          document.getElementById('fact-pains').value = parsed.pains || p.pain;
+          document.getElementById('fact-takeaway').value = parsed.takeaway || p.benefit;
+          showToast(
+            p.id === 'auto-ad' && state.autoDetectedProductName
+              ? `AI ประเมินจากภาพ Ad พบผลิตภัณฑ์: ${state.autoDetectedProductName}`
+              : 'วิเคราะห์ภาพ Ad สำเร็จด้วย Gemini Vision!',
+            'success'
+          );
+        } else {
+          fillDefaultFactsFromProduct();
+        }
+      } catch (e) {
+        fillDefaultFactsFromProduct();
+        showToast('ใช้ข้อมูลผลิตภัณฑ์จริงจากฐานข้อมูล (เชื่อมต่อ Vision API ไม่สำเร็จ)', 'info');
+      } finally {
+        bar.classList.add('hidden');
+      }
+    }
+
+    // ==================== 10. STEP 4: GENERATE 3-ANGLE STORYBOARDS (NO MG/DOSAGE IN STORY & PROMPTS) ====================
+    function stripDosageFromText(text) {
+      return String(text || '')
+        .replace(/\b\d[\d.,–\-/\s]*(?:mg|mcg|µg|ug|g|kg|ml|iu|b\s*cfu|cfu)\b/gi, '')
+        .replace(/\d[\d.,–\-/\s]*(?:มก\.?|มคก\.?|กรัม|ก\.|มล\.?|มิลลิกรัม|ไมโครกรัม)/gi, '')
+        .replace(/\(\s*[/|,\-–]*\s*\)/g, '')
+        .replace(/\s+\/\s+(?=\s|$)/g, ' ')
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\s+([,+|])/g, '$1')
+        .trim();
+    }
+
+    function sanitizeSpokenVO(text) {
+      return stripDosageFromText(
+        String(text || '')
+          .replace(/\([^)]*\)/g, '')
+          .replace(/\[[^\]]*\]/g, '')
+          .replace(/(SFX|VO|เสียงพากย์|กลุ่มเป้าหมายหลัก)\s*[:：]/gi, '')
+      )
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function escapeHTML(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getActiveCharactersForStory() {
+      if (state.avatarAuto && state.autoAvatars.length >= 3) {
+        return {
+          leadTH: state.autoAvatars[0].th,
+          leadEN: state.autoAvatars[0].en,
+          expertTH: state.autoAvatars[2].th,
+          expertEN: state.autoAvatars[2].en
+        };
+      }
+      const chosen = DEFAULT_CHARACTERS.filter(c => state.selectedCharIds.includes(c.id));
+      const lead = chosen[0] || DEFAULT_CHARACTERS[1];
+      const expert = chosen[1] || DEFAULT_CHARACTERS[8];
+      return {
+        leadTH: lead.descTH,
+        leadEN: lead.descEN,
+        expertTH: expert.descTH,
+        expertEN: expert.descEN
+      };
+    }
+
+    function format9BulletPromptTH({ style, camera, shot, lighting, setting, character, action, constraints, dialogue }) {
+      const dlg = (!dialogue || /^(ไม่มี|none)/i.test(dialogue.trim())) ? 'ไม่มี' : stripDosageFromText(dialogue.trim());
+      return [
+        `- สไตล์ (Style): ${stripDosageFromText(style)}`,
+        `- มุมกล้อง (Camera): ${camera}`,
+        `- ระยะภาพ (Shot): ${shot}`,
+        `- แสง (Lighting): ${lighting}`,
+        `- ฉาก (Setting): ${stripDosageFromText(setting)}`,
+        `- ตัวละคร (Character): ${stripDosageFromText(character)}`,
+        `- การกระทำ (Action): ${stripDosageFromText(action)}`,
+        `- ข้อจำกัด (Constraints): ${stripDosageFromText(constraints)}`,
+        `- บทพูด (Dialogue): ${dlg}`
+      ].join('\n');
+    }
+
+    function format9BulletPromptEN({ style, camera, shot, lighting, setting, character, action, constraints, dialogue }) {
+      const dlg = (!dialogue || /^(ไม่มี|none)/i.test(dialogue.trim())) ? 'None' : stripDosageFromText(dialogue.trim());
+      return [
+        `- Style: ${stripDosageFromText(style)}`,
+        `- Camera: ${camera}`,
+        `- Shot: ${shot}`,
+        `- Lighting: ${lighting}`,
+        `- Setting: ${stripDosageFromText(setting)}`,
+        `- Character: ${stripDosageFromText(character)}`,
+        `- Action: ${stripDosageFromText(action)}`,
+        `- Constraints: ${stripDosageFromText(constraints)}`,
+        `- Dialogue: ${dlg}`
+      ].join('\n');
+    }
+
+    function runInstantDemoMode() {
+      state.selectedProductId = 'iicare';
+      document.getElementById('product-select').value = 'iicare';
+      onProductChange();
+      fillDefaultFactsFromProduct();
+      generate3AngleStoryboards();
+      showToast('เปิดโหมด Demo สำเร็จ! พร้อมดู 3 สตอรี่บอร์ด แก้ไขข้อความ และทดสอบดาวน์โหลด Sheet/Excel', 'success');
+    }
+
+    function generate3AngleStoryboards() {
+      const p = getSelectedProduct();
+      const effectiveProductName = p.id === 'auto-ad'
+        ? (state.autoDetectedProductName || 'Mega We Care')
+        : p.name;
+      const rawIng = document.getElementById('fact-ingredients').value.trim();
+      const cleanExtractForContent = stripDosageFromText(rawIng || p.cleanExtract || p.ingredients);
+
+      state.facts = {
+        topic: stripDosageFromText(document.getElementById('fact-topic').value.trim() || `ดูแลสุขภาพด้วย ${effectiveProductName}`),
+        ingredients: cleanExtractForContent,
+        pains: document.getElementById('fact-pains').value.trim() || p.pain,
+        takeaway: stripDosageFromText(document.getElementById('fact-takeaway').value.trim() || p.benefit)
+      };
+      state.namingBrief = (document.getElementById('naming-brief-input')?.value || '').trim();
+
+      const times = buildSceneTimestamps(state.durationSec);
+      const chars = getActiveCharactersForStory();
+      const is169 = state.platform.includes('16:9');
+      const ratioStr = is169 ? '16:9 widescreen' : '9:16 vertical';
+      const styleTH = state.visualStyle;
+      const styleEN = styleTH.includes('Pixar') ? '3D Pixar style, high-end animated film render' : '3D stylized animation, smooth clinical aesthetic';
+
+      const pkgConstraintTH = state.includeRealPackage
+        ? `ไม่มีข้อความบนภาพ, แสดงแพคเกจสินค้า ${effectiveProductName} อย่างคมชัดสมจริง, สัดส่วน ${ratioStr}, ภาพคมชัดสูง`
+        : `ไม่มีข้อความบนภาพ, ห้ามมีขวดหรือกระปุกสินค้าจริงในภาพเด็ดขาด, สัดส่วน ${ratioStr}, ภาพคมชัดสูง`;
+      const pkgConstraintEN = state.includeRealPackage
+        ? `No on-screen text, clean authentic ${effectiveProductName} packaging visible, aspect ratio ${ratioStr}, ultra detailed`
+        : `No on-screen text, strictly no real product bottle or jar packaging, aspect ratio ${ratioStr}, ultra detailed`;
+
+      let mentionPhrase = `สารอาหารสำคัญอย่าง${cleanExtractForContent}`;
+      if (state.namingMode === 'product_extract') {
+        mentionPhrase = `${effectiveProductName} ที่มี${cleanExtractForContent}`;
+      } else if (state.namingMode === 'product_only') {
+        mentionPhrase = `${effectiveProductName}`;
+      } else if (state.namingMode === 'auto') {
+        mentionPhrase = `สารสกัดสำคัญอย่าง${cleanExtractForContent} ภายใต้มาตรฐานการผลิตระดับสากล`;
+      }
+
+      const pkgVisualTH = state.includeRealPackage
+        ? `วางแพคเกจจริงของ ${effectiveProductName} อย่างโดดเด่นคู่กับสัญลักษณ์สารอาหาร 3D เรืองแสง`
+        : `แสดงอนุภาคสารอาหาร 3D เรืองแสงและวัตถุดิบธรรมชาติลอยตัวอย่างโปร่งใสสะอาดตา`;
+      const pkgVisualEN = state.includeRealPackage
+        ? `authentic ${effectiveProductName} package placed cleanly beside glowing 3D nutrient particles`
+        : `glowing 3D botanical nutrient particles floating cleanly in crystal-clear light`;
+
+      const buildAngle = (angleKey, angleTitle, hookVO, eduVO, solVO, ctaVO, caption, hashtags) => {
+        const scenesData = [
+          {
+            scene: 'Scene 1 (Hook)',
+            time: times[0],
+            visual: `ฉาก: โต๊ะทำงานสไตล์โมเดิร์นแสงธรรมชาติ | การกระทำ: ตัวละครหลักแสดงสีหน้าสะท้อนปัญหา ${state.facts.pains} อย่างเห็นได้ชัด`,
+            settingTH: 'โต๊ะทำงานสไตล์โมเดิร์นสว่างสะอาด มีโทนสีฟ้าโคบอลต์อ่อน',
+            settingEN: 'Bright modern workspace with soft cobalt blue accents, completely static environment',
+            charTH: chars.leadTH,
+            charEN: chars.leadEN,
+            actionTH: `ตัวละครหลักหยุดชะงัก แสดงสีหน้าล้าและสะท้อนอาการ ${state.facts.pains} พร้อมกล้องซูมเข้าอย่างนุ่มนวล`,
+            actionEN: 'Main character pauses with a relatable tired expression reflecting daily lifestyle strain while camera gently pushes in',
+            camTH: 'Eye-level ซูมเข้าช้าๆ', camEN: 'Eye-level slow push-in',
+            shotTH: 'Medium Close-up', shotEN: 'Medium Close-up',
+            lightTH: 'แสงธรรมชาติอบอุ่นตัดเงาสีฟ้านุ่ม', lightEN: 'Warm natural key light with soft cobalt rim light',
+            vo: sanitizeSpokenVO(hookVO),
+            textOnClip: `เช็กด่วน! คุณมีอาการนี้ไหม?`
+          },
+          {
+            scene: 'Scene 2 (Pain Point)',
+            time: times[1],
+            visual: `ฉาก: สภาพแวดล้อมชีวิตประจำวันคนเมือง | การกระทำ: ภาพจำลอง 3D แสดงพฤติกรรมสะสมที่ทำให้ร่างกายอ่อนล้า`,
+            settingTH: 'ห้องนั่งเล่นสมัยใหม่ยามเย็นที่มีแสงไฟนุ่มนวลและบรรยากาศสงบนิ่ง',
+            settingEN: 'Modern evening living room with calm ambient lighting, static background',
+            charTH: chars.leadTH,
+            charEN: chars.leadEN,
+            actionTH: 'ตัวละครทำกิจวัตรเดิมซ้ำๆ โดยมีไอคอนกราฟิก 3D แสดงระดับความล้าค่อยๆ ลอยขึ้นมาข้างตัว',
+            actionEN: 'Character repeats daily routine while subtle 3D fatigue meter orbs gently rise beside them',
+            camTH: 'Over-the-shoulder แพนข้างช้าๆ', camEN: 'Over-the-shoulder slow pan',
+            shotTH: 'Medium Shot', shotEN: 'Medium Shot',
+            lightTH: 'Cinematic โทนเย็นสบายตา', lightEN: 'Cinematic cool-tone balanced lighting',
+            vo: sanitizeSpokenVO(`หลายคนคิดว่าแค่นอนพักเดี๋ยวก็หาย แต่พฤติกรรมเดิมซ้ำๆ ทุกวันทำให้ร่างกายใช้สารอาหารจำเป็นหมดไวกว่าที่คิด`),
+            textOnClip: `พฤติกรรมเดิมๆ ทำให้ร่างกายล้าสะสม`
+          },
+          {
+            scene: 'Scene 3 (Science Educate)',
+            time: times[2],
+            visual: `ฉาก: โลกจุลภาค 3D ระดับเซลล์โทนสีฟ้าคลินิก | การกระทำ: อนุภาคสารสำคัญพุ่งเข้าปกป้องและเติมสมดุลเซลล์อย่างนุ่มนวล`,
+            settingTH: 'โลกจุลภาค 3D ระดับเซลล์โปร่งแสงโทนฟ้าโคบอลต์สะอาดตาแบบ Lab-Core',
+            settingEN: 'Translucent 3D microscopic cellular world in clean clinical cobalt blue Lab-Core aesthetic',
+            charTH: 'ไม่มี',
+            charEN: 'None',
+            actionTH: 'คลื่นพลังงานสารอาหาร 3D สีทองและสีฟ้าค่อยๆ ลอยเข้ามาโอบอุ้มโครงสร้างเซลล์ให้กลับมาเปล่งประกายสมดุล',
+            actionEN: 'Golden and sky-blue 3D nutrient waves gracefully surround and illuminate cellular structures into healthy balance',
+            camTH: 'Dynamic Orbit หมุนรอบ 360 องศา', camEN: 'Smooth 360-degree orbital camera',
+            shotTH: 'Macro Shot', shotEN: 'Macro Shot',
+            lightTH: 'Clinical Bright เรืองแสงนุ่มนวล', lightEN: 'Clinical bright volumetric glow',
+            vo: sanitizeSpokenVO(eduVO),
+            textOnClip: `กลไกสารอาหารดูแลลึกระดับเซลล์`
+          },
+          {
+            scene: 'Scene 4 (Solution)',
+            time: times[3],
+            visual: `ฉาก: ห้องแล็บคลินิกสีขาวสว่างสะอาด | การกระทำ: ผู้เชี่ยวชาญ 3D อธิบายหลักการดูแลสุขภาพองค์รวม พร้อม${pkgVisualTH}`,
+            settingTH: 'ห้องแล็บคลินิกสีขาวสะอาดตาพร้อมแสงแดดอ่อนๆ ยามเช้า',
+            settingEN: 'Crisp white clinical wellness studio with soft morning sunlight, static room',
+            charTH: chars.expertTH,
+            charEN: chars.expertEN,
+            actionTH: `ผู้เชี่ยวชาญ 3D ผายมือแนะนำอย่างเป็นมิตร ขณะที่${pkgVisualTH}`,
+            actionEN: `3D wellness specialist gestures warmly while ${pkgVisualEN}`,
+            camTH: 'Eye-level นิ่งมั่นคง', camEN: 'Steady eye-level framing',
+            shotTH: 'Medium Shot', shotEN: 'Medium Shot',
+            lightTH: 'Bright Clinical Daylight', lightEN: 'Bright clinical daylight',
+            vo: sanitizeSpokenVO(solVO),
+            textOnClip: `ปรับพฤติกรรม + เติมสารอาหารให้ครบ`
+          },
+          {
+            scene: 'Scene 5 (CTA & Positive Vibe)',
+            time: times[4],
+            visual: `ฉาก: สวนสาธารณะหรือพื้นที่ทำงานแสงแดดยามเช้าสดใส | การกระทำ: ตัวละครหลักยิ้มสดชื่นเต็มเปี่ยมด้วยพลังพร้อมใช้ชีวิต`,
+            settingTH: 'พื้นที่ไลฟ์สไตล์สว่างสดใสแสงแดดยามเช้าและต้นไม้สีเขียว',
+            settingEN: 'Sunlit morning lifestyle space with lush greenery, static peaceful backdrop',
+            charTH: chars.leadTH,
+            charEN: chars.leadEN,
+            actionTH: 'ตัวละครหลักยืดเส้นสาย ยิ้มกว้างอย่างสดชื่นมั่นใจ มองกล้องอย่างเป็นมิตร',
+            actionEN: 'Main character stretches comfortably and smiles brightly at the camera with refreshed energy',
+            camTH: 'Eye-level ถอยกล้องออกเล็กน้อย', camEN: 'Eye-level gentle pull-back',
+            shotTH: 'Medium Wide Shot', shotEN: 'Medium Wide Shot',
+            lightTH: 'Golden Morning Sunlight', lightEN: 'Golden morning sunlight',
+            vo: sanitizeSpokenVO(ctaVO),
+            textOnClip: `ดูแลตัวเองวันละนิด เพื่อสุขภาพดีระยะยาว`
+          }
+        ];
+
+        return {
+          angleKey,
+          angleTitle,
+          campaign: `${effectiveProductName} — ${angleTitle}`,
+          format: state.platform,
+          duration: formatDurationLabel(state.durationSec),
+          caption: stripDosageFromText(caption),
+          hashtags,
+          scenes: scenesData.map(s => ({
+            scene: s.scene,
+            time: s.time,
+            visual: stripDosageFromText(s.visual),
+            imgPromptTH: format9BulletPromptTH({
+              style: styleTH, camera: s.camTH, shot: s.shotTH, lighting: s.lightTH,
+              setting: s.settingTH, character: s.charTH, action: s.actionTH,
+              constraints: pkgConstraintTH, dialogue: 'ไม่มี'
+            }),
+            imgPromptEN: format9BulletPromptEN({
+              style: styleEN, camera: s.camEN, shot: s.shotEN, lighting: s.lightEN,
+              setting: s.settingEN, character: s.charEN, action: s.actionEN,
+              constraints: pkgConstraintEN, dialogue: 'None'
+            }),
+            vidPromptTH: format9BulletPromptTH({
+              style: `${styleTH}, แอนิเมชันลื่นไหล 60fps`, camera: s.camTH, shot: s.shotTH, lighting: s.lightTH,
+              setting: s.settingTH, character: s.charTH, action: `${s.actionTH} พร้อมการเคลื่อนไหวฟิสิกส์ที่เป็นธรรมชาติ`,
+              constraints: `${pkgConstraintTH}, การเคลื่อนไหวสมูทต่อเนื่อง`, dialogue: 'ไม่มี'
+            }),
+            vidPromptEN: format9BulletPromptEN({
+              style: `${styleEN}, smooth 60fps cinematic animation`, camera: s.camEN, shot: s.shotEN, lighting: s.lightEN,
+              setting: s.settingEN, character: s.charEN, action: `${s.actionEN} with natural physics and fluid motion`,
+              constraints: `${pkgConstraintEN}, smooth continuous motion`, dialogue: 'None'
+            }),
+            vo: s.vo,
+            textOnClip: stripDosageFromText(s.textOnClip)
+          }))
+        };
+      };
+
+      state.storyboards = [
+        buildAngle(
+          'hook',
+          'มุมมองที่ 1: เปิดหัว Hook ดึงดูดใจ (Insight)',
+          `รู้ไหมครับว่าอาการ${state.facts.pains} อาจเป็นสัญญาณเตือนเงียบๆ ที่ร่างกายกำลังส่งมาหาคุณอยู่ทุกวัน`,
+          `ตามกลไกร่างกาย ${mentionPhrase} มีบทบาทสำคัญในการช่วยดูแลและเติมเต็มสมดุลให้ระบบต่างๆ ทำงานได้อย่างเต็มที่`,
+          `เริ่มดูแลตัวเองง่ายๆ ด้วยการพักผ่อนให้เพียงพอ ทานอาหารให้ครบ 5 หมู่ และเสริมด้วย ${mentionPhrase} ที่ได้มาตรฐานการผลิตระดับสากล`,
+          `ถ้าคุณกำลังเจออาการเหล่านี้อยู่ ลองเซฟคลิปนี้ไว้เช็กตัวเองและแชร์ให้คนข้างๆ ด้วยนะครับ`,
+          `เช็กสัญญาณร่างกายก่อนล้าสะสม! ดูแลสุขภาพเชิงป้องกันตั้งแต่วันนี้ด้วยความรู้ที่ถูกต้องและ${mentionPhrase} ควบคู่การปรับพฤติกรรมประจำวัน`,
+          `#MegaWeCare #ดูแลสุขภาพเชิงป้องกัน #สุขภาพดีเริ่มที่ตัวเรา #ความรู้สุขภาพ #${effectiveProductName.replace(/[^a-zA-Z0-9ก-๙]/g, '')}`
+        ),
+        buildAngle(
+          'science',
+          'มุมมองที่ 2: เชิงวิชาการย่อยง่าย (Lab-Core Science)',
+          `เคยสงสัยไหมครับว่าทำไมกินอาหารครบมื้อแล้ว ร่างกายบางส่วนยังรู้สึกไม่เต็มร้อยเหมือนเดิม`,
+          `ในเชิงวิทยาศาสตร์ ร่างกายของเราต้องใช้สารอาหารเฉพาะทางอย่าง ${mentionPhrase} เพื่อช่วยดูแลโครงสร้างระดับเซลล์อย่างต่อเนื่อง`,
+          `การเลือกเติม ${mentionPhrase} ที่ผ่านมาตรฐานระดับสากล TGA และ BfArM ควบคู่การดูแลโภชนาการ จึงเป็นทางเลือกที่ช่วยให้มั่นใจในคุณภาพ`,
+          `ความรู้สุขภาพดีๆ ที่เข้าใจง่ายแบบนี้ กดติดตามไว้ได้เลยครับ จะได้ไม่พลาดเคล็ดลับดูแลตัวเองในทุกวัน`,
+          `เจาะลึกกลไกวิทยาศาสตร์แบบเข้าใจง่าย ทำไม ${mentionPhrase} ถึงสำคัญต่อไลฟ์สไตล์คนยุคใหม่ มาดูแลสุขภาพอย่างมีหลักการไปด้วยกัน`,
+          `#MegaWeCare #ScienceDecoded #LabCoreHealth #สารอาหารจำเป็น #${effectiveProductName.replace(/[^a-zA-Z0-9ก-๙]/g, '')}`
+        ),
+        buildAngle(
+          'myth',
+          'มุมมองที่ 3: เข้าใจง่าย หักล้างความเชื่อผิดๆ (Myth vs Fact)',
+          `ความเชื่อที่ว่ายังอายุน้อยไม่ต้องดูแลสุขภาพก็ได้ จริงๆ แล้วอาจทำให้ร่างกายเหนื่อยล้าไวกว่าที่คิดนะครับ`,
+          `ความจริงคือไลฟ์สไตล์คนเมืองใช้พลังงานและสารอาหารสูงมาก การเติม ${mentionPhrase} จึงมีส่วนช่วยดูแลสมดุลร่างกายได้ตั้งแต่เนิ่นๆ`,
+          `อย่ารอให้ร่างกายส่งสัญญาณหนัก เริ่มปรับเวลานอน ดื่มน้ำให้พอ และดูแลเสริมด้วย ${mentionPhrase} อย่างสม่ำเสมอ`,
+          `คุณเคยเชื่อแบบข้อไหนมาก่อน คอมเมนต์มาแลกเปลี่ยนกันใต้คลิปนี้ได้เลยนะครับ`,
+          `จริงหรือมั่ว? ไขความเชื่อเรื่องสุขภาพที่หลายคนเข้าใจผิด พร้อมวิธีดูแลตัวเองให้แข็งแรงสมดุลในทุกช่วงวัย`,
+          `#MegaWeCare #MythVsFact #เช็กความเชื่อสุขภาพ #PreventiveHealth #${effectiveProductName.replace(/[^a-zA-Z0-9ก-๙]/g, '')}`
+        )
+      ];
+
+      state.activeAngleIdx = 0;
+      saveDraftToBrowser();
+      goToStep(4);
+      renderAllStep4();
+    }
+
+    // ==================== 11. RISK SCANNER (3 CATEGORIES + USER EDITABLE FIX) ====================
+    function scanAllRiskyWords() {
+      const findings = [];
+      state.storyboards.forEach((sb, aIdx) => {
+        const checkField = (text, locLabel, setter) => {
+          if (!text) return;
+          RISK_RULES.forEach(rule => {
+            if (text.includes(rule.word)) {
+              findings.push({
+                id: `${aIdx}-${locLabel}-${rule.word}`,
+                angleIdx: aIdx,
+                locLabel,
+                word: rule.word,
+                category: rule.category,
+                catLabel: rule.label,
+                suggest: rule.suggest,
+                setter
+              });
+            }
+          });
+        };
+        checkField(sb.caption, `คลิป ${aIdx + 1} • แคปชั่น`, (oldW, newW) => { sb.caption = sb.caption.split(oldW).join(newW); });
+        sb.scenes.forEach((sc, sIdx) => {
+          checkField(sc.vo, `คลิป ${aIdx + 1} • ซีน ${sIdx + 1} (VO)`, (oldW, newW) => { sc.vo = sc.vo.split(oldW).join(newW); });
+          checkField(sc.textOnClip, `คลิป ${aIdx + 1} • ซีน ${sIdx + 1} (Text บนคลิป)`, (oldW, newW) => { sc.textOnClip = sc.textOnClip.split(oldW).join(newW); });
+        });
+      });
+      return findings;
+    }
+
+    function renderRiskScanner() {
+      const panel = document.getElementById('risk-scanner-panel');
+      const findings = scanAllRiskyWords();
+      window.__currentRiskFindings = findings;
+
+      if (findings.length === 0) {
+        panel.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="icon-3d w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-sm sm:text-base font-extrabold text-emerald-900">ผ่านเกณฑ์ความปลอดภัยครบทั้ง 3 หมวด (พบคำเสี่ยง 0 รายการ)</h3>
+                <p class="text-xs text-emerald-700">ปลอดคำ Overclaim ผิดกฎ อย., ปลอดคำลดการมองเห็นโซเชียล, ไม่ขายตรงเกินไป และไม่ระบุหน่วย mg ในคอนเทนต์</p>
+              </div>
+            </div>
+            <button onclick="injectSampleRiskWord()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] font-semibold transition">
+              🧪 ทดลองจำลองคำเสี่ยง
+            </button>
+          </div>
+        `;
+      } else {
+        const badgeColors = {
+          FDA: 'bg-rose-100 text-rose-800 border-rose-200',
+          SOCIAL: 'bg-amber-100 text-amber-900 border-amber-200',
+          HARDSELL: 'bg-purple-100 text-purple-900 border-purple-200'
+        };
+        panel.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-rose-100 pb-3">
+            <div class="flex items-center gap-3">
+              <div class="icon-3d w-10 h-10 bg-gradient-to-br from-rose-500 to-red-600 text-white">
+                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="text-sm sm:text-base font-extrabold text-rose-900">พบคำเสี่ยง อย. / โซเชียล / ขายตรง จำนวน ${findings.length} รายการ</h3>
+                <p class="text-xs text-rose-700">ตรวจสอบคำที่พบ พิมพ์แก้คำแทนเองได้ทันที หรือกดปรับแก้ทั้งหมดอัตโนมัติ</p>
+              </div>
+            </div>
+            <button onclick="fixAllRiskWords()" class="magnetic-btn px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm">
+              ✨ ปรับแก้คำเสี่ยงทั้งหมดอัตโนมัติ
+            </button>
+          </div>
+          <div class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+            ${findings.map((f, idx) => `
+              <div class="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-rose-50/70 border border-rose-200 text-xs">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-full border font-bold text-[10px] ${badgeColors[f.category]}">${f.catLabel}</span>
+                  <span class="font-bold text-rose-800 bg-white px-2 py-0.5 rounded-lg border border-rose-200">"${f.word}"</span>
+                  <span class="text-slate-500">${f.locLabel}</span>
+                </div>
+                <div class="flex items-center gap-2 flex-1 sm:flex-initial justify-end">
+                  <span class="text-slate-500">&rarr; แก้เป็น:</span>
+                  <input type="text" id="risk-fix-input-${idx}" value="${escapeHTML(f.suggest)}"
+                         class="px-2.5 py-1.5 rounded-xl border border-cobalt-300 bg-white text-cobalt-950 font-medium text-xs w-48 sm:w-56" />
+                  <button onclick="fixSingleRiskWord(${idx})" class="px-3 py-1.5 rounded-xl bg-cobalt-600 hover:bg-cobalt-700 text-white font-bold text-xs shrink-0">
+                    แก้คำนี้
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+      lucide.createIcons();
+    }
+
+    function injectSampleRiskWord() {
+      if (!state.storyboards[0]) return;
+      state.storyboards[0].scenes[0].vo += ' ระวังตาพัง รักษาหายขาด ซื้อเลย';
+      saveDraftToBrowser();
+      renderAllStep4();
+      showToast('จำลองคำเสี่ยงครบทั้ง 3 หมวดแล้ว ลองแก้ไขดูได้เลย!', 'warn');
+    }
+
+    function fixSingleRiskWord(idx) {
+      const f = window.__currentRiskFindings?.[idx];
+      if (!f) return;
+      const customVal = document.getElementById(`risk-fix-input-${idx}`)?.value || f.suggest;
+      f.setter(f.word, customVal);
+      saveDraftToBrowser();
+      renderAllStep4();
+      showToast(`ปรับคำว่า "${f.word}" เป็น "${customVal}" เรียบร้อย!`, 'success');
+    }
+
+    function fixAllRiskWords() {
+      const findings = window.__currentRiskFindings || [];
+      findings.forEach((f, idx) => {
+        const customVal = document.getElementById(`risk-fix-input-${idx}`)?.value || f.suggest;
+        f.setter(f.word, customVal);
+      });
+      saveDraftToBrowser();
+      renderAllStep4();
+      showToast('ปรับแก้คำเสี่ยงทั้งหมดเรียบร้อยแล้ว!', 'success');
+    }
+
+    // ==================== 12. RENDER STEP 4 (CARDS, INLINE EDIT & 11-COLUMN TABLE) ====================
+    function selectAngleTab(idx) {
+      state.activeAngleIdx = idx;
+      renderAllStep4();
+    }
+
+    function setViewMode(mode) {
+      state.viewMode = mode;
+      renderAllStep4();
+    }
+
+    function toggleInlineEditMode() {
+      state.inlineEditMode = !state.inlineEditMode;
+      renderAllStep4();
+      showToast(state.inlineEditMode ? 'เปิดโหมดแก้ไขข้อความแล้ว พิมพ์แก้ได้ทุกช่องและบันทึกอัตโนมัติ' : 'บันทึกการแก้ไขและกลับสู่โหมดอ่านแล้ว', 'info');
+    }
+
+    function updateStoryboardMetaField(field, value) {
+      const sb = state.storyboards[state.activeAngleIdx];
+      if (!sb) return;
+      sb[field] = value;
+      saveDraftToBrowser();
+      renderRiskScanner();
+    }
+
+    function updateSceneField(sIdx, field, value) {
+      const sc = state.storyboards[state.activeAngleIdx]?.scenes?.[sIdx];
+      if (!sc) return;
+      sc[field] = value;
+      saveDraftToBrowser();
+      if (field === 'vo' || field === 'textOnClip') renderRiskScanner();
+    }
+
+    function renderAllStep4() {
+      renderRiskScanner();
+      const sb = state.storyboards[state.activeAngleIdx];
+      if (!sb) return;
+
+      for (let i = 0; i < 3; i++) {
+        const tab = document.getElementById(`angle-tab-${i}`);
+        if (tab) {
+          tab.classList.toggle('hidden', i >= state.storyboards.length);
+          tab.className = `${i >= state.storyboards.length ? 'hidden ' : ''}angle-tab px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+            i === state.activeAngleIdx
+              ? 'bg-cobalt-600 text-white shadow-md'
+              : 'bg-cobalt-50 text-cobalt-900 hover:bg-cobalt-100'
+          }`;
+        }
+      }
+
+      const editBtn = document.getElementById('toggle-edit-mode-btn');
+      const editLbl = document.getElementById('toggle-edit-mode-label');
+      if (editBtn && editLbl) {
+        if (state.inlineEditMode) {
+          editBtn.className = 'magnetic-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 text-xs font-bold transition bg-amber-500 border-amber-600 text-white shadow-sm';
+          editLbl.textContent = '✅ เสร็จสิ้นการแก้ไข';
+        } else {
+          editBtn.className = 'magnetic-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 text-xs font-bold transition bg-amber-50 border-amber-300 text-amber-900 hover:bg-amber-100';
+          editLbl.textContent = '✏️ แก้ไขข้อความในสตอรี่บอร์ด';
+        }
+      }
+
+      document.getElementById('view-btn-cards').className = state.viewMode === 'cards'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-cobalt-600 text-white'
+        : 'px-3 py-1.5 rounded-lg text-xs font-bold text-cobalt-800';
+      document.getElementById('view-btn-table').className = state.viewMode === 'table'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-cobalt-600 text-white'
+        : 'px-3 py-1.5 rounded-lg text-xs font-bold text-cobalt-800';
+
+      if (state.inlineEditMode) {
+        document.getElementById('active-angle-header').innerHTML = `
+          <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="space-y-1.5">
+              <label class="font-bold text-cobalt-900">🎬 ชื่อแคมเปญ</label>
+              <input type="text" value="${escapeHTML(sb.campaign)}" oninput="updateStoryboardMetaField('campaign', this.value)"
+                     class="w-full px-3 py-2 rounded-xl border border-cobalt-300 bg-white font-semibold text-cobalt-950" />
+              <div class="flex flex-wrap gap-2 text-[11px] text-cobalt-800 font-medium pt-1">
+                <span>📱 ${escapeHTML(sb.format)}</span> • <span>⏱️ ${escapeHTML(sb.duration)}</span>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <label class="font-bold text-cobalt-900">📝 แคปชั่น &amp; แฮชแท็ก (แก้แล้วอัปเดตลง Excel/Sheet ทันที)</label>
+              <textarea rows="2" oninput="updateStoryboardMetaField('caption', this.value)"
+                        class="w-full px-3 py-1.5 rounded-xl border border-cobalt-300 bg-white text-slate-800">${escapeHTML(sb.caption)}</textarea>
+              <input type="text" value="${escapeHTML(sb.hashtags)}" oninput="updateStoryboardMetaField('hashtags', this.value)"
+                     class="w-full px-3 py-1.5 rounded-xl border border-cobalt-300 bg-white text-cobalt-700 font-semibold" />
+            </div>
+          </div>
+        `;
+      } else {
+        document.getElementById('active-angle-header').innerHTML = `
+          <div class="space-y-1">
+            <div class="text-sm font-extrabold text-cobalt-950">🎬 ${escapeHTML(sb.campaign)}</div>
+            <div class="flex flex-wrap gap-2 text-xs text-cobalt-800 font-medium">
+              <span>📱 ${escapeHTML(sb.format)}</span> •
+              <span>⏱️ ${escapeHTML(sb.duration)}</span> •
+              <span>📦 ${state.includeRealPackage ? 'ใส่ package จริง' : 'ไม่ใส่ขวด/กระปุกจริง'}</span>
+            </div>
+          </div>
+          <div class="text-xs text-slate-600 max-w-md">
+            <strong class="text-cobalt-900">แคปชั่น:</strong> ${escapeHTML(sb.caption)}<br/>
+            <span class="text-cobalt-600 font-semibold">${escapeHTML(sb.hashtags)}</span>
+          </div>
+        `;
+      }
+
+      const container = document.getElementById('storyboard-container');
+      if (state.viewMode === 'cards') {
+        container.innerHTML = sb.scenes.map((sc, sIdx) => `
+          <div class="rounded-3xl border ${state.inlineEditMode ? 'border-amber-300 ring-2 ring-amber-100' : 'border-cobalt-200'} bg-white p-5 shadow-sm space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-cobalt-100 pb-3">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-3 py-1 rounded-xl bg-cobalt-900 text-white text-xs font-extrabold">${escapeHTML(sc.scene)}</span>
+                ${state.inlineEditMode
+                  ? `<input type="text" value="${escapeHTML(sc.time)}" oninput="updateSceneField(${sIdx}, 'time', this.value)" class="px-2.5 py-1 rounded-xl bg-cobalt-50 border border-cobalt-300 text-cobalt-900 text-xs font-bold w-24" />
+                     <input type="text" value="${escapeHTML(sc.textOnClip)}" oninput="updateSceneField(${sIdx}, 'textOnClip', this.value)" placeholder="Text บนคลิป" class="px-2.5 py-1 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs font-bold w-56" />`
+                  : `<span class="px-2.5 py-1 rounded-xl bg-cobalt-50 text-cobalt-800 text-xs font-bold">⏱️ ${escapeHTML(sc.time)}</span>
+                     <span class="px-2.5 py-1 rounded-xl bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold">Text: ${escapeHTML(sc.textOnClip)}</span>`
+                }
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button onclick="copyPromptAndOpenFlow(${sIdx}, 'img')" class="px-3 py-1.5 rounded-xl bg-cobalt-600 hover:bg-cobalt-700 text-white text-[11px] font-bold">
+                  📋 Copy Image Prompt &rarr; Flow
+                </button>
+                <button onclick="copyPromptAndOpenFlow(${sIdx}, 'vid')" class="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-[11px] font-bold">
+                  🎬 Copy Video Prompt &rarr; Flow
+                </button>
+                <button onclick="copyVOAndOpenSpeech(${sIdx})" class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200 text-[11px] font-bold">
+                  🎙️ Copy VO &rarr; AI Studio
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 text-xs">
+              <div class="lg:col-span-4 space-y-3">
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div class="font-bold text-cobalt-900 mb-1">👁️ ภาพรวม (Visual)</div>
+                  ${state.inlineEditMode
+                    ? `<textarea rows="3" oninput="updateSceneField(${sIdx}, 'visual', this.value)" class="w-full p-2 rounded-xl border border-cobalt-300 bg-white text-xs text-slate-800">${escapeHTML(sc.visual)}</textarea>`
+                    : `<p class="text-slate-700 leading-relaxed">${escapeHTML(sc.visual)}</p>`
+                  }
+                </div>
+                <div class="p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-200">
+                  <div class="font-bold text-indigo-950 mb-1">🎙️ เสียงพากย์ (VO ล้วน พร้อม Copy)</div>
+                  ${state.inlineEditMode
+                    ? `<textarea rows="3" oninput="updateSceneField(${sIdx}, 'vo', this.value)" class="w-full p-2 rounded-xl border border-indigo-300 bg-white text-xs text-indigo-950 font-medium">${escapeHTML(sc.vo)}</textarea>`
+                    : `<p class="text-indigo-950 leading-relaxed font-medium">"${escapeHTML(sc.vo)}"</p>`
+                  }
+                </div>
+              </div>
+              <div class="lg:col-span-4 p-3.5 rounded-2xl bg-cobalt-50/50 border border-cobalt-100">
+                <div class="font-bold text-cobalt-900 mb-1.5">🖼️ Image Prompt (EN — 9 บูลเลท)</div>
+                ${state.inlineEditMode
+                  ? `<textarea rows="9" oninput="updateSceneField(${sIdx}, 'imgPromptEN', this.value)" class="w-full p-2 rounded-xl border border-cobalt-300 bg-white text-[11px] text-slate-800 leading-relaxed">${escapeHTML(sc.imgPromptEN)}</textarea>`
+                  : `<pre class="whitespace-pre-wrap font-sans text-[11px] text-slate-700 leading-relaxed">${escapeHTML(sc.imgPromptEN)}</pre>`
+                }
+              </div>
+              <div class="lg:col-span-4 p-3.5 rounded-2xl bg-sky-50/50 border border-sky-100">
+                <div class="font-bold text-sky-950 mb-1.5">🎬 Video Prompt (EN — 9 บูลเลท)</div>
+                ${state.inlineEditMode
+                  ? `<textarea rows="9" oninput="updateSceneField(${sIdx}, 'vidPromptEN', this.value)" class="w-full p-2 rounded-xl border border-sky-300 bg-white text-[11px] text-slate-800 leading-relaxed">${escapeHTML(sc.vidPromptEN)}</textarea>`
+                  : `<pre class="whitespace-pre-wrap font-sans text-[11px] text-slate-700 leading-relaxed">${escapeHTML(sc.vidPromptEN)}</pre>`
+                }
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = `
+          <div class="overflow-x-auto rounded-2xl border border-cobalt-200">
+            <table class="w-full text-left border-collapse text-[11px] min-w-[1400px]">
+              <thead>
+                <tr class="bg-cobalt-900 text-white">
+                  <th class="p-3 border border-cobalt-800">A: Scene</th>
+                  <th class="p-3 border border-cobalt-800">B: เวลา</th>
+                  <th class="p-3 border border-cobalt-800">C: ภาพ (Visual)</th>
+                  <th class="p-3 border border-cobalt-800">D: Image Prompt (TH)</th>
+                  <th class="p-3 border border-cobalt-800">E: Image Prompt (EN)</th>
+                  <th class="p-3 border border-cobalt-800">F: Video Prompt (TH)</th>
+                  <th class="p-3 border border-cobalt-800">G: Video Prompt (EN)</th>
+                  <th class="p-3 border border-cobalt-800">H: เสียงพากย์ (VO)</th>
+                  <th class="p-3 border border-cobalt-800">I: Text บนคลิป</th>
+                  <th class="p-3 border border-cobalt-800">J: แคปชั่น</th>
+                  <th class="p-3 border border-cobalt-800">K: แฮชแท็ก</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${sb.scenes.map((sc, i) => `
+                  <tr class="align-top ${i % 2 === 0 ? 'bg-white' : 'bg-cobalt-50/40'}">
+                    <td class="p-3 border border-cobalt-100 font-bold whitespace-nowrap">${escapeHTML(sc.scene)}</td>
+                    <td class="p-3 border border-cobalt-100 whitespace-nowrap">${escapeHTML(sc.time)}</td>
+                    <td class="p-3 border border-cobalt-100 min-w-[180px]">${escapeHTML(sc.visual)}</td>
+                    <td class="p-3 border border-cobalt-100 min-w-[230px] whitespace-pre-wrap">${escapeHTML(sc.imgPromptTH)}</td>
+                    <td class="p-3 border border-cobalt-100 min-w-[230px] whitespace-pre-wrap">${escapeHTML(sc.imgPromptEN)}</td>
+                    <td class="p-3 border border-cobalt-100 min-w-[230px] whitespace-pre-wrap">${escapeHTML(sc.vidPromptTH)}</td>
+                    <td class="p-3 border border-cobalt-100 min-w-[230px] whitespace-pre-wrap">${escapeHTML(sc.vidPromptEN)}</td>
+                    <td class="p-3 border border-cobalt-100 min-w-[190px] font-medium text-indigo-950">${escapeHTML(sc.vo)}</td>
+                    <td class="p-3 border border-cobalt-100 min-w-[140px] font-bold">${escapeHTML(sc.textOnClip)}</td>
+                    <td class="p-3 border border-cobalt-100 min-w-[180px]">${i === 0 ? escapeHTML(sb.caption) : ''}</td>
+                    <td class="p-3 border border-cobalt-100 min-w-[150px] text-cobalt-700">${i === 0 ? escapeHTML(sb.hashtags) : ''}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+      lucide.createIcons();
+    }
+
+    function copyTextSafe(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    function copyPromptAndOpenFlow(sIdx, type) {
+      const sc = state.storyboards[state.activeAngleIdx]?.scenes?.[sIdx];
+      if (!sc) return;
+      copyTextSafe(type === 'img' ? sc.imgPromptEN : sc.vidPromptEN);
+      showToast('คัดลอก Prompt แล้ว! กำลังเปิด Google Flow...', 'success');
+      window.open('https://flow.google.com/', '_blank', 'noopener,noreferrer');
+    }
+
+    function copyVOAndOpenSpeech(sIdx) {
+      const sc = state.storyboards[state.activeAngleIdx]?.scenes?.[sIdx];
+      if (!sc) return;
+      copyTextSafe(sanitizeSpokenVO(sc.vo));
+      showToast('คัดลอกเสียงพากย์ล้วนแล้ว! กำลังเปิด AI Studio Voice...', 'success');
+      window.open('https://aistudio.google.com/generate-speech', '_blank', 'noopener,noreferrer');
+    }
+
+    function copyAllVOInActiveAngle() {
+      const sb = state.storyboards[state.activeAngleIdx];
+      if (!sb) return;
+      const pureVO = sb.scenes.map(sc => sanitizeSpokenVO(sc.vo)).join('\n\n');
+      copyTextSafe(pureVO);
+      showToast('คัดลอกเสียงพากย์ล้วนทั้ง 5 ซีนแล้ว! กำลังเปิด AI Studio Voice...', 'success');
+      window.open('https://aistudio.google.com/generate-speech', '_blank', 'noopener,noreferrer');
+    }
+
+    // ==================== 13. STEP 5: STRICT STORYBOARD+PROMT=TEM EXPORT ====================
+    function buildTemplateRowsAndMeta() {
+      const headers = [
+        'Scene', 'เวลา (Time)', 'ภาพ (Visual)',
+        'Image Prompt (TH)', 'Image Prompt (EN)',
+        'Video Prompt (TH)', 'Video Prompt (EN)',
+        'เสียงพากย์ (VO)', 'Text บนคลิป', 'แคปชั่น (Caption)', 'แฮชแท็ก (Hashtags)'
+      ];
+      const rows = [];
+      const merges = [];
+      const rowMeta = [];
+
+      rows.push(Array(11).fill(''));
+      rowMeta.push({ type: 'blank', hpt: 18 });
+
+      state.storyboards.forEach((sb, idx) => {
+        if (idx > 0) {
+          for (let b = 0; b < 4; b++) {
+            rows.push(Array(11).fill(''));
+            rowMeta.push({ type: 'blank', hpt: 22 });
+          }
+        }
+
+        const bannerRowIdx = rows.length;
+        const bannerRow = Array(11).fill('');
+        bannerRow[0] = `🎬 Storyboard & AI Prompt Template | คอนเทนต์ที่ ${idx + 1}: ${sb.angleTitle}`;
+        rows.push(bannerRow);
+        rowMeta.push({ type: 'banner', hpt: 36 });
+        merges.push({ s: { r: bannerRowIdx, c: 0 }, e: { r: bannerRowIdx, c: 10 } });
+
+        const metaRowIdx = rows.length;
+        const metaRow = Array(11).fill('');
+        metaRow[0] = `📌 แคมเปญ: ${sb.campaign}`;
+        metaRow[3] = `📱 รูปแบบ: ${sb.format}`;
+        metaRow[5] = `⏱️ ความยาว: ${sb.duration}`;
+        metaRow[7] = `📊 สถานะ: พร้อมผลิต (ผ่านตรวจคำเสี่ยง อย.)`;
+        rows.push(metaRow);
+        rowMeta.push({ type: 'meta', hpt: 28 });
+        merges.push({ s: { r: metaRowIdx, c: 0 }, e: { r: metaRowIdx, c: 2 } });
+        merges.push({ s: { r: metaRowIdx, c: 3 }, e: { r: metaRowIdx, c: 4 } });
+        merges.push({ s: { r: metaRowIdx, c: 5 }, e: { r: metaRowIdx, c: 6 } });
+        merges.push({ s: { r: metaRowIdx, c: 7 }, e: { r: metaRowIdx, c: 10 } });
+
+        rows.push(headers);
+        rowMeta.push({ type: 'header', hpt: 32 });
+
+        const firstSceneRow = rows.length;
+        sb.scenes.forEach((sc, sIdx) => {
+          rows.push([
+            sc.scene, sc.time, sc.visual,
+            sc.imgPromptTH, sc.imgPromptEN,
+            sc.vidPromptTH, sc.vidPromptEN,
+            sanitizeSpokenVO(sc.vo), sc.textOnClip,
+            sIdx === 0 ? sb.caption : '',
+            sIdx === 0 ? sb.hashtags : ''
+          ]);
+          rowMeta.push({ type: 'scene', hpt: 235 });
+        });
+        const lastSceneRow = rows.length - 1;
+        merges.push({ s: { r: firstSceneRow, c: 9 }, e: { r: lastSceneRow, c: 9 } });
+        merges.push({ s: { r: firstSceneRow, c: 10 }, e: { r: lastSceneRow, c: 10 } });
+      });
+
+      return { rows, merges, rowMeta };
+    }
+
+    function downloadStyledWorkbook(target) {
+      if (state.storyboards.length === 0) {
+        showToast('ยังไม่มีข้อมูลสตอรี่บอร์ดสำหรับดาวน์โหลด', 'warn');
+        return;
+      }
+      if (typeof XLSX === 'undefined') {
+        showToast('กำลังโหลดไลบรารี Excel กรุณาลองอีกครั้งใน 2 วินาที', 'warn');
+        return;
+      }
+
+      const { rows, merges, rowMeta } = buildTemplateRowsAndMeta();
+      const ws = XLSX.utils.aoa_to_sheet(rows);
+      ws['!merges'] = merges;
+      ws['!cols'] = [
+        { wch: 16 }, { wch: 14 }, { wch: 30 },
+        { wch: 44 }, { wch: 44 }, { wch: 44 }, { wch: 44 },
+        { wch: 34 }, { wch: 24 }, { wch: 32 }, { wch: 26 }
+      ];
+      ws['!rows'] = rowMeta.map(m => ({ hpt: m.hpt }));
+
+      const borderThin = {
+        top: { style: 'thin', color: { rgb: 'BFDBFE' } },
+        bottom: { style: 'thin', color: { rgb: 'BFDBFE' } },
+        left: { style: 'thin', color: { rgb: 'BFDBFE' } },
+        right: { style: 'thin', color: { rgb: 'BFDBFE' } }
+      };
+
+      const range = XLSX.utils.decode_range(ws['!ref']);
+      for (let r = range.s.r; r <= range.e.r; r++) {
+        const meta = rowMeta[r] || { type: 'blank' };
+        for (let c = range.s.c; c <= range.e.c; c++) {
+          const addr = XLSX.utils.encode_cell({ r, c });
+          if (!ws[addr]) ws[addr] = { t: 's', v: '' };
+
+          if (meta.type === 'banner') {
+            ws[addr].s = {
+              fill: { fgColor: { rgb: '041547' } },
+              font: { name: 'Prompt', sz: 13, bold: true, color: { rgb: 'FFFFFF' } },
+              alignment: { vertical: 'center', horizontal: 'left', wrapText: true }
+            };
+          } else if (meta.type === 'meta') {
+            ws[addr].s = {
+              fill: { fgColor: { rgb: 'DBEAFE' } },
+              font: { name: 'Prompt', sz: 10, bold: true, color: { rgb: '041547' } },
+              alignment: { vertical: 'center', horizontal: 'left', wrapText: true },
+              border: borderThin
+            };
+          } else if (meta.type === 'header') {
+            ws[addr].s = {
+              fill: { fgColor: { rgb: '0038A8' } },
+              font: { name: 'Prompt', sz: 10, bold: true, color: { rgb: 'FFFFFF' } },
+              alignment: { vertical: 'center', horizontal: 'center', wrapText: true },
+              border: borderThin
+            };
+          } else if (meta.type === 'scene') {
+            ws[addr].s = {
+              fill: { fgColor: { rgb: r % 2 === 0 ? 'FFFFFF' : 'F8FAFC' } },
+              font: { name: 'Prompt', sz: 10, color: { rgb: '0F172A' } },
+              alignment: { vertical: 'top', horizontal: 'left', wrapText: true },
+              border: borderThin
+            };
+          }
+        }
+      }
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'MegaWeCare_3Contents');
+
+      const curProd = getSelectedProduct();
+      const rawName = curProd.id === 'auto-ad' ? (state.autoDetectedProductName || 'Auto_AD') : curProd.name;
+      const pName = rawName.replace(/[^a-zA-Z0-9ก-๙]/g, '_') || 'Auto_AD';
+      const dateStr = new Date().toISOString().slice(0, 10);
+      const filename = `MegaWeCare_${pName}_3Contents_${target === 'sheet' ? 'GoogleSheet' : 'Excel'}_${dateStr}.xlsx`;
+
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      const fbEl = document.getElementById(target === 'sheet' ? 'fallback-sheet-link' : 'fallback-excel-link');
+      if (fbEl) {
+        fbEl.classList.remove('hidden');
+        fbEl.innerHTML = `<a href="${url}" download="${filename}" class="underline font-bold text-cobalt-700">หากไฟล์ไม่เด้งอัตโนมัติ คลิกที่นี่เพื่อบันทึก (${filename})</a>`;
+      }
+      saveDraftToBrowser();
+      showToast(`สร้างไฟล์ ${filename} สำเร็จแล้ว!`, 'success');
+    }
+
+    function copyQuotedTSVAndOpenSheets() {
+      if (state.storyboards.length === 0) return;
+      const { rows } = buildTemplateRowsAndMeta();
+      const tsv = rows.map(row => row.map(cell => {
+        const s = String(cell ?? '');
+        return `"${s.replace(/"/g, '""')}"`;
+      }).join('\t')).join('\n');
+      copyTextSafe(tsv);
+      showToast('คัดลอกตาราง 3 คอนเทนต์ (เว้น 4 บรรทัด) แล้ว! กด Ctrl+V ที่ช่อง A1 ใน Google Sheets ได้เลย', 'success');
+      window.open('https://sheets.new', '_blank', 'noopener,noreferrer');
+    }
+
+    // ==================== 14. REAL-TIME AI ASSISTANT ====================
+    function openAssistantModal() {
+      const m = document.getElementById('assistant-modal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+      lucide.createIcons();
+    }
+    function closeAssistantModal() {
+      const m = document.getElementById('assistant-modal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    function resetAssistantChat() {
+      state.chatHistory = [];
+      const p = getSelectedProduct();
+      const box = document.getElementById('assistant-chat-messages');
+      if (!box) return;
+      box.innerHTML = '';
+      appendChatBubble('model', `สวัสดีครับ! ผมคือ **ผู้ช่วย Content Mega Wecare** พร้อมให้คำปรึกษาแบบเรียลไทม์ครับ ตอนนี้คุณกำลังเลือกสินค้า **${p.name}** อยู่ที่ขั้นตอนที่ ${state.currentStep} อยากให้ช่วยคิด Hook, เช็กข้อมูลสารสกัด หรือแนะนำวิธีใช้ปุ่มไหนในเว็บ ถามมาได้เลยครับ!`);
+    }
+
+    function appendChatBubble(role, text) {
+      const box = document.getElementById('assistant-chat-messages');
+      const div = document.createElement('div');
+      div.className = role === 'user' ? 'flex justify-end' : 'flex justify-start';
+      const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>');
+      div.innerHTML = role === 'user'
+        ? `<div class="max-w-[82%] px-4 py-2.5 rounded-2xl rounded-br-sm bg-cobalt-600 text-white text-xs sm:text-sm shadow-sm">${formatted}</div>`
+        : `<div class="max-w-[85%] px-4 py-2.5 rounded-2xl rounded-bl-sm bg-white border border-cobalt-200 text-cobalt-950 text-xs sm:text-sm shadow-sm leading-relaxed">${formatted}</div>`;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function askQuickQuestion(q) {
+      document.getElementById('assistant-input').value = q;
+      handleAssistantSubmit(new Event('submit'));
+    }
+
+    async function handleAssistantSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('assistant-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+      input.value = '';
+      appendChatBubble('user', msg);
+      state.chatHistory.push({ role: 'user', parts: [{ text: msg }] });
+
+      const box = document.getElementById('assistant-chat-messages');
+      const typing = document.createElement('div');
+      typing.id = 'ai-typing-indicator';
+      typing.className = 'flex justify-start';
+      typing.innerHTML = `<div class="px-4 py-3 rounded-2xl bg-white border border-cobalt-200 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-cobalt-500 dot-1"></span><span class="w-2 h-2 rounded-full bg-cobalt-500 dot-2"></span><span class="w-2 h-2 rounded-full bg-cobalt-500 dot-3"></span></div>`;
+      box.appendChild(typing);
+      box.scrollTop = box.scrollHeight;
+
+      const p = getSelectedProduct();
+      const liveContext = `คุณคือผู้ช่วย Content Mega Wecare แบบเรียลไทม์ ตอบภาษาไทยสั้น กระชับ ตรงคำถามที่สุด
+สถานะหน้าเว็บปัจจุบันของผู้ใช้:
+- ขั้นตอนปัจจุบัน: Step ${state.currentStep}
+- สินค้าที่เลือกอยู่: ${p.name} (สารสำคัญ: ${p.ingredients} | จุดเด่น: ${p.benefit} | กลุ่มเป้าหมาย: ${p.target})
+- โหมดการระบุชื่อผลิตภัณฑ์: ${state.namingMode}
+- ใส่ package จริง: ${state.includeRealPackage ? 'เปิด' : 'ปิด'}
+- แพลตฟอร์ม: ${state.platform} | ความยาว: ${formatDurationLabel(state.durationSec)} | สไตล์: ${state.visualStyle}
+- จำนวนคำเสี่ยงที่ตรวจพบตอนนี้: ${scanAllRiskyWords().length} รายการ
+กฎสำคัญ:
+1. ห้าม Overclaim (ห้ามใช้ รักษาหายขาด, 100%, เห็นผลทันที)
+2. เฉพาะเวลาช่วยคิดสตอรี่บอร์ด บทพูด หรือ Prompt คอนเทนต์ ห้ามระบุปริมาณมิลลิกรัม (mg / มก. / mcg / IU / g) ของสารสกัดเด็ดขาด (ระบุเฉพาะชื่อสารสกัด)`;
+
+      let reply = '';
+      try {
+        const res = await callGeminiWithBackoff({
+          contents: state.chatHistory.slice(-8),
+          systemInstruction: { parts: [{ text: liveContext }] }
+        });
+        reply = res?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      } catch (err) {
+        reply = buildSmartLocalReply(msg, p);
+      }
+
+      typing.remove();
+      if (!reply) reply = buildSmartLocalReply(msg, p);
+      state.chatHistory.push({ role: 'model', parts: [{ text: reply }] });
+      appendChatBubble('model', reply);
+    }
+
+    function buildSmartLocalReply(q, p) {
+      const lower = q.toLowerCase();
+      if (lower.includes('hook') || lower.includes('เปิดหัว')) {
+        return `ไอเดีย Hook 3 วินาทีแรกสำหรับ **${p.name}** (ปลอดภัย อย. และไม่ระบุปริมาณ mg):\n1. "ใครกำลังเจอปัญหา${p.pain} ลองเช็ก 1 สัญญาณนี้ด่วน!"\n2. "รู้ไหมว่าทำไมพักผ่อนแล้วก็ยังไม่หายล้า? คำตอบอยู่ที่สารอาหารอย่าง${p.cleanExtract}ครับ"\n3. "หยุดเชื่อเรื่องนี้ก่อนสาย! วิธีดูแลแบบเข้าใจง่ายสำหรับ${p.target}"`;
+      }
+      if (lower.includes('จุดเด่น') || lower.includes('ส่วนประกอบ') || lower.includes('สารสกัด') || lower.includes('สินค้า')) {
+        return `ข้อมูลจริงของ **${p.name}**:\n• **สารสำคัญ (อ้างอิง):** ${p.ingredients}\n• **คำเรียกสารสกัดในคอนเทนต์ (ไม่ระบุ mg):** ${p.cleanExtract}\n• **จุดเด่น Benefit:** ${p.benefit}\n• **กลุ่มเป้าหมาย:** ${p.target}`;
+      }
+      if (lower.includes('โหมด') || lower.includes('อย') || lower.includes('ชื่อผลิตภัณฑ์')) {
+        return `โหมดระบุชื่อผลิตภัณฑ์ 4 แบบใน Step 1:\n1. **ใส่เฉพาะสารสกัด+benefit** (แนะนำ/ปลอดภัย อย. สูงสุด ไม่เอ่ยชื่อสินค้า)\n2. **ใส่ชื่อผลิตภัณฑ์+สารสกัด** (ใช้เมื่อบรีฟอนุญาต)\n3. **ใส่ชื่อผลิตภัณฑ์** (ระบุชื่อสินค้าตรงๆ ต้องกรอกบรีฟเพิ่ม)\n4. **Auto** (AI ประเมินความเหมาะสมตามกฎ อย. ให้ครับ)`;
+      }
+      if (lower.includes('แก้ย้อนหลัง') || lower.includes('นำเข้า') || lower.includes('export')) {
+        return `วิธีแก้ไขงานย้อนหลังง่ายๆ 3 วิธี:\n1. กดปุ่ม **"เปิดไฟล์เก่าแก้ย้อนหลัง (.xlsx)"** บนแถบด้านบน แล้วเลือกไฟล์ Excel ที่เคย Export ออกไปกลับมาแก้ในเว็บได้เลย\n2. กดปุ่ม **"เปิดงานล่าสุดที่ค้างไว้"** บนหน้าแรก (ระบบ Auto-Save ในเบราว์เซอร์ให้อัตโนมัติ)\n3. กดปุ่ม **"✏️ แก้ไขข้อความในสตอรี่บอร์ด"** ใน Step 4 เพื่อพิมพ์แก้ทุกช่องแล้ว Export ใหม่ได้ทันทีครับ`;
+      }
+      if (lower.includes('sheet') || lower.includes('excel') || lower.includes('ดาวน์โหลด')) {
+        return `ใน **ขั้นตอนที่ 5 (ดาวน์โหลด)** มีให้เลือก 2 หมวดชัดเจนครับ:\n1. **Download ไฟล์ Sheet** (ได้ไฟล์ .xlsx จัดสไตล์ตรงต้นแบบ + ปุ่มคัดลอกวาง sheets.new ทันที)\n2. **ดาวน์โหลดไฟล์ Excel** (เปิดใน Excel ได้เลย แถวโปร่ง เว้นว่าง 4 บรรทัดเป๊ะครับ)`;
+      }
+      return `สำหรับ **${p.name}** (ตอนนี้คุณอยู่ Step ${state.currentStep} | ${state.platform} | ${formatDurationLabel(state.durationSec)}): ผมแนะนำให้กดปุ่ม **"ทดลองโหมด Demo ทันที"** หรือเดินตามขั้นตอน 1 &rarr; 5 ได้เลยครับ หากต้องการให้ช่วยคิด Hook, เช็กสารสำคัญ หรือปรับคำเสี่ยง อย. พิมพ์ถามเจาะจงได้เลยครับ!`;
+    }
+
+    // ==================== 15. LOGIN & SETTINGS MODALS ====================
+    function openLoginModal() {
+      const m = document.getElementById('login-modal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function closeLoginModal() {
+      const m = document.getElementById('login-modal');
+      m.classList.add('hidden'); m.classList.remove('flex');
+    }
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      state.user = email;
+      document.getElementById('header-login-label').textContent = email.split('@')[0];
+      closeLoginModal();
+      showToast(`ยินดีต้อนรับคุณ ${email.split('@')[0]} เข้าสู่ระบบ!`, 'success');
+    }
+
+    function openSettingsModal() {
+      document.getElementById('settings-api-key').value = state.apiKey;
+      const m = document.getElementById('settings-modal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function closeSettingsModal() {
+      const m = document.getElementById('settings-modal');
+      m.classList.add('hidden'); m.classList.remove('flex');
+    }
+    function saveSettings() {
+      state.apiKey = document.getElementById('settings-api-key').value.trim();
+      localStorage.setItem('mwc_gemini_key', state.apiKey);
+      closeSettingsModal();
+      showToast('บันทึกการตั้งค่า Gemini API Key เรียบร้อย!', 'success');
+    }
+  </script>
+</body>
+</html>
