@@ -352,7 +352,11 @@
           <h2 class="text-lg sm:text-xl font-extrabold text-cobalt-950">ขั้นที่ 4: 3 สตอรี่บอร์ด, Prompt 9 บูลเลท &amp; ระบบตรวจคำเสี่ยง 3 หมวด</h2>
           <p class="text-xs text-slate-500">กฎซีนต่อเนื่อง 20% / คัทซีน 80% • แก้ไขข้อความได้ตรงหน้าเว็บ • ตรวจคำ อย. / ลดการมองเห็น / Hard Sell</p>
         </div>
-        <button onclick="goToStep(5)" class="btn-lift px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">ไปหน้าดาวน์โหลด Sheet / Excel &rarr;</button>
+        <div class="flex flex-wrap items-center gap-2">
+          <span id="content-variant-badge" class="px-3 py-1.5 rounded-xl bg-violet-50 text-violet-800 border border-violet-200 text-[11px] font-bold">✨ AI คิดสดใหม่ 100% (ห้ามซ้ำ)</span>
+          <button id="reroll-content-btn" type="button" onclick="rerollUniqueContent()" class="btn-lift px-4 py-2.5 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold text-xs shadow">🎲 สุ่มเนื้อหาใหม่</button>
+          <button onclick="goToStep(5)" class="btn-lift px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs">ไปหน้าดาวน์โหลด Sheet / Excel &rarr;</button>
+        </div>
       </div>
 
       <!-- 3-CATEGORY COMPLIANCE SCANNER -->
@@ -636,30 +640,69 @@
       generalKw: r[8] ? r[8].split(',').map(s => s.trim()).filter(Boolean) : []
     }));
 
-    /* ==================== AVATAR POOLS ==================== */
+    /* ==================== AVATAR POOLS (EXPANDED 1,920+ NON-REPEATING COMBINATIONS) ==================== */
     const AVATAR_POOLS = {
       main: [
         'คุณเจมส์ (โปรแกรมเมอร์ดึก) (ชายไทยวัย 28 ปี ใส่ฮู้ดดี้สีกรมท่า นั่งทำงานหน้าจอคอมพิวเตอร์ช่วงค่ำ)',
         'น้ำใส (สาวออฟฟิศ Gen Z วัย 26 ปี ใส่เสื้อเชิ้ตสีฟ้าอ่อน นั่งทำงานในออฟฟิศโมเดิร์น)',
-        'พี่ต้น (หนุ่มออฟฟิศวัย 33 ปี ใส่แว่นสายตา ชุด Smart Casual)',
+        'พี่ต้น (หนุ่มออฟฟิศวัย 33 ปี ใส่แว่นสายตา ชุด Smart Casual สีเทา-ขาว)',
         'คุณแม่เมย์ (คุณแม่ยุคใหม่วัย 35 ปี ยิ้มอบอุ่น ชุดโทนครีม-ฟ้า)',
         'น้องบีม (นักศึกษา/ครีเอเตอร์วัย 22 ปี สดใส เสื้อยืดสีขาว-น้ำเงิน)',
-        'คุณลุงสมชาย (ผู้ใหญ่ใจดีวัย 58 ปี แข็งแรง ชุดโปโลสีฟ้า)'
+        'คุณลุงสมชาย (ผู้ใหญ่ใจดีวัย 58 ปี แข็งแรง ชุดโปโลสีฟ้า)',
+        'พี่แพรว (ครีเอทีฟสาววัย 30 ปี มัดผมหางม้า เสื้อเบลเซอร์สีเบจ สไตล์มินิมอล)',
+        'คุณนัท (สายฟิตเนสวัย 29 ปี เสื้อกีฬาโทนน้ำเงิน-เทา บุคลิกกระฉับกระเฉง)',
+        'คุณป้าสุณี (คุณป้าวัย 60 ปี ยิ้มแย้ม ใส่เสื้อผ้าฝ้ายโทนพาสเทลสดใส)',
+        'พี่ก้อง (เจ้าของธุรกิจวัย 38 ปี เสื้อเชิ้ตพับแขนสีขาว ดูน่าเชื่อถือ)',
+        'น้องพลอย (สาวสายคาเฟ่และโซเชียลวัย 24 ปี เสื้อคาร์ดิแกนสีฟ้าพาสเทล)',
+        'คุณหมิว (คุณครู/วิทยากรสาววัย 32 ปี เสื้อเชิ้ตเรียบหรู ใช้เสียงสอนทั้งวัน)',
+        'พี่อาร์ต (กราฟิกดีไซเนอร์วัย 27 ปี ใส่แว่นกรอบใส หูฟังคล้องคอ)',
+        'คุณพ่อเอก (คุณพ่อสายลุยวัย 41 ปี เสื้อโปโลสีกรมท่า ดูแลครอบครัว)',
+        'น้องมิ้นท์ (นักศึกษาแพทย์/สายอ่านหนังสือดึกวัย 21 ปี ใส่เสื้อสเวตเตอร์สีฟ้า)',
+        'พี่บอย (เซลส์และนักเดินทางวัย 34 ปี ชุดทำงานคล่องตัว สะพายกระเป๋าเป้)'
       ],
       mascot: [
         'น้องแคปซูลใส (3D Softgel Buddy โปร่งแสงเรืองแสงสีฟ้า-ทอง)',
         'น้องวิตามินเรืองแสง (3D Glowing Vitamin Mascot ตากลมโตน่ารัก)',
         'น้องการ์ดภูมิคุ้มกัน (3D Cobalt Shield Buddy ถือโล่พลังสีน้ำเงิน)',
         'น้องหยดสมุนไพร (3D Herbal Drop Mascot สีเขียวมินต์สดชื่น)',
-        'น้องเมกะบอท (3D Mini Health Bot ตัวกลมสีขาว-น้ำเงินโคบอลต์)'
+        'น้องเมกะบอท (3D Mini Health Bot ตัวกลมสีขาว-น้ำเงินโคบอลต์)',
+        'น้องอะตอมพลัง (3D Energy Orb Mascot มีวงโคจรแสงสีฟ้าใส)',
+        'น้องเซลล์การ์เดี้ยน (3D Cell Guardian ใส่ผ้าคลุมฮีโร่สีน้ำเงิน)',
+        'น้องสเปรย์สดชื่น (3D Breeze Mist Mascot ลอยตัวพร้อมละอองใส)',
+        'น้องคลื่นโอเมก้า (3D Golden Drop Mascot สีทองอำพันเงางาม)',
+        'น้องนาฬิกาสมดุล (3D Bio-Clock Buddy สื่อถึงจังหวะชีวิตสมดุล)',
+        'น้องใบไม้ธรรมชาติ (3D Botanical Sprite สีเขียวสดใสเปล่งประกาย)',
+        'น้องเลนส์ใส (3D Clear Vision Mascot ใส่แว่นตากันแสงสีฟ้าสุดน่ารัก)'
       ],
       expert: [
         'พี่เภสัชกรเมก้า (3D Modern Pharmacist ใส่เสื้อกาวน์ขาว แว่นทรงกลม ใจดี)',
         'ดร.น้ำฟ้า (3D Female Nutritionist นักโภชนาการยุคใหม่ ท่าทางมั่นใจ)',
         'พี่หมอภูมิ (3D Friendly Health Advisor ใส่เสื้อกาวน์ติดเข็มกลัดสีฟ้า)',
-        'ผู้เชี่ยวชาญแคลร์ (3D Wellness Specialist บุคลิกอบอุ่น อธิบายเข้าใจง่าย)'
+        'ผู้เชี่ยวชาญแคลร์ (3D Wellness Specialist บุคลิกอบอุ่น อธิบายเข้าใจง่าย)',
+        'เภสัชกรหญิงเอมี่ (3D Pharmacist ยิ้มสดใส ถือแท็บเล็ตโฮโลแกรมข้อมูลสุขภาพ)',
+        'ดร.ภพ (3D Health Scientist ใส่เสื้อกาวน์สั้นสไตล์โมเดิร์น สื่อสารสนุก)',
+        'โค้ชสุขภาพพีท (3D Holistic Health Coach ชุดสมาร์ทคลีน พูดจาเป็นกันเอง)',
+        'นักโภชนาการมีนา (3D Dietitian ถือโมเดล 3D สารอาหารธรรมชาติ)',
+        'พี่เภสัชกรต้นกล้า (3D Community Pharmacist เป็นมิตร อธิบายตรงประเด็น)',
+        'ดร.ลินดา (3D Biomedical Educator ฉากหลังโฮโลแกรมวิทยาศาสตร์เข้าใจง่าย)'
       ]
     };
+
+    function drawFromShuffleBag(storageKey, poolLen, currentIdx) {
+      let bag = [];
+      try { bag = JSON.parse(safeGet(storageKey, '[]')); } catch (e) {}
+      if (!Array.isArray(bag) || bag.length === 0) {
+        bag = Array.from({ length: poolLen }, (_, i) => i).sort(() => Math.random() - 0.5);
+        if (bag.length > 1 && bag[bag.length - 1] === currentIdx) {
+          const tmp = bag[0];
+          bag[0] = bag[bag.length - 1];
+          bag[bag.length - 1] = tmp;
+        }
+      }
+      const nextIdx = bag.pop();
+      safeSet(storageKey, JSON.stringify(bag));
+      return nextIdx;
+    }
 
     /* ==================== COMPLIANCE RULES (3 CATEGORIES) ==================== */
     const COMPLIANCE_RULES = [
@@ -701,7 +744,8 @@
       avatar: { main: AVATAR_POOLS.main[0], mascot: AVATAR_POOLS.mascot[0], expert: AVATAR_POOLS.expert[0] },
       starredAvatars: [],
       storyboards: [],
-      activeAngle: 0
+      activeAngle: 0,
+      isGenerating: false
     };
 
     /* ==================== INIT & NAVIGATION ==================== */
@@ -730,7 +774,7 @@
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
-    window.goToStep = function(n) {
+    window.goToStep = function(n, skipAutoGen) {
       state.step = n;
       for (let i = 1; i <= 5; i++) {
         const panel = document.getElementById('panel-' + i);
@@ -741,11 +785,14 @@
           btn.classList.toggle('step-idle', i !== n);
         }
       }
-      if (n === 3) runAutoAnalyze(false);
-      if (n === 4 && state.storyboards.length === 0) generateAllStoryboards();
+      if (n === 3 && !skipAutoGen) runAutoAnalyze(false);
+      if (n === 4 && !skipAutoGen && state.storyboards.length === 0 && !state.isGenerating) generateAllStoryboards();
       if (n === 5) {
-        if (state.storyboards.length === 0) generateAllStoryboards();
-        renderExportPreview();
+        if (!skipAutoGen && state.storyboards.length === 0 && !state.isGenerating) {
+          generateAllStoryboards(true).then(() => renderExportPreview());
+        } else {
+          renderExportPreview();
+        }
       }
     };
 
@@ -865,27 +912,40 @@
       return others[Math.floor(Math.random() * others.length)] || arr[0];
     }
 
+    window._avatarRollSeq = parseInt(safeGet('mw_avatar_roll_seq', '0'), 10) || 1;
+
     window.rerollAutoAvatars = function() {
+      const curMain = AVATAR_POOLS.main.indexOf(state.avatar.main);
+      const curMascot = AVATAR_POOLS.mascot.indexOf(state.avatar.mascot);
+      const curExpert = AVATAR_POOLS.expert.indexOf(state.avatar.expert);
+
+      const nextMain = drawFromShuffleBag('mw_bag_avatar_main_v2', AVATAR_POOLS.main.length, curMain);
+      const nextMascot = drawFromShuffleBag('mw_bag_avatar_mascot_v2', AVATAR_POOLS.mascot.length, curMascot);
+      const nextExpert = drawFromShuffleBag('mw_bag_avatar_expert_v2', AVATAR_POOLS.expert.length, curExpert);
+
       state.avatar = {
-        main: pickDifferent(AVATAR_POOLS.main, state.avatar.main),
-        mascot: pickDifferent(AVATAR_POOLS.mascot, state.avatar.mascot),
-        expert: pickDifferent(AVATAR_POOLS.expert, state.avatar.expert)
+        main: AVATAR_POOLS.main[nextMain],
+        mascot: AVATAR_POOLS.mascot[nextMascot],
+        expert: AVATAR_POOLS.expert[nextExpert]
       };
+      window._avatarRollSeq++;
+      safeSet('mw_avatar_roll_seq', String(window._avatarRollSeq));
       renderAvatarCards();
-      showToast('🎲 สุ่มชุดตัวละคร 3D ใหม่เรียบร้อย!');
+      showToast(`🎲 สุ่มชุดตัวละคร 3D ใหม่ (ชุดที่ #${window._avatarRollSeq}) ไม่ซ้ำเดิมเรียบร้อย!`);
     };
 
     function renderAvatarCards() {
       const wrap = document.getElementById('avatar-cards');
+      if (!wrap) return;
       const items = [
-        { title: '👤 ตัวละครหลัก (Relatable)', val: state.avatar.main },
+        { title: `👤 ตัวละครหลัก (ชุด #${window._avatarRollSeq})`, val: state.avatar.main },
         { title: '✨ มาสคอต 3D (Visual Hook)', val: state.avatar.mascot },
         { title: '🩺 ผู้เชี่ยวชาญ 3D (Trust)', val: state.avatar.expert }
       ];
       wrap.innerHTML = items.map(it => `
         <div class="bg-white rounded-xl p-3 border border-cobalt-200 pop-in">
           <div class="text-[11px] font-bold text-cobalt-700 mb-1">${it.title}</div>
-          <div class="text-xs font-extrabold text-cobalt-950">${it.val}</div>
+          <div class="text-xs font-extrabold text-cobalt-950">${escapeHtml(it.val)}</div>
         </div>
       `).join('');
       const isStarred = state.starredAvatars.some(s => s.main === state.avatar.main && s.mascot === state.avatar.mascot && s.expert === state.avatar.expert);
@@ -1062,6 +1122,7 @@
     window.runAutoAnalyze = async function() {
       if (state.productId !== 'auto') {
         const p = PRODUCTS.find(x => x.id === state.productId) || PRODUCTS[1];
+        state.lastAdEvidence = null;
         applyProductToStep3(p, null, {
           confidence: 100, engine: 'ฐานข้อมูลฝังในเว็บ',
           reason: 'ดึงข้อมูลตรงตามผลิตภัณฑ์ที่คุณเลือกในขั้นที่ 1',
@@ -1073,6 +1134,7 @@
 
       if (state.images.length === 0) {
         const fallback = PRODUCTS.find(x => x.id === 'lecithin');
+        state.lastAdEvidence = null;
         applyProductToStep3(fallback, null, {
           confidence: 40, engine: 'โหมด Auto (ยังไม่ได้แนบภาพ)',
           reason: 'กรุณาแนบภาพ Ad ในขั้นที่ 1 หรือพิมพ์คำใบ้/สลับสินค้าด่วนด้านขวา',
@@ -1097,6 +1159,11 @@
         if (resp.ok) {
           const data = await resp.json();
           const matched = PRODUCTS.find(x => x.id === data.productId) || scoreTextAgainstProducts((data.observedBoxText || '') + ' ' + (data.observedIngredients || '') + ' ' + (data.observedBenefits || ''))[0].p;
+          state.lastAdEvidence = {
+            boxText: data.observedBoxText || '',
+            ingredients: data.observedIngredients || '',
+            benefits: data.observedBenefits || ''
+          };
           applyProductToStep3(matched, data, {
             confidence: data.confidence || 97, engine: 'Vercel Vision AI (/api/analyze)',
             reason: data.detectedReason || 'วิเคราะห์ภาพกล่อง สารสกัด และ Benefit โดยตรงด้วย Vision AI',
@@ -1124,6 +1191,11 @@
             if (m) {
               const data = JSON.parse(m[0]);
               const matched = PRODUCTS.find(x => x.id === data.productId) || scoreTextAgainstProducts((data.observedBoxText || '') + ' ' + (data.observedIngredients || ''))[0].p;
+              state.lastAdEvidence = {
+                boxText: data.observedBoxText || '',
+                ingredients: data.observedIngredients || '',
+                benefits: data.observedBenefits || ''
+              };
               applyProductToStep3(matched, data, {
                 confidence: data.confidence || 96, engine: 'Gemini Vision AI',
                 reason: data.detectedReason || 'อ่านข้อมูลจากภาพตรงด้วย Gemini Vision',
@@ -1154,6 +1226,12 @@
       const best = ranked[0];
       const conf = best.score >= 50 ? 92 : (best.score >= 15 ? 76 : (best.score > 0 ? 55 : 35));
       const matchedSummary = best.hits.length ? `คำที่จับคู่เจอ: [${best.hits.slice(0, 6).join(', ')}] | ` : '';
+      // เก็บเฉพาะข้อมูลสะอาดที่ตรวจสอบแล้ว (ห้ามนำชื่อไฟล์หรือข้อความ OCR ดิบไปปนในเสียงพากย์)
+      state.lastAdEvidence = {
+        boxText: best.p.label,
+        ingredients: best.p.ing,
+        benefits: best.p.benefit
+      };
       applyProductToStep3(best.p, null, {
         confidence: conf, engine: 'Thai-EN Fuzzy OCR (3-Tier)',
         reason: best.score >= 50
@@ -1163,89 +1241,272 @@
       });
     };
 
-    /* ==================== STEP 4: GENERATE 3 STORYBOARDS (EXACT 9-BULLET • & 20% CONTINUOUS RULE) ==================== */
-    window.generateAllStoryboards = function() {
-      const prod = PRODUCTS.find(x => x.id === state.resolvedProductId) || PRODUCTS[1];
-      const shortName = prod.label.split(' (')[0];
-      const topic = stripUnitsAndAd(document.getElementById('field-topic').value) || `ดูแลสุขภาพตรงจุดด้วยสารอาหารสำคัญ (${shortName})`;
-      const ing = stripUnitsAndAd(document.getElementById('field-ingredients').value) || prod.ing;
-      const pain = stripUnitsAndAd(document.getElementById('field-pain').value) || prod.pain;
-      const benefit = stripUnitsAndAd(document.getElementById('field-benefit').value) || prod.benefit;
+    /* ==================== STEP 4: GENERATE 3 STORYBOARDS (REAL-TIME MULTIMODAL AI + 1,000,000+ STORYTELLING ENGINE) ==================== */
+    window._rerollCount = parseInt(safeGet('mw_reroll_seq_v7', '0'), 10) || 0;
 
-      const platform = document.getElementById('platform-select').value;
-      const ratio = platform.includes('16:9') ? '16:9' : '9:16';
-      const orientTH = ratio === '16:9' ? 'แนวนอน 16:9' : 'แนวตั้ง 9:16';
-      const orientEN = ratio === '16:9' ? '16:9 horizontal widescreen' : '9:16 vertical short-form';
-      const style = document.getElementById('style-select').value;
-      const mention = document.getElementById('mention-mode').value;
-      const sceneCount = state.duration <= 35 ? 4 : (state.duration <= 60 ? 5 : Math.min(10, Math.round(state.duration / 12)));
-      const secPerScene = Math.round(state.duration / sceneCount);
-      const drugNote = prod.type === 'drug' ? ' ควรอ่านฉลากหรือปรึกษาแพทย์และเภสัชกรก่อนใช้เสมอ' : '';
-      const fdaFooter = prod.type === 'drug'
-        ? ' ✨ *โปรดอ่านคำเตือนในฉลากก่อนใช้ยา หรือปรึกษาแพทย์และเภสัชกร'
-        : ' ✨ *ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล ควรรับประทานอาหารหลากหลายครบ 5 หมู่ในสัดส่วนที่เหมาะสมเป็นประจำ';
-      const prodNameMention = mention === 'none' ? 'สารอาหารสำคัญสูตรนี้' : shortName;
+    // กรองเสียงพากย์ให้เป็นภาษาพูดไทยธรรมชาติ 100% ตัดชื่อไฟล์ ขยะ OCR และคำเมตาที่ไม่ควรใช้พูดออกทั้งหมด
+    function sanitizeVoiceover(str) {
+      if (!str) return '';
+      return stripUnitsAndAd(str)
+        .replace(/\([^)]*\.(jpg|jpeg|png|webp|gif)[^)]*\)/gi, '')
+        .replace(/\b[\w\- ()]+\.(jpg|jpeg|png|webp|gif)\b/gi, '')
+        .replace(/\([^)]*[A-Za-z]{2,}[^)]*[ก-ฮ][^)]*\)/g, '')
+        .replace(/(คอนเท้นย่อยง่าย|คอนเทนต์ย่อยง่าย|วิชาการย่อยง่าย|คอนเท้นท์|คอนเทนต์|คอนเท้น|Hook\s*3\s*วิ|Myth\s*vs\s*Fact|สตอรี่บอร์ด|สคริปต์|ซีนที่\s*\d+)/gi, '')
+        .replace(/เรื่อง\s*มีส่วนช่วย/g, 'ให้')
+        .replace(/ช่วยเรื่อง\s*มีส่วนช่วย/g, 'มีส่วนช่วย')
+        .replace(/ช่วยเรื่อง\s*ช่วย/g, 'ช่วย')
+        .replace(/ดูแลเรื่อง\s*ดูแล/g, 'ดูแล')
+        .replace(/ปัญหา\s*ผู้ที่มีปัญหา/g, 'อาการ')
+        .replace(/อาการ\s*อาการ/g, 'อาการ')
+        .replace(/ช่วย\s*ช่วย/g, 'ช่วย')
+        .replace(/\(\s*\)/g, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+    }
 
-      const angles = [
-        {
-          shortTag: 'Hook 3 วิ',
-          title: 'เปิดหัว Hook ดึงดูดใจ (3 วิแรก)',
-          hookVO: `หยุดไถฟีดก่อนครับ เคยรู้สึกไหมว่า ${pain} บ้าง? นี่อาจเป็นสัญญาณว่าร่างกายกำลังขอความช่วยเหลือ`,
-          midVO: `รู้ไหมว่า ${ing} มีบทบาทสำคัญมาก เพราะ${benefit}`,
-          ctaVO: `เริ่มดูแลตัวเองอย่างถูกวิธีด้วย ${prodNameMention} ตั้งแต่วันนี้${drugNote}`
-        },
-        {
-          shortTag: 'วิชาการย่อยง่าย',
-          title: 'เชิงวิชาการย่อยง่าย (Science Decoded)',
-          hookVO: `กลไกที่หลายคนไม่เคยรู้ เมื่อร่างกายต้องเจอกับ ${pain} เป็นประจำทุกวัน`,
-          midVO: `จุดเด่นของ ${ing} คือการทำงานร่วมกันอย่างเป็นระบบ เพื่อช่วยเรื่อง${benefit}`,
-          ctaVO: `เลือกสารอาหารมาตรฐานระดับสากลอย่าง ${prodNameMention} เพื่อดูแลตัวเองทุกวัน${drugNote}`
-        },
-        {
-          shortTag: 'Myth vs Fact',
-          title: 'หักล้างความเชื่อ (Myth vs Fact)',
-          hookVO: `จริงหรือมั่ว? หลายคนยังเข้าใจผิดเรื่องการดูแลปัญหา ${pain}`,
-          midVO: `ความจริงคือร่างกายต้องการตัวช่วยที่ตรงจุดอย่าง ${ing} ซึ่ง${benefit}`,
-          ctaVO: `ปรับวิธีดูแลตัวเองให้ถูกต้อง เริ่มต้นง่ายๆ กับ ${prodNameMention}${drugNote}`
+    function cleanPainForSpeech(pain) {
+      return sanitizeVoiceover(pain)
+        .replace(/^(ผู้สูงอายุหรือผู้ที่มีปัญหา|ผู้ที่มีความกังวลเรื่อง|ผู้ที่มีปัญหา|ผู้หญิงวัย\d+\+?\s*ที่|ความกังวลเรื่อง|อาการ|ปัญหา)\s*/g, '')
+        .trim();
+    }
+
+    function cleanBenefitForSpeech(benefit) {
+      return sanitizeVoiceover(benefit)
+        .replace(/\(ผลิตภัณฑ์ยา[^)]*\)/g, '')
+        .replace(/\(ยาแผนโบราณ[^)]*\)/g, '')
+        .replace(/\(ควรอ่านฉลาก[^)]*\)/g, '')
+        .replace(/\(ปรึกษาเภสัชกร[^)]*\)/g, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+    }
+
+    const STORY_ARCHETYPES = [
+      'What-If Simulation (ถ้าคนนี้ทำพฤติกรรมแบบนี้ทุกวัน จะเกิดอะไรขึ้น?)',
+      'Day-in-the-Life Follow (พาไปส่องชีวิต 1 วันของคนนี้ตั้งแต่เช้าจรดค่ำ)',
+      'Creative Edu Analogy (ให้ความรู้สุขภาพด้วยการเปรียบเทียบให้เห็นภาพชัด)',
+      'Game HP Bar (จำลองชีวิตเป็นหลอดพลังที่ลดลงทุกชั่วโมงเมื่อใช้งานหนัก)',
+      'Micro-Drama บทสนทนาสั้น 2 คนในชีวิตจริงที่ฟังแล้วสะดุดใจ',
+      'Object/Organ POV (เล่าผ่านมุมมองของอวัยวะที่กำลังส่งสัญญาณเตือน)',
+      '30-Day Time-Lapse (เทียบชัดอีก 30 วันข้างหน้า ระหว่างปล่อยผ่าน vs เริ่มดูแล)',
+      '24-Hour Split Contrast (แบ่งครึ่งจอชีวิตคน 2 แบบในสถานการณ์เดียวกัน)',
+      '3-Sign Silent Checklist (3 สัญญาณเงียบที่คนทำงานมักมองข้าม)',
+      'Health Detective (สืบหาต้นตออาการแบบนักสืบสุขภาพ)',
+      '3D Micro-World Tour (พามุดกล้องเข้าดูการทำงานระดับเซลล์แบบภาพยนตร์)',
+      'Mini Q&A 30 วิ (ตอบคำถามคาใจแบบตรงไปตรงมาสไตล์เภสัชกรยุคใหม่)',
+      'Plot Twist Insight (เปิดประเด็นชวนเอ๊ะแล้วหักมุมเฉลยความจริงด้านสารอาหาร)',
+      'Behind-the-Habit (แอบส่องเบื้องหลัง 1 นิสัยประจำวันที่ดึงพลังงานไปใช้)',
+      'Smart Survival Guide (คู่มือดูแลตัวเองฉบับกระชับสำหรับคนยุคดิจิทัล)',
+      'Time-Travel Future Self (ข้อความเตือนใจจากตัวเราในอีก 5 ปีข้างหน้า)',
+      'Body Dashboard Alert (จำลองหน้าปัดเตือนสถานะร่างกายแบบล้ำสมัย)',
+      'Office Confession (สารภาพพฤติกรรมเสี่ยงที่คนออฟฟิศทำทุกวันโดยไม่รู้ตัว)',
+      'Science in 15 Seconds (อธิบายกลไกสารสกัดให้เห็นภาพใน 15 วิ)',
+      'Expectation vs Reality (สิ่งที่คิด vs ความจริงของร่างกายในแต่ละวัน)',
+      'Night-Owl Rescue (ภารกิจกู้คืนความสมดุลให้สายนอนดึกทำงานหนัก)',
+      'Ingredient Spotlight (ซูมเจาะลึกเบื้องหลังสารสกัดเด่นจากธรรมชาติ)',
+      'Habit Upgrade Challenge (เปลี่ยน 1 นิสัยเล็กๆ เพื่อผลลัพธ์สุขภาพระยะยาว)',
+      'Myth-Buster Courtroom (พิพากษาความเชื่อผิดๆ เรื่องสุขภาพด้วยข้อเท็จจริง)',
+      'Before-Bed Thought (ความคิดก่อนนอนของคนที่เพิ่งรู้ตัวว่าร่างกายล้า)',
+      'Friend Intervention (เพื่อนสนิทจับเข่าคุยเตือนสติเรื่องพฤติกรรมเสี่ยง)',
+      'Body Battery Audit (เช็กบิลว่าร่างกายเสียพลังไปกับอะไรบ้างใน 1 วัน)',
+      'Micro-Experiment (จำลองการทดลองสั้นๆ ให้เห็นการทำงานของสารอาหารชัดๆ)',
+      'POV Breaking News (รายงานข่าวด่วนจากภายในร่างกายเมื่อเจอภาวะล้า)',
+      'Smart Label Decoder (ชวนสังเกตความต่างของสารสกัดคุณภาพระดับสากล)',
+      'Weekend Reset Story (ตามติดภารกิจรีเซ็ตร่างกายสุดสัปดาห์ให้พร้อมลุย)',
+      'Hidden Cost of Busy Life (ราคาที่ต้องจ่ายเมื่อใช้ร่างกายหนักเกินพิกัด)',
+      'One-Minute Mentor (รุ่นพี่สายเฮลท์ตี้แชร์เคล็ดลับดูแลตัวเองแบบไม่อวย)',
+      'Myth vs Reality Rapid Fire (ยิงคำถามรัวๆ หักล้างความเชื่อเดิมใน 30 วิ)',
+      'Morning Routine Makeover (พาดู 1 จุดเปลี่ยนตอนเช้าที่ทำให้ทั้งวันต่างออกไป)',
+      'Inside the Body Factory (เปรียบร่างกายเป็นโรงงานที่ต้องการอะไหล่ชั้นดี)'
+    ];
+
+    function getUsedHistory(key) {
+      try {
+        const arr = JSON.parse(safeGet(key, '[]'));
+        return Array.isArray(arr) ? arr : [];
+      } catch (e) { return []; }
+    }
+
+    function pushUsedHistory(key, items, maxLen) {
+      const prev = getUsedHistory(key);
+      const merged = [...items.filter(Boolean), ...prev].slice(0, maxLen || 50);
+      safeSet(key, JSON.stringify(merged));
+    }
+
+    function draw3UniqueArchetypes() {
+      let bag = [];
+      try { bag = JSON.parse(safeGet('mw_arch_bag_v8', '[]')); } catch (e) {}
+      if (!Array.isArray(bag) || bag.length < 3) {
+        bag = STORY_ARCHETYPES.map((_, i) => i).sort(() => Math.random() - 0.5);
+      }
+      const picked = [bag.pop(), bag.pop(), bag.pop()].map(i => STORY_ARCHETYPES[i]);
+      safeSet('mw_arch_bag_v8', JSON.stringify(bag));
+      return picked;
+    }
+
+    function drawUniqueItems(storageKey, arr, count) {
+      let bag = [];
+      try { bag = JSON.parse(safeGet(storageKey, '[]')); } catch (e) {}
+      const result = [];
+      for (let k = 0; k < count; k++) {
+        if (!Array.isArray(bag) || bag.length === 0) {
+          bag = arr.map((_, i) => i).sort(() => Math.random() - 0.5);
         }
-      ];
+        result.push(arr[bag.pop()]);
+      }
+      safeSet(storageKey, JSON.stringify(bag));
+      return result;
+    }
 
-      const sceneRoleLabels = ['Hook 3 วิ', 'ขยี้ Insight', 'กลไกสารอาหาร', 'ผลลัพธ์การใช้ชีวิต', 'CTA ปิดท้าย'];
+    // จับคู่หมวดหมู่สุขภาพตรงตามรหัสสินค้า 100% (ป้องกันคำพ้องเช่น "ตามข้อ" ไปตรงกับ "ตา")
+    function detectAdContextCue(prod, pain, ing, benefit) {
+      const id = (prod && prod.id) || '';
+      const CUE_PRESETS = {
+        curcare: {
+          organTH: 'ข้อต่อและระบบย่อยอาหาร',
+          propTH: 'โมเดล 3D สารสกัดขมิ้นชันไฟโตโซมสีทองและข้อต่อที่เคลื่อนไหวคล่องตัว',
+          propEN: 'golden 3D turmeric phytosome spheres and flexible joint visual',
+          themeTag: 'คนวัยทำงานและสายแอคทีฟ',
+          habitTH: 'ใช้งานข้อต่อหนัก เดินยืนนาน หรือทานอาหารไม่ตรงเวลาจนระคายท้อง',
+          metaphorTH: 'กลไกที่ใช้งานหนักทุกวันจนเริ่มฝืดและล้า'
+        },
+        eye: {
+          organTH: 'ดวงตาและสายตา',
+          propTH: 'หน้าจอคอมพิวเตอร์และเกราะกรองแสงสีฟ้า 3D',
+          propEN: 'glowing blue-light shield around digital screen',
+          themeTag: 'คนจ้องจอนาน',
+          habitTH: 'จ้องจอคอมสลับไถมือถือยาวจนดึก',
+          metaphorTH: 'เลนส์กล้องที่เปิดรับแสงจ้าทั้งวันไม่เคยได้พัก'
+        },
+        joint_bone: {
+          organTH: 'ข้อต่อและมวลกระดูก',
+          propTH: 'โมเดล 3D ข้อต่อและโครงสร้างกระดูกที่แข็งแรงยืดหยุ่น',
+          propEN: 'smooth flexible 3D joint and bone structure',
+          themeTag: 'สายแอคทีฟและคนดูแลข้อกระดูก',
+          habitTH: 'เดินขึ้นลงบันไดบ่อย นั่งท่าเดิมนาน หรือออกแรงหนักซ้ำๆ',
+          metaphorTH: 'บานพับที่เปิดปิดวันละหลายร้อยครั้งจนเริ่มฝืด'
+        },
+        liver_lipid: {
+          organTH: 'ตับและสมดุลไขมัน',
+          propTH: 'โต๊ะอาหารมื้อหนักสลับโมเดล 3D เซลล์ตับใสสะอาด',
+          propEN: 'heavy feast table transitioning to clean 3D liver wellness visual',
+          themeTag: 'สายกินและคนดูแลตับ',
+          habitTH: 'จัดเต็มบุฟเฟ่ต์ ของทอด ของมัน และมื้อดึกติดกันหลายวัน',
+          metaphorTH: 'เครื่องกรองที่ทำงานล่วงเวลาทุกคืนโดยไม่ได้พัก'
+        },
+        throat_resp: {
+          organTH: 'ลำคอและทางเดินหายใจ',
+          propTH: 'ละอองสมุนไพร 3D สีเขียวมินต์สดชื่นในอากาศ',
+          propEN: 'fresh 3D botanical mist waves soothing the throat',
+          themeTag: 'สายใช้เสียงและคนเจออากาศเปลี่ยนบ่อย',
+          habitTH: 'ประชุมยาวใช้เสียงทั้งวันในห้องแอร์เย็นจัดสลับเจออากาศเปลี่ยน',
+          metaphorTH: 'ไมโครโฟนที่เปิดใช้งานต่อเนื่องจนเริ่มแห้งและฝืด'
+        },
+        gut: {
+          organTH: 'ลำไส้และระบบขับถ่าย',
+          propTH: 'โลกจุลินทรีย์ดีและใยอาหาร 3D เปล่งประกายสมดุล',
+          propEN: 'balanced 3D friendly microbiome glowing garden',
+          themeTag: 'คนทำงานที่ดูแลระบบขับถ่าย',
+          habitTH: 'กินเร่งรีบ ทานผักน้อย และนั่งทำงานติดเก้าอี้ทั้งวัน',
+          metaphorTH: 'ระบบขนส่งในเมืองที่เริ่มติดขัดเพราะขาดตัวช่วยจัดระเบียบ'
+        },
+        skin_hair: {
+          organTH: 'ผิวพรรณและเส้นผม',
+          propTH: 'ละอองความชุ่มชื้นและสารต้านอนุมูลอิสระ 3D เปล่งปลั่ง',
+          propEN: 'luminous 3D collagen and hydration shimmer',
+          themeTag: 'สายดูแลผิวและบุคลิกภาพ',
+          habitTH: 'นอนดึก ตากแดด เจอมลภาวะ และอยู่ในห้องแอร์ทั้งวัน',
+          metaphorTH: 'ผืนผ้าใบที่โดนแดดลมทุกวันแต่ต้องการการบำรุงจากภายใน'
+        },
+        brain_sleep: {
+          organTH: 'สมอง ระบบประสาท และการพักผ่อน',
+          propTH: 'เส้นแสงซินแนปส์ 3D สื่อถึงสมาธิและความปลอดโปร่ง',
+          propEN: 'bright 3D neural clarity light pathways',
+          themeTag: 'สายใช้สมองและคนนอนดึก',
+          habitTH: 'คิดงานหลายอย่างพร้อมกันจนดึกและพักผ่อนไม่เต็มอิ่ม',
+          metaphorTH: 'คอมพิวเตอร์ที่เปิดหลายโปรแกรมทั้งวันไม่เคยรีสตาร์ต'
+        },
+        women: {
+          organTH: 'สมดุลสุขภาพผู้หญิง',
+          propTH: 'แสงออร่า 3D โทนอบอุ่นสื่อถึงสมดุลและพลังจากภายใน',
+          propEN: 'warm luminous 3D holistic women wellness aura',
+          themeTag: 'ผู้หญิงยุคใหม่',
+          habitTH: 'ทำงานหนักและดูแลหลายบทบาทจนไม่ค่อยมีเวลาดูแลสมดุลตัวเอง',
+          metaphorTH: 'นาฬิกาที่เดินตรงเวลาทุกวันแต่ต้องการการดูแลกลไกอย่างอ่อนโยน'
+        },
+        fitness_energy: {
+          organTH: 'พลังงานและการเผาผลาญร่างกาย',
+          propTH: 'เกจพลังงานและโมเดล 3D สื่อถึงความฟิตและสมดุลร่างกาย',
+          propEN: 'vibrant 3D vitality and metabolic balance visual',
+          themeTag: 'สายแอคทีฟและคนรักสุขภาพ',
+          habitTH: 'ใช้พลังเต็มที่ทั้งวัน กินไม่เป็นเวลา และอยากดูแลความฟิตให้สม่ำเสมอ',
+          metaphorTH: 'แบตเตอรี่ที่ถูกใช้งานหนักทุกวันและต้องการการชาร์จอย่างถูกวิธี'
+        },
+        immunity: {
+          organTH: 'ภูมิคุ้มกันและพลังงานร่างกาย',
+          propTH: 'เกราะพลัง 3D สีน้ำเงินโคบอลต์เรืองแสงรอบตัว',
+          propEN: 'radiant 3D cobalt immunity shield aura',
+          themeTag: 'คนวัยทำงานที่ดูแลสุขภาพทุกวัน',
+          habitTH: 'โหมงานหนัก พักผ่อนน้อย และเจออากาศเปลี่ยนบ่อย',
+          metaphorTH: 'เกราะป้องกันที่ต้องเติมพลังให้แข็งแรงอยู่เสมอในทุกฤดู'
+        }
+      };
 
-      state.storyboards = angles.map(ang => {
+      const PRODUCT_GROUP_MAP = {
+        curcare: 'curcare',
+        ii_care: 'eye', optivit: 'eye',
+        flexigen: 'joint_bone', flexsa: 'joint_bone', calcium_d: 'joint_bone', nat_cal_plus: 'joint_bone',
+        lecithin: 'liver_lipid', dtoxi: 'liver_lipid', livotone: 'liver_lipid', cosanol: 'liver_lipid', cholezz: 'liver_lipid', fish_oil: 'liver_lipid', garlic_oil: 'liver_lipid',
+        eugica_herbal: 'throat_resp', eugica_cold: 'throat_resp', eugica_coff: 'throat_resp', eugica_ivy: 'throat_resp', eugica_nasal: 'throat_resp', muclear: 'throat_resp', viruno: 'throat_resp', echinax: 'throat_resp', loreze: 'throat_resp',
+        ab_pre_pro: 'gut', mega_fiber: 'gut', avarin: 'gut', gogaz: 'gut', multizyme: 'gut', normagut: 'gut', unomint: 'gut', prodefenz: 'gut',
+        acnacare: 'skin_hair', astax: 'skin_hair', glow_collagen: 'skin_hair', grape_seed: 'skin_hair', pynocare: 'skin_hair', regenez: 'skin_hair', rivita: 'skin_hair', epo: 'skin_hair', nat_e: 'skin_hair', zincomin: 'skin_hair',
+        dha: 'brain_sleep', giloba: 'brain_sleep', nat_b: 'brain_sleep', nat_mag: 'brain_sleep', diavit: 'brain_sleep', valian_x: 'brain_sleep', teenivit: 'brain_sleep', gofen: 'brain_sleep',
+        femiflora: 'women', femosa: 'women', multilives: 'women', soygerm: 'women', ferrotone: 'women',
+        ultrapro: 'fitness_energy', cla_advance: 'fitness_energy', hi_green: 'fitness_energy', apple_cider: 'fitness_energy', glucomeal: 'fitness_energy', lipo_x: 'fitness_energy', zemax: 'fitness_energy', ginsomin: 'fitness_energy', alerten: 'fitness_energy', spirulina: 'fitness_energy', immuplex: 'fitness_energy',
+        nat_c: 'immunity', nat_c_ester: 'immunity', nat_c_yummy: 'immunity', nat_d: 'immunity', nutrivita: 'immunity'
+      };
+
+      if (PRODUCT_GROUP_MAP[id]) return CUE_PRESETS[PRODUCT_GROUP_MAP[id]];
+
+      const hay = `${(prod && prod.label) || ''} ${pain} ${ing} ${benefit}`.toLowerCase();
+      if (/ดวงตา|สายตา|ตาแห้ง|ตาล้า|แสงสีฟ้า|ลูทีน|จอประสาทตา/.test(hay)) return CUE_PRESETS.eye;
+      if (/ขมิ้นชัน|เคอร์คูมิน|ไฟโตโซม|meriva/.test(hay)) return CUE_PRESETS.curcare;
+      if (/ตับ|เลซิติน|คอเลสเตอรอล|โคเลสเตอรอล|ไขมันในเลือด/.test(hay)) return CUE_PRESETS.liver_lipid;
+      if (/พ่นคอ|เจ็บคอ|ชุ่มคอ|ไอมีเสมหะ|คัดจมูก|โพรงจมูก|สเปรย์/.test(hay)) return CUE_PRESETS.throat_resp;
+      if (/ลำไส้|ท้องผูก|ขับถ่าย|ไฟเบอร์|โพรไบโอติก|อาหารไม่ย่อย|แน่นท้อง/.test(hay)) return CUE_PRESETS.gut;
+      if (/ผิวพรรณ|ผิวแห้ง|คอลลาเจน|ริ้วรอย|สิว|ฝ้า|ผมร่วง/.test(hay)) return CUE_PRESETS.skin_hair;
+      if (/ข้อเข่า|ข้อเสื่อม|กระดูก|แคลเซียม|กลูโคซามีน|ปวดข้อ/.test(hay)) return CUE_PRESETS.joint_bone;
+      if (/สมอง|ความจำ|นอนหลับ|ไมเกรน|ปลายประสาท|วิตามินบี/.test(hay)) return CUE_PRESETS.brain_sleep;
+      return CUE_PRESETS.immunity;
+    }
+
+    // แปลงผลลัพธ์จาก AI (หรือระบบสำรอง) ให้ตรงกฎ Prompt 9 บูลเลท (• ) + ซีนต่อเนื่อง 20% + กฎ อย. 100%
+    function formatClipsToStandardStoryboards(rawClips, ctx) {
+      const { prod, shortName, topic, platform, ratio, orientTH, orientEN, style, sceneCount, secPerScene, fdaFooter } = ctx;
+      const defaultRoles = ['Hook 3 วิ', 'ขยี้ Insight', 'กลไกสารอาหาร', 'ผลลัพธ์การใช้ชีวิต', 'CTA ปิดท้าย'];
+      const fallbackTags = ['Hook 3 วิ', 'วิชาการย่อยง่าย', 'Myth vs Fact'];
+
+      return rawClips.slice(0, 3).map((clip, cIdx) => {
         const scenes = [];
+        const srcScenes = Array.isArray(clip.scenes) ? clip.scenes : [];
+
         for (let s = 0; s < sceneCount; s++) {
-          const isCont = (s === 1); // 20% continuous scene (1 out of 5 scenes)
+          const scRaw = srcScenes[s] || srcScenes[srcScenes.length - 1] || {};
+          const isCont = (s === 1) || (sceneCount >= 8 && s === 6); // กฎซีนต่อเนื่อง 20% / คัทซีน 80%
           const startS = s * secPerScene;
           const endS = s === sceneCount - 1 ? state.duration : (s + 1) * secPerScene;
           const timeStr = `${String(Math.floor(startS / 60)).padStart(2, '0')}:${String(startS % 60).padStart(2, '0')} - ${String(Math.floor(endS / 60)).padStart(2, '0')}:${String(endS % 60).padStart(2, '0')}`;
-          const roleLabel = s === sceneCount - 1 ? 'CTA ปิดท้าย' : (sceneRoleLabels[s] || `ขยายประเด็น ${s + 1}`);
+          const roleLabel = scRaw.roleLabel || (s === sceneCount - 1 ? 'CTA ปิดท้าย' : (defaultRoles[s] || `ขยายประเด็น ${s + 1}`));
 
-          let visual = '', vo = '', textOnClip = '', charUsed = state.avatar.main;
-          if (s === 0) {
-            visual = `เปิดฉาก POV ชีวิตประจำวันของ ${state.avatar.main} ที่กำลังเจออาการ ${pain} พร้อมกราฟิกเตือนสัญญาณร่างกายสีฟ้าเรืองแสง`;
-            vo = ang.hookVO;
-            textOnClip = 'เช็กด่วน! สัญญาณร่างกายอ่อนล้า';
-          } else if (s === 1) {
-            visual = `ภาพ 3D Split-Screen แสดงกิจวัตรคนเมืองที่สะสมความล้าเทียบกับเซลล์ร่างกายที่เริ่มอ่อนแรงลง`;
-            vo = `ยิ่งใช้ชีวิตเร่งรีบทุกวัน ร่างกายก็ยิ่งดึงสารอาหารสำคัญออกไปใช้ตลอดเวลาโดยที่เราไม่รู้ตัว`;
-            textOnClip = 'ไลฟ์สไตล์เร่งรีบ = ดึงสารอาหารไปใช้ทุกวัน';
-          } else if (s === 2) {
-            charUsed = state.avatar.expert;
-            visual = `${state.avatar.expert} และ ${state.avatar.mascot} อธิบายกลไกการทำงานของ ${ing} ด้วยภาพ 3D สวยงามเข้าใจง่าย`;
-            vo = ang.midVO;
-            textOnClip = ing.slice(0, 38);
-          } else if (s === sceneCount - 1) {
-            charUsed = state.avatar.main;
-            visual = `${state.avatar.main} ยิ้มสดใสสุขภาพดี` + (state.realPackage ? ` พร้อมวางภาพ package จริงของ ${shortName} ชัดเจน` : ` ในบรรยากาศอบอุ่นโทนฟ้า-ขาว พร้อมสัญลักษณ์ 3D สื่อถึงสุขภาพดี`);
-            vo = ang.ctaVO;
-            textOnClip = mention === 'none' ? 'ดูแลสุขภาพทุกวัน' : shortName;
-          } else {
-            charUsed = state.avatar.main;
-            visual = `${state.avatar.main} กลับมาสดชื่นมีพลังในการใช้ชีวิตประจำวัน แสงแดดยามเช้าอบอุ่น`;
-            vo = `เมื่อดูแลร่างกายอย่างสม่ำเสมอ คุณจะรู้สึกมั่นใจและพร้อมลุยทุกกิจกรรมมากขึ้น`;
-            textOnClip = 'มั่นใจ พร้อมลุยทุกวัน';
+          const charType = scRaw.characterType || (s === 2 ? 'expert' : 'main');
+          const charUsed = charType === 'expert' ? state.avatar.expert : (charType === 'mascot' ? state.avatar.mascot : state.avatar.main);
+
+          let visual = stripUnitsAndAd(scRaw.visualTH || '');
+          if (s === sceneCount - 1 && state.realPackage && !visual.includes('package')) {
+            visual += ` พร้อมวางภาพ package จริงของ ${shortName} ชัดเจน`;
           }
+          const actionEN = stripUnitsAndAd(scRaw.actionEN || `Healthy lifestyle storytelling related to ${shortName}`);
+          const vo = sanitizeVoiceover(scRaw.vo || '');
+          const textOnClip = sanitizeVoiceover(scRaw.textOnClip || shortName).slice(0, 40);
 
           const imgHeadTH = isCont ? 'สร้างภาพซีนต่อเนื่อง' : 'สร้างภาพ';
           const imgHeadEN = isCont ? 'Generate continuous scene image' : 'Generate image';
@@ -1259,37 +1520,531 @@
             ? 'Display real product packaging clearly without distorting the logo, FDA compliant, no milligram numbers displayed on screen'
             : 'No real supplement bottle or packaging, use clean 3D symbolic nutrient visuals, FDA compliant, no milligram numbers displayed on screen';
 
-          const camTH = isCont ? 'แพนกล้องข้างแบบนุ่มนวล (ต่อเนื่องจากซีนก่อนหน้า ใช้ตัวละครและฉากเดิม เปลี่ยนมุมกล้องให้ลื่นไหล)' : (s === 0 ? 'ซูมเข้าไปใกล้ใบหน้าอย่างรวดเร็ว' : 'มุมกล้องระดับสายตา คมชัดระดับ 4K');
-          const camEN = isCont ? 'Smooth horizontal pan (continuous from previous scene, same character and setting, shifted camera angle)' : (s === 0 ? 'Dynamic push-in close-up' : 'Eye-level 35mm lens, sharp cinematic focus');
+          const camTH = isCont ? 'แพนกล้องข้างแบบนุ่มนวล (ต่อเนื่องจากซีนก่อนหน้า ใช้ตัวละครและฉากเดิม เปลี่ยนมุมกล้องให้ลื่นไหล)' : (clip.cameraTH || 'มุมกล้องระดับสายตา คมชัดระดับ 4K');
+          const camEN = isCont ? 'Smooth horizontal pan (continuous from previous scene, same character and setting, shifted camera angle)' : (clip.cameraEN || 'Eye-level 35mm lens, sharp cinematic focus');
+          const setTH = isCont ? (clip.settingContTH || clip.settingTH || 'ฉากเดิมปรับมุมกล้องต่อเนื่อง') : (clip.settingTH || 'มุมทำงานหรือห้องนั่งเล่นสมัยใหม่');
+          const setEN = isCont ? (clip.settingContEN || clip.settingEN || 'Same setting with continuous camera angle') : (clip.settingEN || 'Modern urban workspace or living room');
+          const lightTH = clip.lightingTH || 'แสงธรรมชาติผสมแสงสตูดิโอนุ่มๆ';
+          const lightEN = clip.lightingEN || 'Natural ambient with soft studio key light';
 
-          const imgTH = `${imgHeadTH}\n• Style: สไตล์ ${style} สัดส่วนภาพ${orientTH} คุณภาพระดับภาพยนตร์ 4K\n• Camera: ${camTH}\n• Shot: ${s === 0 ? 'Close-Up เน้นอารมณ์' : (s === 1 ? 'Medium Shot แบ่งครึ่งจอ' : 'Medium Shot')}\n• Lighting: ${s === 1 ? 'แสงโทนเย็นเทียบกับโทนอุ่น' : 'แสงธรรมชาติผสมแสงหน้าจอนุ่มๆ'}\n• Setting: ${s === 1 ? 'ฉากชีวิตคนเมืองตัดสลับโลกเซลล์ 3D' : 'มุมทำงานหรือห้องนั่งเล่นสมัยใหม่'}\n• Character: ${charUsed}\n• Action: ${visual}\n• Constraints: ${pkgConstraintTH}\n• Dialogue: ไม่มี`;
+          const imgTH = `${imgHeadTH}\n• Style: สไตล์ ${style} สัดส่วนภาพ${orientTH} คุณภาพระดับภาพยนตร์ 4K\n• Camera: ${camTH}\n• Shot: ${s === 0 ? 'Close-Up เน้นอารมณ์' : (isCont ? 'Medium Shot แบ่งครึ่งจอ' : 'Medium Shot')}\n• Lighting: ${lightTH}\n• Setting: ${setTH}\n• Character: ${charUsed}\n• Action: ${visual}\n• Constraints: ${pkgConstraintTH}\n• Dialogue: ไม่มี`;
+          const imgEN = `${imgHeadEN}\n• Style: ${style}, ${orientEN}, cinematic 4K render\n• Camera: ${camEN}\n• Shot: ${s === 0 ? 'Expressive close-up shot' : (isCont ? 'Split-screen medium shot' : 'Medium shot')}\n• Lighting: ${lightEN}\n• Setting: ${setEN}\n• Character: ${charUsed}\n• Action: ${actionEN}\n• Constraints: ${pkgConstraintEN}\n• Dialogue: None`;
+          const vidTH = `${vidHeadTH}\n• Style: สไตล์ ${style} สัดส่วนภาพ${orientTH} คุณภาพระดับภาพยนตร์ 4K\n• Camera: ${isCont ? 'แพนกล้องข้างแบบนุ่มนวล เคลื่อนไหวสมูท 24fps (ต่อเนื่องจากซีนก่อนหน้า ใช้ตัวละครและฉากเดิม เปลี่ยนมุมกล้องให้ลื่นไหล)' : camTH + ' เคลื่อนไหวสมูท 24fps'}\n• Shot: ${s === 0 ? 'Close-Up เน้นอารมณ์' : (isCont ? 'Medium Shot แบ่งครึ่งจอ' : 'Medium Shot')}\n• Lighting: ${lightTH}\n• Setting: ${setTH}\n• Character: ${charUsed}\n• Action: ${visual}\n• Constraints: ${pkgConstraintTH}\n• Dialogue: ไม่มี`;
+          const vidEN = `${vidHeadEN}\n• Style: ${style}, ${orientEN}, cinematic 4K render\n• Camera: ${isCont ? 'Smooth horizontal pan, smooth cinematic motion 24fps (continuous from previous scene, same character and setting, shifted camera angle)' : camEN + ', smooth cinematic motion 24fps'}\n• Shot: ${s === 0 ? 'Expressive close-up shot' : (isCont ? 'Split-screen medium shot' : 'Medium shot')}\n• Lighting: ${lightEN}\n• Setting: ${setEN}\n• Character: ${charUsed}\n• Action: Natural subtle facial expression and smooth motion, ${actionEN}\n• Constraints: ${pkgConstraintEN}\n• Dialogue: None`;
 
-          const imgEN = `${imgHeadEN}\n• Style: ${style}, ${orientEN}, cinematic 4K render\n• Camera: ${camEN}\n• Shot: ${s === 0 ? 'Expressive close-up shot' : (s === 1 ? 'Split-screen medium shot' : 'Medium shot')}\n• Lighting: ${s === 1 ? 'Cool vs warm contrast lighting' : 'Natural ambient with soft screen glow'}\n• Setting: ${s === 1 ? 'City lifestyle split with 3D cellular world' : 'Modern urban workspace or living room'}\n• Character: ${charUsed}\n• Action: Healthy lifestyle visual storytelling related to ${shortName}\n• Constraints: ${pkgConstraintEN}\n• Dialogue: None`;
-
-          const vidTH = `${vidHeadTH}\n• Style: สไตล์ ${style} สัดส่วนภาพ${orientTH} คุณภาพระดับภาพยนตร์ 4K\n• Camera: ${isCont ? 'แพนกล้องข้างแบบนุ่มนวล เคลื่อนไหวสมูท 24fps (ต่อเนื่องจากซีนก่อนหน้า ใช้ตัวละครและฉากเดิม เปลี่ยนมุมกล้องให้ลื่นไหล)' : 'ซูมเข้าไปใกล้ใบหน้าอย่างรวดเร็ว เคลื่อนไหวสมูท 24fps'}\n• Shot: ${s === 0 ? 'Close-Up เน้นอารมณ์' : (s === 1 ? 'Medium Shot แบ่งครึ่งจอ' : 'Medium Shot')}\n• Lighting: ${s === 1 ? 'แสงโทนเย็นเทียบกับโทนอุ่น' : 'แสงธรรมชาติผสมแสงหน้าจอนุ่มๆ'}\n• Setting: ${s === 1 ? 'ฉากชีวิตคนเมืองตัดสลับโลกเซลล์ 3D' : 'มุมทำงานหรือห้องนั่งเล่นสมัยใหม่'}\n• Character: ${charUsed}\n• Action: ${visual}\n• Constraints: ${pkgConstraintTH}\n• Dialogue: ไม่มี`;
-
-          const vidEN = `${vidHeadEN}\n• Style: ${style}, ${orientEN}, cinematic 4K render\n• Camera: ${isCont ? 'Smooth horizontal pan, smooth cinematic motion 24fps (continuous from previous scene, same character and setting, shifted camera angle)' : 'Dynamic push-in close-up, smooth cinematic motion 24fps'}\n• Shot: ${s === 0 ? 'Expressive close-up shot' : (s === 1 ? 'Split-screen medium shot' : 'Medium shot')}\n• Lighting: ${s === 1 ? 'Cool vs warm contrast lighting' : 'Natural ambient with soft screen glow'}\n• Setting: ${s === 1 ? 'City lifestyle split with 3D cellular world' : 'Modern urban workspace or living room'}\n• Character: ${charUsed}\n• Action: Natural subtle facial expression and smooth motion matching narration\n• Constraints: ${pkgConstraintEN}\n• Dialogue: None`;
-
-          scenes.push({
-            scene: s + 1, roleLabel, isCont, time: timeStr, visual,
-            imgTH, imgEN, vidTH, vidEN,
-            vo: stripUnitsAndAd(vo), textOnClip: stripUnitsAndAd(textOnClip)
-          });
+          scenes.push({ scene: s + 1, roleLabel, isCont, time: timeStr, visual, imgTH, imgEN, vidTH, vidEN, vo, textOnClip });
         }
 
-        const caption = `ใครกำลังเจอปัญหา ${pain} บ้าง? ลองเช็กสัญญาณร่างกายและเติม ${ing} จากแนวคิดการดูแลสุขภาพของ ${shortName} ควบคู่การพักผ่อนให้เพียงพอกันนะครับ${fdaFooter}`;
+        const cleanCap = sanitizeVoiceover(clip.caption || '').replace(/✨\s*\*.*$/, '').trim();
+        const caption = `${cleanCap}${fdaFooter}`;
         const hashtags = `#MegaWeCare #WeCare #ดูแลสุขภาพ #สุขภาพดีเริ่มที่ตัวเรา #${shortName.replace(/[^a-zA-Z0-9ก-ฮ]/g, '')}`;
+
         return {
-          shortTag: ang.shortTag, title: ang.title, topic, productShort: shortName, productLabel: prod.label,
+          shortTag: clip.shortTag || fallbackTags[cIdx] || `คลิป ${cIdx + 1}`,
+          title: stripUnitsAndAd(clip.title || fallbackTags[cIdx]),
+          topic, productShort: shortName, productLabel: prod.label,
           platform, ratio, duration: state.duration, scenes, caption, hashtags
         };
       });
+    }
 
-      state.activeAngle = 0;
-      renderStoryboardView();
-      scanAllCompliance();
-      goToStep(4);
-      showToast('✨ สร้าง 3 สตอรี่บอร์ดตรงแพทเทิร์นต้นแบบเรียบร้อย!');
+    // ระบบสร้างคอนเทนต์แบบให้ความรู้ + เล่าเรื่อง 8 หมวด (1,000,000+ รูปแบบ ภาษาพูดธรรมชาติ ไม่มีขยะ OCR ตรงสินค้า 100%)
+    function buildOfflineFallbackClips(ctx) {
+      const { prod, pain, ing, benefit, prodNameMention, drugNote, shortName, sceneCount, clipArchetypes } = ctx;
+      const cue = detectAdContextCue(prod, pain, ing, benefit);
+      const mainCharName = (state.avatar.main || 'ตัวเอก').split(' ')[0];
+      const cleanPain = cleanPainForSpeech(pain);
+      const cleanBenefit = cleanBenefitForSpeech(benefit);
+
+      const SETTINGS_POOL = [
+        { sTH: 'โต๊ะทำงานโมเดิร์นช่วงค่ำพร้อมจอแสดงพลังงาน 3D', sEN: 'Modern workspace at dusk with 3D energy display', cTH: 'มุมโต๊ะทำงานเดิมแพนกล้องสู่กราฟิก 3D', cEN: 'Same workspace panning to 3D graphic', lTH: 'แสงธรรมชาติผสมแสงหน้าจอนุ่มๆ', lEN: 'Natural ambient with soft screen glow', camTH: 'มุมกล้อง Push-in เข้าใกล้สีหน้าอย่างมีมิติ', camEN: 'Dynamic push-in close-up lens' },
+        { sTH: 'สตูดิโอโฮโลแกรมโทนฟ้า-ขาวทันสมัย', sEN: 'Cobalt-white holographic health studio', cTH: 'สตูดิโอเดิมเคลื่อนกล้องตามเส้นพลัง 3D', cEN: 'Same studio gliding along 3D energy lines', lTH: 'แสงสตูดิโอคลีนพร้อมริมไลท์สีฟ้า', lEN: 'Clean studio light with cobalt rim light', camTH: 'มุมกล้องระดับสายตา 35mm คมชัดระดับภาพยนตร์', camEN: 'Eye-level 35mm cinematic lens' },
+        { sTH: 'มุมคาเฟ่มินิมอลรับแสงแดดยามเช้า', sEN: 'Bright minimalist cafe in morning sunlight', cTH: 'มุมโต๊ะคาเฟ่เดิมแพนกล้องข้างต่อเนื่อง', cEN: 'Same minimalist cafe table lateral pan', lTH: 'แสงแดดอุ่นยามเช้าโทนโกลเด้นเอาว์', lEN: 'Warm golden morning sunlight', camTH: 'มุมกล้อง POV เคลื่อนไหวเป็นธรรมชาติ', camEN: 'Natural handheld POV movement' },
+        { sTH: 'ห้องนั่งเล่นสมาร์ทโฮมโทนอบอุ่นพร้อมกระจกใส', sEN: 'Warm smart-home living room with floor-to-ceiling windows', cTH: 'ห้องนั่งเล่นเดิมหมุนมุมกล้องเผยรายละเอียด 3D', cEN: 'Same living room orbiting toward 3D overlay', lTH: 'แสงนุ่มจากหน้าต่างด้านข้างสไตล์ภาพยนตร์', lEN: 'Soft cinematic side window light', camTH: 'มุมกล้อง Dolly-in นุ่มนวล', camEN: 'Smooth cinematic dolly-in shot' },
+        { sTH: 'แล็บสุขภาพ 3D แห่งอนาคตโทนขาว-น้ำเงิน', sEN: 'Futuristic white-and-cobalt 3D wellness lab', cTH: 'แล็บเดิมซูมต่อเนื่องเข้าสู่โมเดลสารอาหาร 3D', cEN: 'Same lab gliding continuously into 3D nutrient model', lTH: 'แสงคลีนไฮคีย์สะท้อนประกายคริสตัล', lEN: 'Clean high-key lighting with subtle glow', camTH: 'มุมกล้อง Low-angle สร้างความน่าเชื่อถือ', camEN: 'Confident subtle low-angle framing' },
+        { sTH: 'สวนสาธารณะเมืองใหญ่ยามเช้าพร้อมเส้นทางวิ่ง', sEN: 'Urban park walkway at crisp sunrise', cTH: 'ทางเดินสวนเดิมแพนกล้องตามจังหวะก้าวเดิน', cEN: 'Same park walkway tracking smoothly', lTH: 'แสงเช้าโปร่งใสสดชื่น', lEN: 'Crisp refreshing morning daylight', camTH: 'มุมกล้อง Tracking Shot ลื่นไหล', camEN: 'Smooth steadicam tracking shot' },
+        { sTH: 'มุมห้องครัวโมเดิร์นจัดวางวัตถุดิบธรรมชาติสดใหม่', sEN: 'Modern bright kitchen with fresh natural ingredients', cTH: 'เคาน์เตอร์ครัวเดิมเลื่อนกล้องสู่ภาพ 3D สารสกัด', cEN: 'Same kitchen counter sliding into 3D extract visual', lTH: 'แสงธรรมชาติสว่างสะอาดตา', lEN: 'Bright clean natural daylight', camTH: 'มุมกล้อง Top-angle สลับระดับสายตา', camEN: 'Clean overhead-to-eye-level framing' },
+        { sTH: 'โคเวิร์กกิ้งสเปซยุคใหม่บรรยากาศโปร่งโล่ง', sEN: 'Airy contemporary co-working space', cTH: 'มุมทำงานเดิมแพนกล้องต่อเนื่องเทียบกราฟสุขภาพ', cEN: 'Same co-working desk panning to 3D wellness gauge', lTH: 'แสงเดย์ไลท์ผสมไฟวอร์มไวท์ละมุน', lEN: 'Balanced daylight and warm practical lights', camTH: 'มุมกล้อง Medium Wide ชัดลึก', camEN: 'Crisp medium-wide cinematic framing' },
+        { sTH: 'ระเบียงคอนโดวิวเมืองยามเย็นพร้อมสายลมอ่อนๆ', sEN: 'City-view condo balcony at twilight breeze', cTH: 'ระเบียงเดิมแพนกล้องรับแสงเมืองด้านหลัง', cEN: 'Same balcony panning with soft city bokeh', lTH: 'แสงทไวไลท์โทนน้ำเงิน-ทองตัดกันสวย', lEN: 'Blue-and-gold twilight contrast lighting', camTH: 'มุมกล้อง Slow Orbit รอบตัวละคร', camEN: 'Slow cinematic orbit around character' },
+        { sTH: 'ย่านธุรกิจยามเช้าบรรยากาศเมืองทันสมัย', sEN: 'Vibrant modern city district in crisp morning light', cTH: 'ฉากเมืองเดิมแพนกล้องเข้าหาอินโฟกราฟิก 3D', cEN: 'Same city scene panning into 3D HUD overlay', lTH: 'แสงเมืองสดใสคมชัดสไตล์โฆษณา', lEN: 'Crisp commercial city daylight', camTH: 'มุมกล้อง Dynamic Tracking จังหวะกระชับ', camEN: 'Fast dynamic tracking shot' },
+        { sTH: 'ห้องประชุมกระจกใสวิวตึกสูงใจกลางเมือง', sEN: 'Glass-walled meeting room overlooking city skyline', cTH: 'ห้องประชุมเดิมแพนกล้องข้างเก็บสีหน้าตัวละคร', cEN: 'Same meeting room lateral character reaction pan', lTH: 'แสงธรรมชาติลอดกระจกใสสไตล์พรีเมียม', lEN: 'Premium diffused skyline window light', camTH: 'มุมกล้อง Over-the-Shoulder เล่าเรื่องสมจริง', camEN: 'Authentic over-the-shoulder framing' },
+        { sTH: 'โต๊ะอาหารสไตล์โมเดิร์นบรรยากาศเพื่อนสนิทคุยกัน', sEN: 'Modern dining table with warm friendly conversation vibe', cTH: 'โต๊ะอาหารเดิมสลับมุมกล้องรับ-ส่งอารมณ์คู่สนทนา', cEN: 'Same dining table smooth angle shift', lTH: 'แสงอุ่นสบายตาแบบภาพยนตร์ไลฟ์สไตล์', lEN: 'Warm lifestyle cinema lighting', camTH: 'มุมกล้อง Two-Shot สลับ Close-Up', camEN: 'Expressive two-shot to close-up' },
+        { sTH: 'ห้องทดลองภาพ 3D โปร่งแสงสีฟ้าคริสตัล', sEN: 'Translucent crystal-blue 3D science showcase room', cTH: 'ห้องทดลองเดิมเคลื่อนกล้องทะลุโมเลกุล 3D', cEN: 'Same showcase room gliding through 3D molecules', lTH: 'แสงโปร่งใสสะท้อนประกายสะอาดตา', lEN: 'Luminous crystal-clear studio lighting', camTH: 'มุมกล้อง Macro-to-Wide สุดล้ำ', camEN: 'Sleek macro-to-wide reveal shot' }
+      ];
+
+      // 8 หมวดการเล่าเรื่องที่เน้นให้ความรู้และสนุกกระชับ ภาษาพูดไทยล้วน ไม่มีคำเมตาหรือคำซ้ำ
+      const STORY_BLUEPRINTS = [
+        {
+          id: 'what_if',
+          name: 'จำลองเหตุการณ์ (What-If)',
+          roles: ['จำลองเหตุการณ์', 'ผลสะสมที่ตามมา', 'จุดเปลี่ยนสารอาหาร', 'ภาพชีวิตใหม่', 'สรุปชวนเริ่ม'],
+          hooks: [
+            `จะเกิดอะไรขึ้นถ้า ${mainCharName} ยัง${cue.habitTH}ติดกันทุกวัน?`,
+            `ลองจำลองดูครับ ถ้าเรายังปล่อยให้${cue.habitTH}ต่อไปอีกหนึ่งเดือน ร่างกายจะเป็นยังไง`,
+            `สมมติว่าวันนี้คุณ${cue.habitTH}จนเป็นเรื่องปกติ มาดูสิ่งที่${cue.organTH}ต้องรับมือกันครับ`,
+            `ถ้าพฤติกรรมอย่าง${cue.habitTH}ยังวนซ้ำทุกสัปดาห์ นี่คือสิ่งที่เกิดขึ้นกับ${cue.organTH}`
+          ],
+          escalations: [
+            `ช่วงแรกอาจแค่รู้สึก${cleanPain}เบาๆ แต่พอสะสมไปเรื่อยๆ ${cue.organTH}จะเริ่มส่งสัญญาณฟ้องชัดขึ้น`,
+            `ภาพจำลองเห็นชัดเลยครับ ภายในไม่กี่สัปดาห์อาการ${cleanPain}จะเริ่มกวนใจจนใช้ชีวิตไม่คล่องตัว`,
+            `ยิ่งปล่อยผ่านโดยไม่ดูแล ${cue.organTH}ก็เหมือน${cue.metaphorTH}ที่เริ่มทำงานไม่เต็มที่`,
+            `พอเข้าสู่สัปดาห์ที่สอง ความล้าจากอาการ${cleanPain}จะเริ่มกระทบทั้งโฟกัสงานและความสบายตัวตลอดวัน`
+          ],
+          mechanisms: [
+            `แต่พอปรับพฤติกรรมควบคู่การเติม ${ing} จุดเด่นคือ ${cleanBenefit}`,
+            `ลองสลับโหมดมาดูแลด้วย ${ing} จะเห็นเลยว่าสารอาหารนี้สำคัญมาก เพราะ ${cleanBenefit}`,
+            `จุดเปลี่ยนอยู่ที่ ${ing} ซึ่งถูกออกแบบมาเพื่อดูแล${cue.organTH}โดยเฉพาะ และ ${cleanBenefit}`,
+            `เมื่อร่างกายได้รับ ${ing} อย่างเหมาะสม ระบบภายในก็พร้อมกลับมาสมดุล เพราะ ${cleanBenefit}`
+          ],
+          textHooks: ['ถ้าทำแบบนี้ทุกวันจะเกิดอะไรขึ้น?', 'จำลองผลลัพธ์ใน 30 วัน', 'พฤติกรรมนี้ส่งผลกับร่างกายยังไง?']
+        },
+        {
+          id: 'day_in_life',
+          name: 'พาไปส่องชีวิต 1 วัน',
+          roles: ['เปิดวาร์ปชีวิต 1 วัน', 'จุดสะดุดระหว่างวัน', 'ตัวช่วยกู้สมดุล', 'ช่วงเย็นสุดสดใส', 'ฝากไว้ให้ลอง'],
+          hooks: [
+            `พาไปส่องชีวิตหนึ่งวันของ ${mainCharName} ที่หลายคนดูแล้วต้องร้องว่า นี่มันชีวิตเราชัดๆ`,
+            `ตามติดหนึ่งวันของ ${mainCharName} มาดูกันว่าทำไมช่วงนี้ถึงเจออาการ${cleanPain}บ่อยกว่าเดิม`,
+            `เปิดกล้องตามชีวิต ${mainCharName} ตั้งแต่เช้าจรดค่ำ เจอจุดพีกที่ทำเอา${cue.organTH}เริ่มล้า`,
+            `หนึ่งวันของ${cue.themeTag}อย่าง ${mainCharName} ใช้ร่างกายหนักขนาดไหน มาเช็กไปพร้อมกันครับ`
+          ],
+          escalations: [
+            `ตอนเช้ายังไหว แต่พอผ่านช่วงบ่ายที่${cue.habitTH} อาการ${cleanPain}ก็โผล่มาทักทายทันที`,
+            `ดูตารางชีวิตสิครับ ทั้ง${cue.habitTH}แทบไม่มีเวลาพัก จน${cue.organTH}เริ่มส่งสัญญาณเตือน`,
+            `จุดที่หลายคนพลาดเหมือนกัน คือปล่อยให้อาการ${cleanPain}สะสมระหว่างวันโดยไม่เติมตัวช่วยที่ตรงจุด`,
+            `พอกลางวันผ่านไป ความสดชื่นก็ลดลงเพราะ${cue.habitTH}ซ้ำๆ ทุกวันโดยไม่รู้ตัว`
+          ],
+          mechanisms: [
+            `เคล็ดลับที่ ${mainCharName} เพิ่มเข้าในกิจวัตรประจำวันคือ ${ing} เพราะ ${cleanBenefit}`,
+            `จุดเปลี่ยนในตารางชีวิตวันนี้คือการเสริมด้วย ${ing} ตัวช่วยดูแล${cue.organTH}ที่โดดเด่นคือ ${cleanBenefit}`,
+            `หลังปรับกิจวัตรและเติม ${ing} ที่มีบทบาทสำคัญต่อ${cue.organTH} ทำให้ ${cleanBenefit}`,
+            `นี่แหละตัวช่วยในวันยุ่งๆ อย่าง ${ing} เพราะ ${cleanBenefit}`
+          ],
+          textHooks: ['พาดูชีวิต 1 วันของคนยุคนี้', 'ตามติดรูทีนสายลุยทั้งวัน', 'จุดพลาดระหว่างวันที่หลายคนเป็น']
+        },
+        {
+          id: 'science_edu',
+          name: 'ความรู้สุขภาพเห็นภาพชัด',
+          roles: ['เปิดประเด็นน่ารู้', 'เบื้องหลังการทำงาน', 'สรุปกลไกสารอาหาร', 'ปรับใช้ในชีวิตจริง', 'ชวนดูแลต่อ'],
+          hooks: [
+            `เคยสงสัยไหมว่าทำไมเราถึงเจออาการ${cleanPain} ลองนึกภาพ${cue.organTH}เป็น${cue.metaphorTH}ดูครับ`,
+            `หนึ่งกลไกสำคัญของร่างกายที่อธิบายได้ทันทีว่าทำไม${cue.themeTag}มักเจออาการ${cleanPain}`,
+            `เรื่องน่ารู้ใกล้ตัว เวลาเรา${cue.habitTH} ข้างใน${cue.organTH}กำลังเกิดอะไรขึ้นบ้าง?`,
+            `เข้าใจเรื่อง${cue.organTH}ในไม่กี่วินาที ทำไมการดูแลจากต้นตอถึงต่างจากการรอให้อาการมาเยือน`
+          ],
+          escalations: [
+            `เพราะทุกครั้งที่${cue.habitTH} ร่างกายต้องดึงสารอาหารสำรองออกมาใช้งานหนักกว่าปกติ`,
+            `เมื่อ${cue.organTH}ทำงานหนักเหมือน${cue.metaphorTH} สัญญาณแรกที่ฟ้องเราคืออาการ${cleanPain}`,
+            `คนส่วนใหญ่มักแก้แค่ภายนอก แต่ลืมเติมสารอาหารสำคัญที่${cue.organTH}ต้องใช้จริงในทุกวัน`,
+            `ในระดับเซลล์ ความล้าจากอาการ${cleanPain}ไม่ได้เกิดขึ้นแค่วันเดียว แต่สะสมจากกิจวัตรเล็กๆ ที่ทำซ้ำ`
+          ],
+          mechanisms: [
+            `สารอาหารสำคัญที่เข้ามาช่วยจัดระเบียบคือ ${ing} โดยจุดเด่นคือ ${cleanBenefit}`,
+            `สรุปกลไกให้จำง่ายมากครับ ${ing} จะเข้าไปสนับสนุนการทำงานของ${cue.organTH} เพราะ ${cleanBenefit}`,
+            `นี่คือเหตุผลที่ผู้เชี่ยวชาญมักพูดถึง ${ing} เนื่องจาก ${cleanBenefit}`,
+            `เมื่อร่างกายได้รับ ${ing} อย่างสม่ำเสมอ ก็เหมือนมีผู้ช่วยมือโปรดูแล${cue.organTH} เพราะ ${cleanBenefit}`
+          ],
+          textHooks: ['ความรู้สุขภาพเข้าใจใน 15 วิ', 'เปรียบให้เห็นภาพชัดสุดๆ', 'กลไกลับที่คนยุคนี้ควรรู้']
+        },
+        {
+          id: 'ingredient_deep',
+          name: 'เจาะลึกสารสกัดสำคัญ',
+          roles: ['เปิดความลับสารสกัด', 'ทำไมทั่วไปไม่พอ', 'จุดเด่นที่แตกต่าง', 'ประโยชน์ที่ได้รับ', 'เลือกให้เหมาะกับตัว'],
+          hooks: [
+            `รู้ไหมว่า ${ing} มีความพิเศษต่างจากสารอาหารทั่วไปยังไง ทำไมคนดูแล${cue.organTH}ถึงเลือกใช้`,
+            `เจาะลึกสารอาหารสำคัญสำหรับคนเจออาการ${cleanPain} ที่หลายคนอาจยังไม่เคยสังเกต`,
+            `เวลาเลือกดูแล${cue.organTH} สิ่งที่ต้องดูไม่ใช่แค่ชื่อสารสกัด แต่ต้องดูรูปแบบการดูดซึมด้วยครับ`,
+            `ชวนซูมใกล้ๆ เข้าไปดูการทำงานของ ${ing} ว่าเข้าไปช่วยดูแล${cue.organTH}ยังไงบ้าง`
+          ],
+          escalations: [
+            `หลายคนทานอาหารไม่ครบหมู่ หรือ${cue.habitTH}บ่อย จนร่างกายได้รับสารอาหารสำคัญไม่เพียงพอ`,
+            `สารอาหารบางชนิดจากธรรมชาติอาจดูดซึมได้ยาก ทำให้ร่างกายนำไปใช้ได้ไม่เต็มที่เท่าที่ควร`,
+            `เมื่อ${cue.organTH}ต้องรับมือกับอาการ${cleanPain}เป็นประจำ คุณภาพของสารอาหารที่เลือกจึงสำคัญมาก`,
+            `ความต่างเล็กๆ ในเทคโนโลยีการผลิต ส่งผลโดยตรงต่อการนำไปใช้ประโยชน์ของร่างกายในทุกวัน`
+          ],
+          mechanisms: [
+            `จุดเด่นของ ${ing} คือ ${cleanBenefit}`,
+            `เมื่ออยู่ในรูปแบบที่เหมาะสมอย่าง ${ing} ร่างกายจึงนำไปดูแล${cue.organTH}ได้ดีขึ้น โดย ${cleanBenefit}`,
+            `นี่คือจุดแข็งของ ${ing} ที่ช่วยให้การดูแล${cue.organTH}เป็นเรื่องง่ายขึ้น เพราะ ${cleanBenefit}`,
+            `การเลือก ${ing} ที่มีมาตรฐานชัดเจน จึงตอบโจทย์คนเจออาการ${cleanPain} เพราะ ${cleanBenefit}`
+          ],
+          textHooks: ['เจาะลึกจุดเด่นสารสกัดสำคัญ', 'ต่างจากสูตรทั่วไปยังไง?', 'เลือกสารอาหารให้ตรงจุด']
+        },
+        {
+          id: 'silent_signs',
+          name: 'เช็ก 3 สัญญาณเงียบ',
+          roles: ['ชวนเช็กสัญญาณ', 'จุดที่มักมองข้าม', 'วิธีดูแลให้ตรงจุด', 'ผลลัพธ์ระยะยาว', 'เริ่มเช็กวันนี้'],
+          hooks: [
+            `ลองเช็กตัวเองดูครับ ว่าช่วงนี้คุณมีสัญญาณเตือนเรื่อง${cleanPain}อยู่บ้างหรือเปล่า`,
+            `สามสัญญาณเงียบที่บอกว่า${cue.organTH}กำลังต้องการการดูแลมากกว่าเดิม`,
+            `อย่ามองข้ามอาการเล็กๆ อย่าง${cleanPain} เพราะนี่อาจเป็นวิธีที่ร่างกายกำลังขอพักครับ`,
+            `ถ้าคุณเป็น${cue.themeTag}แล้วเริ่มรู้สึก${cleanPain} ลองฟังสัญญาณจากร่างกายสักนิดครับ`
+          ],
+          escalations: [
+            `หลายคนคิดว่าเป็นเรื่องปกติของคนทำงานหนัก แต่การ${cue.habitTH}ทุกวันคือตัวเร่งให้ร่างกายล้าไว`,
+            `สัญญาณเหล่านี้มักค่อยๆ มาทีละนิด จนกว่าเราจะรู้ตัวก็เริ่มกระทบความคล่องตัวในแต่ละวันแล้ว`,
+            `การสังเกตตัวเองตั้งแต่วันที่อาการ${cleanPain}เพิ่งเริ่ม ช่วยให้เราวางแผนดูแลได้ง่ายกว่ามาก`,
+            `แค่ปรับเวลาพักผ่อนควบคู่การเลือกสารอาหารที่เหมาะสม ก็ช่วยลดภาระของ${cue.organTH}ได้เยอะเลยครับ`
+          ],
+          mechanisms: [
+            `หนึ่งในสารอาหารที่แนะนำสำหรับดูแล${cue.organTH}คือ ${ing} เพราะ ${cleanBenefit}`,
+            `การเสริมด้วย ${ing} ควบคู่มื้ออาหารที่สมดุล เป็นทางเลือกที่ดีมาก เพราะ ${cleanBenefit}`,
+            `เมื่อเติม ${ing} ให้ร่างกายอย่างต่อเนื่อง จะช่วยสนับสนุน${cue.organTH}ได้ตรงจุด โดย ${cleanBenefit}`,
+            `รู้จัก ${ing} ไว้เป็นตัวช่วยประจำวันได้เลยครับ จุดเด่นคือ ${cleanBenefit}`
+          ],
+          textHooks: ['เช็ก 3 สัญญาณเงียบของร่างกาย', 'ร่างกายกำลังส่งสัญญาณเตือน', 'อย่ามองข้ามอาการเล็กๆ นี้']
+        },
+        {
+          id: 'micro_drama',
+          name: 'บทสนทนาสั้น 2 คน',
+          roles: ['บทสนทนาสะดุดใจ', 'ความจริงที่โดนจี้จุด', 'คำแนะนำจากผู้รู้', 'ลองปรับแล้วเวิร์ก', 'ส่งต่อเพื่อน'],
+          hooks: [
+            `ทำไมช่วงนี้ดูล้าจัง ประโยคทักสั้นๆ ที่ทำเอา ${mainCharName} เพิ่งรู้ตัวว่าเจออาการ${cleanPain}มานาน`,
+            `เดี๋ยวก่อน ยัง${cue.habitTH}อีกแล้วเหรอ เสียงเตือนจากเพื่อนสนิทที่อยากให้${cue.themeTag}ได้ฟัง`,
+            `เคยเป็นไหม อยู่ดีๆ ก็รู้สึก${cleanPain} ทั้งที่ไม่ได้ทำอะไรแปลกไปจากเดิมเลย`,
+            `บทสนทนาสั้นๆ ในออฟฟิศ ที่เปลี่ยนวิธีดูแล${cue.organTH}ของ ${mainCharName} ไปเลยครับ`
+          ],
+          escalations: [
+            `พอคุยกันดีๆ ถึงบางอ้อเลยว่า ต้นตอไม่ได้มาจากไหนไกล แต่มาจากการ${cue.habitTH}ทุกวันนี่เอง`,
+            `ฟังแล้วตรงใจมาก เพราะเรามัวแต่ยุ่งจนปล่อยให้อาการ${cleanPain}กลายเป็นเรื่องชินชา`,
+            `เพื่อนเลยทักตรงๆ ว่า ร่างกายเราไม่ใช่เครื่องจักร ถ้าใช้งาน${cue.organTH}หนักก็ต้องดูแลกลับบ้าง`,
+            `หลายคนพยักหน้าตามทันที เพราะพอ${cue.habitTH}สะสม อาการ${cleanPain}ก็ตามมาแบบไม่ทันตั้งตัว`
+          ],
+          mechanisms: [
+            `ผู้เชี่ยวชาญเลยแนะนำให้รู้จัก ${ing} ตัวช่วยดูแล${cue.organTH} เพราะ ${cleanBenefit}`,
+            `คำตอบที่ฟังแล้วเข้าใจทันทีคือการเสริมด้วย ${ing} โดยจุดเด่นคือ ${cleanBenefit}`,
+            `พอได้ลองศึกษาข้อมูลของ ${ing} ก็เข้าใจเลยว่าทำไมคนถึงนิยม เพราะ ${cleanBenefit}`,
+            `สรุปให้เพื่อนฟังง่ายๆ ว่า ${ing} คือสารอาหารสำคัญสำหรับ${cue.organTH} เนื่องจาก ${cleanBenefit}`
+          ],
+          textHooks: ['บทสนทนาที่ฟังแล้วสะดุ้ง', 'เพื่อนเตือนแล้วนะสายลุย', 'ประโยคเดียวเปลี่ยนวิธีดูแลตัว']
+        },
+        {
+          id: 'myth_twist',
+          name: 'หักมุมความเชื่อผิดๆ',
+          roles: ['ความเชื่อที่พลาดบ่อย', 'ความจริงที่ควรรู้', 'เฉลยด้วยข้อเท็จจริง', 'วิธีดูแลที่ใช่', 'เริ่มใหม่ให้ถูกจุด'],
+          hooks: [
+            `หลายคนคิดว่าเจออาการ${cleanPain} แค่พักเดี๋ยวเดียวก็พอ แต่ความจริงอาจไม่ใช่แค่นั้นครับ`,
+            `ความเข้าใจผิดอันดับหนึ่งของ${cue.themeTag} ที่ทำให้ดูแล${cue.organTH}เท่าไหร่ก็ยังไม่ตรงจุด`,
+            `หักมุมความคิดเดิม ทำไมบางคนพักผ่อนเท่าเดิมแต่ยังเจออาการ${cleanPain}วนซ้ำอยู่เรื่อยๆ`,
+            `เช็กดูว่าคุณยังเข้าใจแบบนี้อยู่ไหม เวลาต้องรับมือกับอาการ${cleanPain}ในชีวิตประจำวัน`
+          ],
+          escalations: [
+            `ความจริงคือการ${cue.habitTH}ทำให้ร่างกายต้องการสารอาหารเฉพาะทางมากกว่าการพักชั่วคราว`,
+            `พอเราดูแลไม่ตรงจุด ${cue.organTH}ก็ยังต้องแบกรับภาระหนักเหมือน${cue.metaphorTH}`,
+            `การแก้แค่ปลายเหตุช่วยได้แค่ชั่วคราว แต่ถ้าไม่เติมสารอาหารที่ใช่ อาการ${cleanPain}ก็จะวนกลับมาอีก`,
+            `นี่คือจุดที่คนส่วนใหญ่มองข้าม เพราะคิดว่าร่างกายจะฟื้นสมดุลเองได้ตลอดแม้ใช้งานหนัก`
+          ],
+          mechanisms: [
+            `วิธีดูแลที่ตรงจุดกว่าคือการเลือก ${ing} เพราะ ${cleanBenefit}`,
+            `ข้อมูลด้านโภชนาการย้ำว่า ${ing} เป็นสารอาหารสำคัญสำหรับ${cue.organTH} โดย ${cleanBenefit}`,
+            `เมื่อเปลี่ยนมาดูแลจากต้นตอด้วย ${ing} ร่างกายจึงได้รับการสนับสนุนอย่างตรงจุด เพราะ ${cleanBenefit}`,
+            `จุดต่างอยู่ที่คุณภาพของ ${ing} ซึ่งช่วยดูแล${cue.organTH}ได้อย่างเหมาะสม เพราะ ${cleanBenefit}`
+          ],
+          textHooks: ['ความเชื่อเดิมที่อาจพลาด', 'หักมุมวิธีดูแลสุขภาพ', 'ดูแลให้ถูกจุด ต่างกันชัดเจน']
+        },
+        {
+          id: 'analogy_game',
+          name: 'จำลองหลอดพลัง 3D',
+          roles: ['หลอดพลังลดลง', 'พฤติกรรมดูดพลัง', 'เติมบัฟสารอาหาร', 'พลังกลับมาสมดุล', 'พร้อมลุยต่อ'],
+          hooks: [
+            `ถ้าชีวิตมีหลอดพลัง ตอนนี้หลอดพลังของ${cue.organTH}คุณเหลืออยู่กี่เปอร์เซ็นต์แล้วครับ?`,
+            `เตือนภัยระดับสีส้ม ทุกครั้งที่คุณ${cue.habitTH} หลอดพลังร่างกายกำลังลดลงทีละขีด`,
+            `สังเกตไหมว่าทำไมยังไม่ทันเย็น พลังของ${cue.themeTag}ก็ลดลงเพราะเจออาการ${cleanPain}`,
+            `เปิดโหมดสแกนร่างกาย นี่คือสาเหตุที่ค่าพลัง${cue.organTH}ลดลงไวกว่าปกติ`
+          ],
+          escalations: [
+            `ตัวดูดพลังของวันคือการ${cue.habitTH} ที่ค่อยๆ ลดความสดชื่นและทำให้เกิดอาการ${cleanPain}`,
+            `ยิ่งกดข้ามเวลาพักผ่อน อาการ${cleanPain}ก็ยิ่งทำให้ความพร้อมในการทำงานลดลง`,
+            `ถ้าปล่อยให้หลอดพลัง${cue.organTH}ติดสีแดงบ่อยๆ ต่อให้นอนชดเชยก็ยังรู้สึกไม่เต็มที่`,
+            `ทุกภารกิจในแต่ละวันใช้พลังเยอะมาก โดยเฉพาะวันที่ต้องรับมือกับอาการ${cleanPain}ซ้ำๆ`
+          ],
+          mechanisms: [
+            `ได้เวลาเติมสารอาหารสำคัญอย่าง ${ing} เพื่อดูแล${cue.organTH} เพราะ ${cleanBenefit}`,
+            `อัปเกรดการดูแล${cue.organTH}ด้วย ${ing} ซึ่งมีจุดเด่นคือ ${cleanBenefit}`,
+            `สูตรลับสายดูแลตัวเองคือเติม ${ing} เป็นประจำ เนื่องจาก ${cleanBenefit}`,
+            `แค่เสริมเกราะด้วย ${ing} ร่างกายก็ได้รับคุณค่าที่ตอบโจทย์ เพราะ ${cleanBenefit}`
+          ],
+          textHooks: ['หลอดพลังร่างกายเหลือเท่าไหร่?', 'ระวังพฤติกรรมดูดพลังทุกวัน', 'เติมเกราะดูแลสุขภาพ 3D']
+        }
+      ];
+
+      const PAYOFF_POOL = [
+        `ผลลัพธ์ของการเริ่มใส่ใจวันนี้ คือความสบายตัวและพลังบวกที่พร้อมลุยทุกตารางงาน`,
+        `แค่ปรับหนึ่งนิสัยเล็กๆ ให้สม่ำเสมอ ทุกวันของ${cue.themeTag}ก็กลับมาคล่องตัวและมั่นใจขึ้นเยอะ`,
+        `ไม่ต้องรอให้ร่างกายประท้วงหนักๆ ก็ดูแลสมดุลให้พร้อมรับทุกเช้าวันใหม่ได้`,
+        `ใช้ชีวิตในแบบที่คุณชอบได้เต็มที่ พร้อมความอุ่นใจว่าได้ดูแล${cue.organTH}อย่างถูกวิธี`,
+        `เปลี่ยนวันวุ่นวายให้กลายเป็นวันที่โฟกัสได้เต็มที่และมีพลังเหลือสำหรับคนที่รัก`,
+        `การดูแล${cue.organTH}วันละนิด คือการลงทุนสุขภาพที่คุ้มค่าที่สุดสำหรับตัวคุณในอนาคต`,
+        `กลับมาสดใสรับเช้าวันใหม่ได้อย่างมั่นใจ ไม่ต้องกังวลกับความล้าสะสมระหว่างวัน`,
+        `สุขภาพที่ดีไม่ได้เริ่มจากเรื่องยาก แค่เลือกตัวช่วยที่ใช่ให้เข้ากับไลฟ์สไตล์ของคุณ`,
+        `พอสมดุลภายในพร้อม ทุกกิจกรรมตั้งแต่เช้าจรดค่ำก็ลื่นไหลและสนุกขึ้นกว่าเดิม`,
+        `ให้ทุกวันทำงานและวันพักผ่อนเต็มไปด้วยความสบายตัวแบบคนดูแลตัวเองเป็น`,
+        `เพราะร่างกายมีแค่ร่างเดียว การเลือกดูแล${cue.organTH}อย่างใส่ใจจึงเห็นความต่างในระยะยาว`,
+        `เริ่มต้นดูแลแบบสมดุลตั้งแต่วันนี้ เพื่อรักษาความคล่องตัวและความสดใสให้อยู่กับคุณไปนานๆ`
+      ];
+
+      const CTA_POOL = [
+        `เริ่มดูแล${cue.organTH}อย่างถูกวิธีไปกับ ${prodNameMention} ตั้งแต่วันนี้เลยครับ${drugNote}`,
+        `ลองให้ ${prodNameMention} เป็นผู้ช่วยคู่ใจในทุกวันของ${cue.themeTag}นะครับ${drugNote}`,
+        `เซฟคลิปนี้ไว้เช็กตัวเอง แล้วเริ่มอัปเกรดการดูแลด้วย ${prodNameMention}${drugNote}`,
+        `แชร์ให้เพื่อนที่กำลังเจออาการ${cleanPain} แล้วชวนกันดูแลสุขภาพด้วย ${prodNameMention}${drugNote}`,
+        `อยากดูแล${cue.organTH}ให้ตรงจุด ลองศึกษาข้อมูลของ ${prodNameMention} เพิ่มเติมได้เลยครับ${drugNote}`,
+        `เลือกมาตรฐานที่คุณวางใจได้อย่าง ${prodNameMention} เพื่อดูแลตัวเองในทุกๆ วัน${drugNote}`,
+        `คอมเมนต์บอกกันหน่อยว่าคุณเจอข้อไหนบ้าง แล้วลองทำความรู้จัก ${prodNameMention} ดูนะครับ${drugNote}`,
+        `วางแผนดูแลตัวเองตั้งแต่วันนี้ ให้ ${prodNameMention} ช่วยเติมเต็มความสมดุลให้คุณ${drugNote}`,
+        `ดูแลให้ครบและตรงจุดยิ่งขึ้น ด้วยแนวคิดสุขภาพจาก ${prodNameMention}${drugNote}`,
+        `พร้อมเปลี่ยนวันล้าให้สบายตัวหรือยังครับ เริ่มต้นง่ายๆ กับ ${prodNameMention} ได้เลย${drugNote}`
+      ];
+
+      const CAPTION_POOL = [
+        `ถ้ายัง${cue.habitTH}ทุกวัน ลองเช็กสัญญาณจากอาการ${cleanPain}กันหน่อยครับ มารู้จักบทบาทของ ${ing} ใน ${shortName} ที่ช่วยดูแล${cue.organTH}อย่างสมดุลในทุกวัน`,
+        `พาไปดูอินไซต์ของ${cue.themeTag}ที่เจอกับอาการ${cleanPain}บ่อยๆ เสริมความใส่ใจด้วย ${ing} จาก ${shortName} ควบคู่การพักผ่อนให้เพียงพอ`,
+        `เข้าใจง่ายในคลิปเดียว ทำไม ${ing} ถึงสำคัญกับ${cue.organTH} โดยเฉพาะคนที่มีไลฟ์สไตล์${cue.habitTH} มาดูแนวคิดการดูแลตัวเองจาก ${shortName} กันครับ`,
+        `เซฟไว้เตือนตัวเองและแชร์ให้เพื่อนได้เลย ใครกำลังกังวลเรื่อง${cleanPain} ลองรู้จักคุณค่าของ ${ing} ใน ${shortName} เพื่อดูแล${cue.organTH}อย่างถูกวิธี`,
+        `อัปเกรดรูทีนสุขภาพแบบไม่ยุ่งยาก เมื่อชีวิตเร่งรีบจนเจออาการ${cleanPain} ลองให้ ${ing} จาก ${shortName} เป็นตัวช่วยดูแล${cue.organTH}ในทุกวันนะครับ`,
+        `หลายคนอาจมองข้ามสัญญาณเล็กๆ อย่าง${cleanPain} แต่การเริ่มดูแล${cue.organTH}ด้วย ${ing} จาก ${shortName} ตั้งแต่วันนี้ช่วยให้ใช้ชีวิตได้อย่างมั่นใจขึ้นเยอะเลยครับ`,
+        `เช็กหลอดพลังร่างกายวันนี้กันหน่อย สำหรับ${cue.themeTag}ที่ต้องรับมือกับอาการ${cleanPain} มาทำความรู้จัก ${ing} ใน ${shortName} เพื่อดูแลตัวเองอย่างสมดุล`,
+        `เปลี่ยนความกังวลจากการ${cue.habitTH}ให้เป็นการดูแลตัวเองอย่างถูกจุด ด้วยคุณค่าของ ${ing} จาก ${shortName} เพื่อ${cue.organTH}ที่สมดุลทุกวันครับ`,
+        `ดูจบแล้วตรงกับชีวิตใครบ้าง ใครที่กำลังมองหาวิธีดูแล${cue.organTH}เมื่อเจออาการ${cleanPain} ลองศึกษาข้อมูลของ ${ing} ใน ${shortName} ไว้เป็นตัวเลือกดีๆ นะครับ`,
+        `สรุปสั้นกระชับสำหรับ${cue.themeTag} เจออาการ${cleanPain}อย่าปล่อยผ่าน มารู้จักคุณค่าของ ${ing} ใน ${shortName} เพื่อดูแลสุขภาพจากภายในอย่างต่อเนื่อง`
+      ];
+
+      const pickedBlueprints = drawUniqueItems('mw_bag_bp_v8', STORY_BLUEPRINTS, 3);
+      const pickedSettings = drawUniqueItems('mw_bag_set_v8', SETTINGS_POOL, 3);
+      const pickedPayoffs = drawUniqueItems('mw_bag_pay_v8', PAYOFF_POOL, 3);
+      const pickedCtas = drawUniqueItems('mw_bag_cta_v8', CTA_POOL, 3);
+      const pickedCaptions = drawUniqueItems('mw_bag_cap_v8', CAPTION_POOL, 3);
+
+      const shortTags = ['Hook 3 วิ', 'วิชาการย่อยง่าย', 'Myth vs Fact'];
+
+      return shortTags.map((tag, i) => {
+        const bp = pickedBlueprints[i];
+        const st = pickedSettings[i];
+        const archShort = (clipArchetypes[i] || bp.name).split(' (')[0];
+
+        const hookVO = drawUniqueItems(`mw_bag_h_${bp.id}_v8`, bp.hooks, 1)[0];
+        const escVO = drawUniqueItems(`mw_bag_e_${bp.id}_v8`, bp.escalations, 1)[0];
+        const mechVO = drawUniqueItems(`mw_bag_m_${bp.id}_v8`, bp.mechanisms, 1)[0];
+        const textHook = drawUniqueItems(`mw_bag_th_${bp.id}_v8`, bp.textHooks, 1)[0];
+
+        const scenes = [];
+        for (let s = 0; s < sceneCount; s++) {
+          if (s === 0) {
+            scenes.push({
+              roleLabel: bp.roles[0] || 'Hook 3 วิ',
+              characterType: 'main',
+              visualTH: `เปิดเรื่องสไตล์ ${bp.name} ใน${st.sTH} แสดงภาพ ${mainCharName} กำลัง${cue.habitTH} พร้อม${cue.propTH}`,
+              actionEN: `Opening ${bp.id} storytelling scene in ${st.sEN} showing character experiencing ${shortName} lifestyle concern with ${cue.propEN}`,
+              vo: hookVO,
+              textOnClip: textHook.slice(0, 38)
+            });
+          } else if (s === 1) {
+            scenes.push({
+              roleLabel: bp.roles[1] || 'ขยี้ Insight',
+              characterType: 'main',
+              visualTH: `แพนกล้องต่อเนื่องใน${st.cTH} เผยให้เห็นผลกระทบต่อ${cue.organTH}จากพฤติกรรมประจำวัน`,
+              actionEN: `Continuous camera pan in ${st.cEN} escalating daily lifestyle impact with subtle 3D visual cue`,
+              vo: escVO,
+              textOnClip: `ผลสะสมที่${cue.organTH}ต้องเจอ`.slice(0, 38)
+            });
+          } else if (s === 2) {
+            scenes.push({
+              roleLabel: bp.roles[2] || 'กลไกสารอาหาร',
+              characterType: 'expert',
+              visualTH: `${state.avatar.expert} และ ${state.avatar.mascot} ใช้${cue.propTH}อธิบายบทบาทของ ${ing} แบบเห็นภาพชัด`,
+              actionEN: `3D expert and mascot explaining key nutrients clearly using ${cue.propEN}`,
+              vo: mechVO,
+              textOnClip: ing.slice(0, 38)
+            });
+          } else if (s === sceneCount - 1) {
+            scenes.push({
+              roleLabel: bp.roles[4] || 'CTA ปิดท้าย',
+              characterType: 'main',
+              visualTH: `${state.avatar.main} ยิ้มสดใสมั่นใจใน${st.sTH} พร้อมสัญลักษณ์ 3D สื่อถึงสุขภาพดีของ${cue.organTH}`,
+              actionEN: `Smiling confident healthy lifestyle closing shot in ${st.sEN}`,
+              vo: pickedCtas[i],
+              textOnClip: shortName
+            });
+          } else {
+            scenes.push({
+              roleLabel: bp.roles[3] || 'ผลลัพธ์การใช้ชีวิต',
+              characterType: 'main',
+              visualTH: `${state.avatar.main} กลับมาสดชื่นคล่องตัวใน${st.sTH} แสงอบอุ่นสื่อถึงชีวิตที่สมดุล`,
+              actionEN: `Refreshed energetic daily life in ${st.sEN} with warm uplifting lighting`,
+              vo: pickedPayoffs[i],
+              textOnClip: `สมดุลดี พร้อมลุยทุกวัน`.slice(0, 38)
+            });
+          }
+        }
+        return {
+          shortTag: tag,
+          title: `${bp.name} • ${archShort}`,
+          settingTH: st.sTH, settingEN: st.sEN, settingContTH: st.cTH, settingContEN: st.cEN,
+          lightingTH: st.lTH, lightingEN: st.lEN,
+          cameraTH: st.camTH, cameraEN: st.camEN,
+          scenes,
+          caption: pickedCaptions[i]
+        };
+      });
+    }
+
+    window.rerollUniqueContent = function() {
+      if (state.isGenerating) return;
+      window._rerollCount++;
+      safeSet('mw_reroll_seq_v7', String(window._rerollCount));
+      generateAllStoryboards(true);
+    };
+
+    window.generateAllStoryboards = async function(keepCurrentTab) {
+      if (state.isGenerating) return;
+      state.isGenerating = true;
+
+      const rerollBtn = document.getElementById('reroll-content-btn');
+      try {
+        const prod = PRODUCTS.find(x => x.id === state.resolvedProductId) || PRODUCTS[1];
+        const shortName = prod.label.split(' (')[0];
+        const topic = stripUnitsAndAd(document.getElementById('field-topic').value) || `ดูแลสุขภาพตรงจุดด้วยสารอาหารสำคัญ (${shortName})`;
+        const ing = stripUnitsAndAd(document.getElementById('field-ingredients').value) || prod.ing;
+        const pain = stripUnitsAndAd(document.getElementById('field-pain').value) || prod.pain;
+        const benefit = stripUnitsAndAd(document.getElementById('field-benefit').value) || prod.benefit;
+
+        const platform = document.getElementById('platform-select').value;
+        const ratio = platform.includes('16:9') ? '16:9' : '9:16';
+        const orientTH = ratio === '16:9' ? 'แนวนอน 16:9' : 'แนวตั้ง 9:16';
+        const orientEN = ratio === '16:9' ? '16:9 horizontal widescreen' : '9:16 vertical short-form';
+        const style = document.getElementById('style-select').value;
+        const mention = document.getElementById('mention-mode').value;
+        const sceneCount = state.duration <= 35 ? 4 : (state.duration <= 60 ? 5 : Math.min(10, Math.round(state.duration / 12)));
+        const secPerScene = Math.round(state.duration / sceneCount);
+        const drugNote = prod.type === 'drug' ? ' ควรอ่านฉลากหรือปรึกษาแพทย์และเภสัชกรก่อนใช้เสมอ' : '';
+        const fdaFooter = prod.type === 'drug'
+          ? ' ✨ *โปรดอ่านคำเตือนในฉลากก่อนใช้ยา หรือปรึกษาแพทย์และเภสัชกร'
+          : ' ✨ *ผลลัพธ์ขึ้นอยู่กับแต่ละบุคคล ควรรับประทานอาหารหลากหลายครบ 5 หมู่ในสัดส่วนที่เหมาะสมเป็นประจำ';
+        const prodNameMention = mention === 'none' ? 'สารอาหารสำคัญสูตรนี้' : shortName;
+        const clipArchetypes = draw3UniqueArchetypes();
+        const usedHooksHistory = getUsedHistory('mw_used_hooks_v6');
+        const usedArchetypesHistory = getUsedHistory('mw_used_arch_v6');
+        const uniqueNonce = `RUN-${Date.now()}-${Math.floor(Math.random() * 99999)}`;
+        const adFocusText = stripUnitsAndAd((state.lastAdEvidence && state.lastAdEvidence.benefits) || '');
+
+        if (!keepCurrentTab) {
+          state.activeAngle = 0;
+          goToStep(4, true);
+        }
+
+        const badge = document.getElementById('content-variant-badge');
+        const container = document.getElementById('storyboard-container');
+        if (rerollBtn) { rerollBtn.disabled = true; rerollBtn.textContent = '⏳ กำลังคิดเนื้อหาใหม่...'; }
+        if (badge) badge.textContent = '⏳ กำลังสร้าง 3 คอนเทนต์สดใหม่ไม่ซ้ำเดิม...';
+        if (container) {
+          container.innerHTML = `<div class="rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50/60 p-8 text-center space-y-2">
+            <div class="text-3xl animate-bounce">✨</div>
+            <div class="text-sm font-extrabold text-cobalt-950">กำลังสร้าง 3 สตอรี่บอร์ดสดใหม่เฉพาะ ${escapeHtml(shortName)} (รอบ #${window._rerollCount + 1})...</div>
+            <div class="text-xs text-slate-600">สุ่มแนวเล่าเรื่อง: ${escapeHtml(clipArchetypes.map(a => a.split(' (')[0]).join(' • '))}</div>
+          </div>`;
+        }
+
+        const ctx = {
+          prod, shortName, topic, ing, pain, benefit, platform, ratio, orientTH, orientEN,
+          style, sceneCount, secPerScene, drugNote, fdaFooter, prodNameMention, clipArchetypes, adFocusText
+        };
+
+        const compressedImages = state.images.length > 0
+          ? await Promise.all(state.images.slice(0, 3).map(im => resizeImageToBase64(im.dataUrl, 800, false)))
+          : [];
+
+        const payload = {
+          images: compressedImages.map(r => ({ mimeType: 'image/jpeg', data: r.base64 })),
+          adEvidence: state.lastAdEvidence || null,
+          productLabel: prod.label, productShort: shortName, productType: prod.type,
+          topic, ingredients: ing, pain, benefit, platform, ratio, style,
+          duration: state.duration, sceneCount, mentionMode: mention, realPackage: state.realPackage,
+          avatar: state.avatar, clipArchetypes, usedHooksHistory, usedArchetypesHistory, uniqueNonce
+        };
+
+        let aiData = null;
+        let engineLabel = 'Creative Shuffle Engine';
+
+        // ช่องทางที่ 1: Vercel Serverless AI (/api/generate) อัตโนมัติ (ทีมไม่ต้องกรอก Key)
+        try {
+          const resp = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (resp.ok) {
+            const j = await resp.json();
+            if (j && Array.isArray(j.clips) && j.clips.length >= 3) {
+              aiData = j;
+              engineLabel = 'Vercel Vision AI สดใหม่ 100%';
+            }
+          }
+        } catch (e) {}
+
+        // ช่องทางที่ 2: Direct Gemini API (กรณีใส่ Key ในหน้าตั้งค่า)
+        if (!aiData) {
+          const userKey = safeGet('mw_gemini_key', '').trim();
+          if (userKey) {
+            try {
+              const directPrompt = `สร้าง JSON 3 คลิปวิดีโอสั้น Mega We Care (${prod.label}) สดใหม่ห้ามซ้ำเดิม รหัสรอบ:${uniqueNonce} หัวข้อ:${topic} สารสกัด:${ing} ปัญหา:${pain} ประโยชน์:${benefit} ความยาว:${state.duration}วิ (${sceneCount}ซีน) แนว3คลิป:[${clipArchetypes.join(' | ')}] ห้ามซ้ำกับ:[${usedHooksHistory.slice(0, 15).join(' | ')}] ห้ามใส่หน่วย mg/ml และคำต้องห้าม อย. ตอบ JSON: {"creativeThemeName":"","clips":[{"shortTag":"Hook 3 วิ","title":"","settingTH":"","settingEN":"","settingContTH":"","settingContEN":"","lightingTH":"","lightingEN":"","cameraTH":"","cameraEN":"","scenes":[{"roleLabel":"","characterType":"main","visualTH":"","actionEN":"","vo":"","textOnClip":""}],"caption":""}]}`;
+              const parts = [{ text: directPrompt }, ...compressedImages.map(r => ({ inline_data: { mime_type: 'image/jpeg', data: r.base64 } }))];
+              const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(userKey)}`;
+              const r = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  contents: [{ parts }],
+                  generationConfig: { responseMimeType: 'application/json', temperature: 1.1, topP: 0.95 }
+                })
+              });
+              if (r.ok) {
+                const j = await r.json();
+                const txt = j?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                const m = txt.match(/\{[\s\S]*\}/);
+                if (m) {
+                  const parsed = JSON.parse(m[0]);
+                  if (Array.isArray(parsed.clips) && parsed.clips.length >= 3) {
+                    aiData = parsed;
+                    engineLabel = 'Gemini Vision AI สดใหม่ 100%';
+                  }
+                }
+              }
+            } catch (e) {}
+          }
+        }
+
+        const rawClips = aiData ? aiData.clips : buildOfflineFallbackClips(ctx);
+        state.storyboards = formatClipsToStandardStoryboards(rawClips, ctx);
+
+        // อัปเดตชื่อแท็บทั้ง 3 คลิปให้เห็นธีมใหม่ทันทีที่กดสุ่ม
+        const tabIcons = ['🎬', '🔬', '💡'];
+        state.storyboards.forEach((sb, idx) => {
+          const tabBtn = document.getElementById('tab-angle-' + idx);
+          if (tabBtn) {
+            tabBtn.textContent = `${tabIcons[idx] || '🎬'} คลิป ${idx + 1}: ${sb.shortTag} (${sb.title.slice(0, 22)})`;
+          }
+        });
+
+        // บันทึกประวัติ Hook และแนวเล่าเรื่องลง Blacklist ถาวร (ห้ามซ้ำข้ามแคมเปญและข้ามภาพ Ad)
+        const newHooks = state.storyboards.map(sb => sb.scenes[0]?.vo?.slice(0, 85)).filter(Boolean);
+        pushUsedHistory('mw_used_hooks_v6', newHooks, 40);
+        pushUsedHistory('mw_used_arch_v6', clipArchetypes, 18);
+
+        if (badge) {
+          const themeName = aiData?.creativeThemeName || `ชุดสดใหม่ #${window._rerollCount + 1}`;
+          badge.textContent = `✨ ${engineLabel} • ${themeName}`;
+        }
+
+        selectAngleTab(keepCurrentTab ? state.activeAngle : 0);
+        renderStoryboardView();
+        scanAllCompliance();
+        showToast(aiData
+          ? `✨ AI คิด 3 สตอรี่บอร์ดใหม่ (${aiData.creativeThemeName || shortName}) ไม่ซ้ำเดิม 100%!`
+          : `🎲 สุ่มเนื้อหาใหม่ชุด #${window._rerollCount + 1} (${clipArchetypes[0].split(' (')[0]}) เรียบร้อย ไม่ซ้ำเดิม!`);
+      } finally {
+        state.isGenerating = false;
+        if (rerollBtn) { rerollBtn.disabled = false; rerollBtn.textContent = '🎲 สุ่มเนื้อหาใหม่'; }
+      }
     };
 
     window.selectAngleTab = function(idx) {
@@ -1707,13 +2462,13 @@
     };
 
     /* ==================== DEMO & MODALS & AI ASSISTANT ==================== */
-    window.runDemoMode = function() {
+    window.runDemoMode = async function() {
       state.productId = 'lecithin';
       document.getElementById('product-select').value = 'lecithin';
       onProductSelectChange();
-      runAutoAnalyze(false);
-      generateAllStoryboards();
-      goToStep(5);
+      await runAutoAnalyze(false);
+      await generateAllStoryboards(false);
+      goToStep(5, true);
       showToast('▶️ โหลดตัวอย่าง Lecithin ตรงแพทเทิร์นและสีชัดเจนแล้ว!');
     };
 
